@@ -9,7 +9,7 @@ import RoutLayout from './_root/Pages/RoutLayout'
 
 const App = () => {
   return (
-    <main className="flex h-screen">
+    <main className="flex h-screen items-center">
       <Routes>
         {/*public routes*/}
         <Route element={<AuthLayout />}>
