@@ -21,10 +21,12 @@
   --color-dark-2: #09090a;
   --color-dark-3: #101012;
   --color-dark-4: #1f1f22;
+  --color-dark-5: #474747;
   --color-light-1: #ffffff;
   --color-light-2: #efefef;
   --color-light-3: #7878a3;
   --color-light-4: #5c5c7b;
+  --color-light-5: #C4C4C4;
   --color-primary-500: #877eff;
   --color-red: #ff5a5a;
 
@@ -346,6 +348,25 @@
 @utility user-card {
   @apply flex-center flex-col gap-4 border border-dark-4 rounded-[20px] px-5 py-8;
 }
+/*****************************************/
+@utility feild {
+  @apply flex flex-col justify-between
+}
+
+@utility form-label{
+ @apply text-[0.4rem] font-bold text-light-2 mt-2 px-1
+}
+
+@utility form-input{
+ @apply bg-dark-5 h-3.5 rounded-[3px] border-[1px] border-light-5 text-light-2 text-[0.5rem]  placeholder:text-[0.4rem] placeholder:flex-center
+                  placeholder:text-light-3
+}
+@utility form-error{
+ @apply text-red-500 text-[0.5rem]
+}
+
+
+
 
 /* ─── Component layer (shadcn overrides) ─────────────────────── */
 @layer components {
@@ -356,7 +377,7 @@
     @apply text-red;
   }
   .shad-input {
-    @apply h-12 bg-dark-4 border-none placeholder:text-light-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3;
+    @apply h-10 bg-dark-4 border-none placeholder:text-light-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3;
   }
   .shad-textarea {
     @apply h-36 bg-dark-3 rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3;
@@ -371,6 +392,7 @@
     @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white;
   }
 }
+
 @media (min-width: 1024px) {
   .side-img {
     display: block;

@@ -13,10 +13,11 @@ const AuthLayout = () => {
       ):
 
       (
-        <div className="bg-dark-3 flex justify-between h-screen w-full ">
-          <section className="flex flex-col justify-center items-center  p-4 mx-auto">
+        <div className="bg-dark-3 flex items-center h-screen w-full ">
+          <section className=" w-full h-full flex flex-col justify-around items-center gap-0 ">
 
-            <img src="/assets/images/logo.svg" alt="logo" className="my-4 size-30" />
+            <img src="/assets/images/logo.svg" alt="logo" 
+            className=" h-6 w-30 " />
 
             <Outlet />
             </section>
@@ -24,7 +25,7 @@ const AuthLayout = () => {
             <img
             src="/assets/images/side-img.svg"
             alt="Side Image"
-            className="h-screen w-1/2 object-cover bg-no-repeat hidden lg:block"
+            className=" h-screen w-full object-cover bg-no-repeat hidden md:block"
             />
         
         </div>
