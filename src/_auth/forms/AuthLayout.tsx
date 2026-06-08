@@ -2,7 +2,7 @@ import {Outlet, Navigate} from 'react-router-dom'
 
 const AuthLayout = () => {
 
-  const isAuthenticated = false; // Replace with actual authentication logic
+  const isAuthenticated = false;
 
   
   return (
@@ -13,11 +13,12 @@ const AuthLayout = () => {
       ):
 
       (
-        <div className="bg-dark-3 flex items-center h-screen w-full ">
-          <section className=" w-full h-full flex flex-col justify-around items-center gap-0 ">
+        <div className="bg-dark-3 flex justify-center items-center  h-screen w-full flex-center overflow-y-auto gap-2">
+
+          <section className="w-full  h-screen flex flex-col flex-center">
 
             <img src="/assets/images/logo.svg" alt="logo" 
-            className=" h-6 w-30 " />
+            className="h-[30%]  w-40 m-auto" />
 
             <Outlet />
             </section>
@@ -25,7 +26,7 @@ const AuthLayout = () => {
             <img
             src="/assets/images/side-img.svg"
             alt="Side Image"
-            className=" h-screen w-full object-cover bg-no-repeat hidden md:block"
+            className=" h-screen w-1/2 object-cover bg-no-repeat  hidden md:block"
             />
         
         </div>
