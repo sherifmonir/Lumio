@@ -1,5 +1,6 @@
 import * as z from "zod"
 import { Link } from 'react-router-dom'
+
 //import { Button } from "@/components/ui/button"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -9,10 +10,20 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import  { signupValidation } from "@/lib/validation"
 import { createUserAccount } from "@/lib/appwrite/api"
 
-
-
+const useToast = () => ({ toast: (opts: { title?: string; description?: string } = {}) => {
+  // minimal non-blocking fallback: use console and a non-intrusive alert for visibility
+  if (typeof window !== 'undefined' && opts.title) {
+    // using setTimeout to avoid blocking render
+    setTimeout(() => void window.alert(opts.title + (opts.description ? `\n${opts.description}` : '')) , 0)
+  } else {
+    // fallback to console
+    // eslint-disable-next-line no-console
+    console.log('toast', opts)
+  }
+}})
 
 const SignupForm = () => {
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof signupValidation>>({
     resolver: zodResolver(signupValidation),
     defaultValues: {
@@ -24,13 +35,12 @@ const SignupForm = () => {
   })
 
   async function onSubmit(Values: z.infer<typeof signupValidation>) {
-
-     try {
-    const newUser = await createUserAccount(Values)
-    console.log(newUser)
-  } catch (error) {
-    console.error(error)
-  }
+  const newUser = await createUserAccount(Values)
+     if(!newUser) {
+      return toast({
+        title: 'sign uo failed'
+      })
+     }
   }
  
  

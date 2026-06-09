@@ -5,7 +5,7 @@ import SigninForm from './_auth/forms/SigninForm'
 import { Home } from './_root/Pages'
 import AuthLayout from './_auth/forms/AuthLayout'
 import RoutLayout from './_root/Pages/RoutLayout'
-
+import { Toaster } from './components/ui/sonner'
 
 const App = () => {
   return (
@@ -21,6 +21,7 @@ const App = () => {
           <Route index element={<Home />} />
         </Route>
       </Routes>
+      <Toaster />
 
     </main>
   )
