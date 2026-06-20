@@ -1,15 +1,24 @@
 import * as z from "zod"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import  { signupValidation } from "@/lib/validation"
-import { createUserAccount } from "@/lib/appwrite/api"
 import { useToast } from "@/components/ui/sonner"
+import { useCreateUserAccount, useSigninAccount } from "@/lib/react-query/queriesAndMutatuins"
+import { ClipLoader } from "react-spinners";
+import { useUserContext } from "@/context/AuthContect"
 
 
 
 const SignupForm = () => {
-  const { toast } = useToast();
+  const { toast } = useToast()
+  const { isLoading, checkAuthUser } = useUserContext()
+  const navigate = useNavigate()
+  
+
+  const { mutateAsync: createUserAccount } = useCreateUserAccount()
+  const { mutateAsync: signinAccount } = useSigninAccount()
+
   const form = useForm<z.infer<typeof signupValidation>>({
     resolver: zodResolver(signupValidation),
     defaultValues: {
@@ -21,13 +30,29 @@ const SignupForm = () => {
   })
 
   async function onSubmit(Values: z.infer<typeof signupValidation>) {
-  const newUser = await createUserAccount(Values)
+
+    const newUser = await createUserAccount(Values)
      if(!newUser) {
       return toast({
-        title: 'sign up failed'
+        title: 'sign up failed. please try again.'
       })
      }
-     //const session = await signInAccount()
+
+     const session = await signinAccount({email: Values.email, password: Values.password})
+     if(!session) {
+      return toast({
+        title: 'Sign in failed. please try again.'
+      })
+     }
+     const isLoggedIn = await checkAuthUser()
+
+     if(isLoggedIn) {
+      form.reset()
+      navigate('/')
+     } else {
+      return toast({title: 'sign up failed. please try again.'})
+     }
+     
   }
  
  
@@ -152,7 +177,11 @@ const SignupForm = () => {
                   )}
                  />  
             </div>
-            <button className="text-small-regular text-light-2 text-center w-full bg-purple-500 mt-3  px-2 rounded-sm" type="submit">Sign up</button>  
+            <button className="text-small-regular text-light-2 text-center w-full bg-purple-500 mt-3  px-2 rounded-sm" type="submit">
+              {isLoading ?
+            (
+              <div className="flex-center gap-2"><ClipLoader /> Loading ...</div>
+            ):"Sign up"}</button>  
         </form>     
       
       
