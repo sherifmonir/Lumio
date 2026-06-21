@@ -12,12 +12,12 @@ import { useUserContext } from "@/context/AuthContect"
 
 const SignupForm = () => {
   const { toast } = useToast()
-  const { isLoading, checkAuthUser } = useUserContext()
+  const { checkAuthUser } = useUserContext()
   const navigate = useNavigate()
   
 
-  const { mutateAsync: createUserAccount } = useCreateUserAccount()
-  const { mutateAsync: signinAccount } = useSigninAccount()
+  const { mutateAsync: createUserAccount, isPending:isCreatingAccount  } = useCreateUserAccount()
+  const { mutateAsync: signinAccount, isPending:isSigningInUser  } = useSigninAccount()
 
   const form = useForm<z.infer<typeof signupValidation>>({
     resolver: zodResolver(signupValidation),
@@ -51,7 +51,10 @@ const SignupForm = () => {
       navigate('/')
      } else {
       return toast({title: 'sign up failed. please try again.'})
-     }
+     } 
+
+      
+     
      
   }
  
@@ -178,7 +181,7 @@ const SignupForm = () => {
                  />  
             </div>
             <button className="text-small-regular text-light-2 text-center w-full bg-purple-500 mt-3  px-2 rounded-sm" type="submit">
-              {isLoading ?
+              {isCreatingAccount || isSigningInUser ?
             (
               <div className="flex-center gap-2"><ClipLoader /> Loading ...</div>
             ):"Sign up"}</button>  

@@ -21,7 +21,7 @@ try{
             accountId: newAccount.$id,
             name: newAccount.name,
             email: newAccount.email,
-            username: user.name,
+            username: user.username,
             imageUrl: avatarUrl
         })
 
@@ -39,7 +39,7 @@ export async function saveUserToDB(user:{
     accountId:string,
     email:string,
     name:string,
-    imageUrl?: string | URL,
+    imageUrl: URL,
     username?:string
 
 }) {
