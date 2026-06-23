@@ -1,7 +1,6 @@
 import { getCurrentUser } from '@/lib/appwrite/api'
-import type { IContextType, IUser } from '@/types'
+import type { IContextType } from '@/types'
 import {createContext, useContext, useEffect, useState} from 'react'
-import { useNavigate } from 'react-router-dom'
 
 
 export const INITIAL_USER = {
@@ -57,14 +56,28 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
     }
   }
 
-  const navigate = useNavigate()
+  
 
   useEffect(() => {
     const checkAuth = async () => {
+
+      const currentPath = window.location.pathname
+      const isAuthPage = currentPath.includes('/sign-in') || currentPath.includes('/sign-up')
+
+      if(isAuthPage) {
+
+        setIsLoading(false)
+        return
+
+      }
+      
       if(
         localStorage.getItem('cookieFallback') === '[]' 
         //localStorage.getItem('cookieFallback') === null
-      ) navigate('/sign-in')
+      ) {
+        setIsAuthenticated(false)
+        return
+      }
 
       await checkAuthUser()
     }

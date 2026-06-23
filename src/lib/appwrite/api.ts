@@ -39,7 +39,7 @@ export async function saveUserToDB(user:{
     accountId:string,
     email:string,
     name:string,
-    imageUrl: URL,
+    imageUrl: string,
     username?:string
 
 }) {
@@ -70,6 +70,7 @@ export async function signinAccount(user: {email:string, password:string}){
 }
 
 export async function getCurrentUser() {
+    
     try{
         const currentAccount = await account.get()
 
