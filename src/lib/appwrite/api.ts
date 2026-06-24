@@ -30,7 +30,7 @@ try{
 
 }catch(error){
     console.log(error)
-    throw error
+    
 }
 }
 
@@ -68,6 +68,7 @@ export async function signinAccount(user: {email:string, password:string}){
         console.log(error)
     }
 }
+
 
 export async function getCurrentUser() {
     
