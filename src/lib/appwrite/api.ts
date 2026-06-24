@@ -1,6 +1,6 @@
 import type { INewUser } from "@/types";
 import { ID, Query } from "appwrite";
-import { account, appwriteconfig, avatars, databases } from "./config";
+import { account, appwriteconfig, databases } from "./config";
 
 
 
@@ -13,24 +13,13 @@ try{
         user.name
         )
 
-        if(!newAccount) throw Error
+    if(!newAccount) throw new Error("ccount creation failedA")
 
-        const avatarUrl = avatars.getInitials(user.name)
-
-        const newUser = await saveUserToDB({
-            accountId: newAccount.$id,
-            name: newAccount.name,
-            email: newAccount.email,
-            username: user.username,
-            imageUrl: avatarUrl
-        })
-
-
-    return newUser;
+    return newAccount;
 
 }catch(error){
-    console.log(error)
-    
+    console.error('Account creation error', error)
+    throw error
 }
 }
 
@@ -39,7 +28,7 @@ export async function saveUserToDB(user:{
     accountId:string,
     email:string,
     name:string,
-    imageUrl: string,
+    imageUrl: never,
     username?:string
 
 }) {

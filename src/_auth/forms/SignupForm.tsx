@@ -4,9 +4,10 @@ import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import  { signupValidation } from "@/lib/validation"
 import { useToast } from "@/components/ui/sonner"
-import { useCreateUserAccount, useSigninAccount } from "@/lib/react-query/queriesAndMutatuins"
+import { useCreateUserAccount, useSaveUserToDB, useSigninAccount } from "@/lib/react-query/queriesAndMutatuins"
 import { ClipLoader } from "react-spinners";
 import { useUserContext } from "@/context/AuthContect"
+import { avatars } from "@/lib/appwrite/config"
 
 
 
@@ -14,49 +15,60 @@ const SignupForm = () => {
   const { toast } = useToast()
   const { checkAuthUser } = useUserContext()
   const navigate = useNavigate()
-  
 
-  const { mutateAsync: createUserAccount, isPending:isCreatingAccount  } = useCreateUserAccount()
-  const { mutateAsync: signinAccount, isPending:isSigningInUser  } = useSigninAccount()
+  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount()
+  const { mutateAsync: signinAccount, isPending: isSigningInUser } = useSigninAccount()
+  const { mutateAsync: saveUserToDB } = useSaveUserToDB() 
 
   const form = useForm<z.infer<typeof signupValidation>>({
     resolver: zodResolver(signupValidation),
     defaultValues: {
       name: "",
       username: "",
-      email: "",
       password: "",
+      email: "",
     },
   })
 
   async function onSubmit(Values: z.infer<typeof signupValidation>) {
+    try {
+      const newAccount = await createUserAccount(Values)
+      if(!newAccount) {
+        return toast({ title: 'Account creation failed. please try again.' })
+      }
 
-    const newUser = await createUserAccount(Values)
-     if(!newUser) {
-      return toast({
-        title: 'sign up failed. please try again.'
-      })
-     }
-
-     const session = await signinAccount({email: Values.email, password: Values.password})
-     if(!session) {
-      return toast({
-        title: 'Sign in failed. please try again.'
-      })
-     }
-     const isLoggedIn = await checkAuthUser()
-
-     if(isLoggedIn) {
-      form.reset()
-      navigate('/')
-     } else {
-      return toast({title: 'sign up failed. please try again.'})
-     } 
+      const session = await signinAccount({email: Values.email, password: Values.password})
+      if(!session) {
+        return toast({ title: 'Sign in failed. please try again.' })
+      }
 
       
-     
-     
+      const newUser = await saveUserToDB({
+        accountId: newAccount.$id,
+        name: newAccount.name,
+        email: newAccount.email,
+        username: Values.username,
+        imageUrl: avatars.getInitials(Values.name) as never
+      })
+
+      if(!newUser) {
+        return toast({ title: 'Could not save profile. please try again.' })
+      }
+
+      const isLoggedIn = await checkAuthUser()
+      if(isLoggedIn) {
+        form.reset()
+        navigate('/')
+      } else {
+        return toast({title: 'sign up failed. please try again.'})
+      }
+
+    } catch(error: unknown) {
+      console.error("Signup error:", error)
+      toast({title: 'Signup failed. please try again.'})
+    }
   }
+
  
  
  
