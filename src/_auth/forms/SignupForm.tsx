@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/sonner"
 import { useCreateUserAccount, useSaveUserToDB, useSigninAccount } from "@/lib/react-query/queriesAndMutatuins"
 import { ClipLoader } from "react-spinners";
 import { useUserContext } from "@/context/AuthContect"
-import { avatars } from "@/lib/appwrite/config"
+import {  account, avatars } from "@/lib/appwrite/config"
 
 
 
@@ -36,12 +36,29 @@ const SignupForm = () => {
       if(!newAccount) {
         return toast({ title: 'Account creation failed. please try again.' })
       }
+      console.log('[Signup] Account created:', newAccount.$id);
+      /** */
 
       const session = await signinAccount({email: Values.email, password: Values.password})
       if(!session) {
         return toast({ title: 'Sign in failed. please try again.' })
       }
+      console.log('[Signup] Session created:', session.$id);
+      await new Promise(resolve => setTimeout(resolve, 100));
 
+    const sessionCheck = localStorage.getItem('cookieFallback');
+    console.log('[Signup] Session in localStorage:', sessionCheck);
+    
+    if (!sessionCheck || sessionCheck === '[]') {
+      console.warn('[Signup] WARNING: Session not found in localStorage. Waiting...');
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    /** */
+
+    console.log('[Signup] Attempting to save user to DB...');
+    
+const currentAccount = await account.get();
+console.log("currentAccount", currentAccount);
       
       const newUser = await saveUserToDB({
         accountId: newAccount.$id,
@@ -54,9 +71,13 @@ const SignupForm = () => {
       if(!newUser) {
         return toast({ title: 'Could not save profile. please try again.' })
       }
+      console.log('[Signup] User saved to DB:', newUser.$id);
+
+      /** */
 
       const isLoggedIn = await checkAuthUser()
       if(isLoggedIn) {
+        console.log('[Signup] Auth verified, redirecting...');
         form.reset()
         navigate('/')
       } else {
@@ -64,7 +85,7 @@ const SignupForm = () => {
       }
 
     } catch(error: unknown) {
-      console.error("Signup error:", error)
+      console.error('[Signup] Full error:', error);
       toast({title: 'Signup failed. please try again.'})
     }
   }

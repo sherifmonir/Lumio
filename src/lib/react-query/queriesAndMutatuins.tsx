@@ -23,7 +23,7 @@ export const useSaveUserToDB = () => {
       accountId: string;
       email: string;
       name: string;
-      imageUrl: never;
+      imageUrl: string;
       username?: string;
     }) => saveUserToDB(user)
     })

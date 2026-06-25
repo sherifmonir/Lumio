@@ -28,34 +28,81 @@ export async function saveUserToDB(user:{
     accountId:string,
     email:string,
     name:string,
-    imageUrl: never,
+    imageUrl: string,
     username?:string
 
 }) {
     try{
+        console.log('[saveUserToDB] Starting with:', user);
+    console.log('[saveUserToDB] Current session:', localStorage.getItem('cookieFallback'));
+    /** */
+    const currentUser = await account.get();
+console.log("AUTH USER:", currentUser);
+console.log(appwriteconfig);
+console.log(appwriteconfig.userTableId)
+console.log({
+  databaseId: appwriteconfig.databaseId,
+  tableId: appwriteconfig.userTableId,
+});
+/** */
         const newUser = await databases.createDocument(
             appwriteconfig.databaseId,
             appwriteconfig.userTableId,
             ID.unique(),
             user
+
         )
+        console.log('[saveUserToDB] Success:', newUser);
+        /** */
         return newUser
 
     }catch(error){
-        console.log(error)
+        console.error('[saveUserToDB] Error details:', {
+      fullError: error
+    });
+    throw error;
+
     }
 
 }
 
 
 export async function signinAccount(user: {email:string, password:string}){
+      try {
+    console.log('[signInAccount] Attempting signin for:', user.email);
+    
+    // CRITICAL: Check if a session already exists
+    try {
+      const currentSession = await account.getSession('current');
+      console.log('[signInAccount] Active session found:', currentSession.$id);
+      console.log('[signInAccount] Logging out existing session first...');
+      
+      // Delete the current session before creating a new one
+      await account.deleteSession('current');
+      console.log('[signInAccount] Existing session deleted');
+    } catch (error) {
+      // If error is "Session not found", that's fine - no existing session
+      if (error) {
+        console.log('[signInAccount] No existing session (expected)');
+      }
+    }
+    /** */
     try{
+         console.log('[signInAccount] Attempting signin for:', user.email);
+         /** */
         const session = await account.createEmailPasswordSession(user.email, user.password)
+        console.log('[signInAccount] Session created successfully:', session.$id);
         return session
 
-    }catch(error){
-        console.log(error)
+    }catch (error) {
+    console.error('[signInAccount] Error:', {fullError: error});
+    /** */
+    throw error;
     }
+  } catch (error) {
+    console.error('[signInAccount] Outer catch error:', error);
+    throw error;
+  }
 }
 
 
