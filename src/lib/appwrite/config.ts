@@ -11,9 +11,11 @@ export const appwriteconfig = {
 }
 
 export const client = new Client()
+  .setEndpoint(appwriteconfig.url)
+  .setProject(appwriteconfig.projectId)
 
-client.setProject(appwriteconfig.projectId)
-client.setEndpoint(appwriteconfig.url)
+// Force web platform — SDK v25 incorrectly sets 'server' in Vite environments
+;(client as any).headers['X-Sdk-Platform'] = 'web'
 
 export const account = new Account(client)
 export const databases = new Databases(client)

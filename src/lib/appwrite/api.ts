@@ -1,11 +1,17 @@
 import type { INewUser } from "@/types";
 import { ID, Query } from "appwrite";
-import { account, appwriteconfig, databases } from "./config";
+import { account, appwriteconfig, databases, client } from "./config";
 
 
 
 export async function createUserAccount(user: INewUser) {
 try{
+
+    try {
+      await account.deleteSession('current');
+    } catch {
+      // No existing session — that's fine
+    }
     const newAccount = await account.create(
         ID.unique(), 
         user.email,
@@ -67,43 +73,83 @@ console.log({
 }
 
 
+
+
 export async function signinAccount(user: {email:string, password:string}){
+
       try {
+
     console.log('[signInAccount] Attempting signin for:', user.email);
-    
+
+   
+
     // CRITICAL: Check if a session already exists
+
     try {
+
       const currentSession = await account.getSession('current');
+
       console.log('[signInAccount] Active session found:', currentSession.$id);
+
       console.log('[signInAccount] Logging out existing session first...');
-      
+
+     
+
       // Delete the current session before creating a new one
+
       await account.deleteSession('current');
+
       console.log('[signInAccount] Existing session deleted');
+
     } catch (error) {
+
       // If error is "Session not found", that's fine - no existing session
+
       if (error) {
+
         console.log('[signInAccount] No existing session (expected)');
+
       }
+
     }
+
     /** */
+
     try{
+
          console.log('[signInAccount] Attempting signin for:', user.email);
+
          /** */
+
         const session = await account.createEmailPasswordSession(user.email, user.password)
+
         console.log('[signInAccount] Session created successfully:', session.$id);
+
         return session
 
+
+
     }catch (error) {
+
     console.error('[signInAccount] Error:', {fullError: error});
+
     /** */
+
     throw error;
+
     }
+
   } catch (error) {
+
     console.error('[signInAccount] Outer catch error:', error);
+
     throw error;
+
   }
-}
+
+} 
+
+
 
 
 export async function getCurrentUser() {

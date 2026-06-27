@@ -31,6 +31,8 @@ const SignupForm = () => {
   })
 
   async function onSubmit(Values: z.infer<typeof signupValidation>) {
+      localStorage.removeItem('cookieFallback')
+
     try {
       const newAccount = await createUserAccount(Values)
       if(!newAccount) {
@@ -65,7 +67,7 @@ console.log("currentAccount", currentAccount);
         name: newAccount.name,
         email: newAccount.email,
         username: Values.username,
-        imageUrl: avatars.getInitials(Values.name) as never
+        imageUrl: avatars.getInitials(Values.name).toString()
       })
 
       if(!newUser) {
