@@ -1,35 +1,16 @@
 import { getCurrentUser } from '@/lib/appwrite/api'
-import type { IContextType } from '@/types'
-import {createContext, useContext, useEffect, useState} from 'react'
+import type {  IUser } from '@/types'
+import { useEffect, useState} from 'react'
+import {  INITIAL_USER, AuthContext } from './AuthConstants'
 
-
-export const INITIAL_USER = {
-  id: '',
-  name: '',
-  username: '',
-  email: '',
-  imageUrl: '',
-  bio: ''
-}
-
-export const INITIAL_STATE = {
-  user: INITIAL_USER,
-  isLoading: false,
-  isAuthenticated: false,
-  setUser: () => {},
-  setIsAuthenticated: () => {},
-  checkAuthUser: async () => false as boolean
-
-}
-
-const AuthContext = createContext<IContextType>(INITIAL_STATE)
 
 const AuthProvider = ({children}: {children: React.ReactNode}) => {
-  const [user, setUser] = useState(INITIAL_USER)
-  const [isLoading, setIsLoading] = useState(false)
+  const [user, setUser] = useState<IUser>(INITIAL_USER)
+  const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const checkAuthUser = async () => {
+    setIsLoading(true)
     try{
       const currentAccount = await getCurrentUser()
       if(currentAccount) {
@@ -46,7 +27,6 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
         return true
       }
       return false
-
 
     } catch(error){
       console.log(error)
@@ -72,12 +52,13 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
       }
       
       if(
-        localStorage.getItem('cookieFallback') === '[]' 
-        //localStorage.getItem('cookieFallback') === null
-      ) {
-        setIsAuthenticated(false)
-        return
-      }
+  localStorage.getItem('cookieFallback') === '[]' ||
+  localStorage.getItem('cookieFallback') === null
+) {
+  setIsAuthenticated(false)
+  setIsLoading(false)
+  return
+}
 
       await checkAuthUser()
     }
@@ -103,4 +84,3 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
 
 export default AuthProvider
-export const useUserContext = () => useContext(AuthContext)
