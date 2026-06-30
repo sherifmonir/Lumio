@@ -73,23 +73,18 @@ const SignupForm = () => {
     }
   }
 
- 
- 
- 
   return (
-
-
-      
+ 
   <>
-        <form className="flex flex-col  h-50 w-40  rounded-md bg-dark-4 p-3" onSubmit={form.handleSubmit(onSubmit)} >
+        <form className="flex flex-col   w-40  rounded-md bg-dark-4 p-3" onSubmit={form.handleSubmit(onSubmit)} >
           <header>
-            <h1 className="text-[0.4rem] font-bold text-light-2  px-1" >Create a new account</h1>
+            <h1 className="text-[0.6rem] font-bold text-light-2  px-1" >Create a new account</h1>
             <h3 className="text-[0.3rem] text-light-2 px-1">
           Update your profile information below.
             </h3>
           </header>
 
-          <div >
+          
             <Controller
               name="name"
               control={form.control}
@@ -114,9 +109,9 @@ const SignupForm = () => {
                 </div>
                   )}
                  />
-            </div>
             
-            <div >
+            
+            
             <Controller
               name="username"
               control={form.control}
@@ -141,9 +136,9 @@ const SignupForm = () => {
                 </div>
                   )}
                  />  
-            </div>
+           
 
-            <div >
+            
             <Controller
               name="password"
               control={form.control}
@@ -168,9 +163,9 @@ const SignupForm = () => {
                 </div>
                   )}
                  />  
-            </div>
+            
 
-            <div >
+            
             <Controller
               name="email"
               control={form.control}
@@ -195,7 +190,7 @@ const SignupForm = () => {
                 </div>
                   )}
                  />  
-            </div>
+            
             <button className="text-small-regular text-light-2 text-center w-full bg-purple-500 mt-3  px-2 rounded-sm" type="submit">
               {isCreatingAccount || isSigningInUser ?
             (

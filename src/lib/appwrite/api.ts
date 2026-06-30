@@ -10,7 +10,7 @@ try{
     try {
       await account.deleteSession('current');
     } catch {
-      // No existing session — that's fine
+      // No existing session
     }
     const newAccount = await account.create(
         ID.unique(), 
@@ -48,9 +48,13 @@ export async function saveUserToDB(user:{
 }
 
 
-
-
 export async function signinAccount(user: {email:string, password:string}){
+
+    try {
+      await account.deleteSession('current');
+    } catch {
+      // No existing session
+    }
 
   try{
         const session = await account.createEmailPasswordSession(user.email, user.password)
@@ -62,8 +66,6 @@ export async function signinAccount(user: {email:string, password:string}){
       }
 
 } 
-
-
 
 
 export async function getCurrentUser() {
@@ -85,4 +87,16 @@ export async function getCurrentUser() {
     } catch(error) {
         console.log(error)
     }
+}
+
+
+export async function signoutAccount() {
+    try {    
+
+        return await account.deleteSession("current")
+        
+    } catch (error){
+        console.log(error)
+    }
+
 }
