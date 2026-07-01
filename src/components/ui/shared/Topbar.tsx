@@ -1,16 +1,18 @@
-import { useSigninAccount } from '@/lib/react-query/queriesAndMutatuins'
+import { useSignoutAccount } from '@/lib/react-query/queriesAndMutatuins'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { useUserContext } from '@/context/UseUserContext'
 
 const Topbar = () => {
-  const { mutate: signout, isSuccess } = useSigninAccount()
+  const { mutate: signout, isSuccess } = useSignoutAccount()
   const navigate = useNavigate()
+  const { user } = useUserContext()
 
   useEffect(() => {
     
     if (isSuccess)
-      navigate(0)
-  }, [isSuccess, navigate])
+      navigate('/sign-in')
+  }, [isSuccess])
 
 
   
@@ -32,6 +34,13 @@ const Topbar = () => {
             alt="logout"
             />
           </button>
+          <Link to={`/profile/${user.id}`} className="flex-center gap-3">
+            <img
+              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+              alt="profile"
+              className="h-8 w-8 rounded-full"
+            />
+          </Link>
         </div>
 
       </div>

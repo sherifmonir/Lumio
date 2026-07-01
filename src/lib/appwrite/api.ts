@@ -10,7 +10,7 @@ try{
     try {
       await account.deleteSession('current');
     } catch {
-      // No existing session
+      return null
     }
     const newAccount = await account.create(
         ID.unique(), 
@@ -19,7 +19,7 @@ try{
         user.name
         )
 
-    if(!newAccount) throw new Error("ccount creation failedA")
+    if(!newAccount) throw new Error("ccount creation failed")
 
     return newAccount;
 
@@ -53,7 +53,7 @@ export async function signinAccount(user: {email:string, password:string}){
     try {
       await account.deleteSession('current');
     } catch {
-      // No existing session
+      return null
     }
 
   try{
@@ -62,7 +62,8 @@ export async function signinAccount(user: {email:string, password:string}){
         return session
 
       }catch (error) {
-         console.log(error);
+         console.log(error)
+         return null
       }
 
 } 
@@ -86,6 +87,7 @@ export async function getCurrentUser() {
 
     } catch(error) {
         console.log(error)
+        return null
     }
 }
 
@@ -97,6 +99,7 @@ export async function signoutAccount() {
         
     } catch (error){
         console.log(error)
+        return null
     }
 
 }

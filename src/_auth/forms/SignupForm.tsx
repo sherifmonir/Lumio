@@ -194,7 +194,12 @@ const SignupForm = () => {
             <button className="text-small-regular text-light-2 text-center w-full bg-purple-500 mt-3  px-2 rounded-sm" type="submit">
               {isCreatingAccount || isSigningInUser ?
             (
-              <div className="flex-center gap-2"><ClipLoader /> Loading ...</div>
+              <div className="flex-center gap-2">
+                <div className="h-14">
+                  <ClipLoader />
+                </div>
+                 <p>Loading ...</p>
+              </div>
             ):"Sign up"}</button>
             
             
