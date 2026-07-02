@@ -10,7 +10,7 @@ try{
     try {
       await account.deleteSession('current');
     } catch {
-      return null
+     // No session exists
     }
     const newAccount = await account.create(
         ID.unique(), 
@@ -53,7 +53,7 @@ export async function signinAccount(user: {email:string, password:string}){
     try {
       await account.deleteSession('current');
     } catch {
-      return null
+      // No session exists
     }
 
   try{

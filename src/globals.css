@@ -322,13 +322,13 @@
   @apply absolute bottom-0 p-5 flex-between w-full bg-gradient-to-t from-dark-3 to-transparent rounded-b-3xl gap-2;
 }
 
-/* Left sidebar */
+/* Left sidebar 
 @utility leftsidebar {
-  @apply  flex px-6 py-10 flex-col justify-between min-w-[270px] bg-dark-2;
+  @apply  flex px-1 py-1 flex-col justify-between w-20 h-screen bg-dark-2 md:hidden;
 }
 @utility leftsidebar-link {
-  @apply rounded-lg base-medium hover:bg-primary-500 transition;
-}
+  @apply rounded-md text-[0.7rem]  font-medium h-6  hover:bg-primary-500 text-white transition;
+}*/
 
 /* Post Card */
 @utility post-card {
@@ -340,7 +340,7 @@
 
 /* Topbar */
 @utility topbar {
-  @apply sticky top-0 z-50 md:hidden bg-dark-2 w-full;
+  @apply sticky top-0 right-0 z-50  bg-dark-2 h-20 w-full;
 }
 
 /* User card */
