@@ -63,16 +63,11 @@ const SigninForm = () => {
 
       
   <>
-        <form className="flex flex-col w-40 rounded-md bg-dark-4 p-3" onSubmit={form.handleSubmit(onSubmit)} >
+        <form className="flex flex-col w-60   rounded-md bg-dark-4 p-3" onSubmit={form.handleSubmit(onSubmit)} >
           <header>
-            <h1 className="text-[0.6rem] font-bold text-light-2  px-1" >Login to your account</h1>
-            
-          </header>
+            <h1 className="text-[1rem] font-bold text-light-2  px-1" >Login to your account</h1>
+          </header>    
 
-          
-            
-            
-            
               <Controller
               name="email"
               control={form.control}
@@ -99,7 +94,6 @@ const SigninForm = () => {
                  />  
             
 
-            
             <Controller
               name="password"
               control={form.control}
@@ -127,18 +121,18 @@ const SigninForm = () => {
             
 
            
-            <button className="text-small-regular text-light-2 text-center w-full bg-purple-500 mt-3  px-2 rounded-sm" type="submit">
+            <button className="form-bottom" type="submit">
               { isSigningInUser ?
             (
-              <div className="flex-center gap-2"><ClipLoader /> Loading ...</div>
+              <div className="flex-center gap-2 "><ClipLoader /> Loading ...</div>
             ):"Sign in"}</button>
             
             
         </form>     
       
-        <p className="text-[0.4rem] mt-1 text-light-2 text-center">
+        <p className="text-[0.6rem] mt-2 text-light-2 text-center">
       Don't have an account?
-          <Link to="/sign-up" className="text-primary-500 text-[0.5rem] ml-1" >
+          <Link to="/sign-up" className="text-primary-500 text-[0.7rem] ml-2" >
      Sign up
           </Link>
         </p>

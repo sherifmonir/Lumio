@@ -2,17 +2,22 @@ import { useSignoutAccount } from '@/lib/react-query/queriesAndMutatuins'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useUserContext } from '@/context/UseUserContext'
+import { INITIAL_USER } from '@/context/AuthConstants'
 
 const Topbar = () => {
   const { mutate: signout, isSuccess } = useSignoutAccount()
   const navigate = useNavigate()
-  const { user } = useUserContext()
+  const { user, setUser, setIsAuthenticated } = useUserContext()
 
   useEffect(() => {
     
-    if (isSuccess)
+    if (isSuccess) {
+      setIsAuthenticated(false)
+      setUser(INITIAL_USER)
+
       navigate('/sign-in')
-  }, [isSuccess])
+    }
+  }, [isSuccess, navigate, setIsAuthenticated, setUser]);
 
 
   
@@ -28,7 +33,7 @@ const Topbar = () => {
         />
         </Link>
         <div className="flex gap-3">
-          <button type="button" className="ghost_buttom" onClick={() => signout()}>
+          <button type="button"  onClick={() => signout()}>
             <img 
             src="/assets/icons/logout.svg"
             alt="logout"

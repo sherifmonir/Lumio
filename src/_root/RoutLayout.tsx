@@ -2,19 +2,20 @@ import Bottombar from '@/components/ui/shared/Bottombar'
 import LeftSideBar from '@/components/ui/shared/LeftSideBar'
 import Topbar from '@/components/ui/shared/Topbar'
 import { useUserContext } from '@/context/UseUserContext'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 const RoutLayout = () => {
 
     const { isAuthenticated, isLoading } = useUserContext()
+    const navigate = useNavigate()
     if (isLoading) return null
-    if (!isAuthenticated) return <Navigate to="/sign-in" />
+    if (!isAuthenticated) return navigate('/sign-in')
 
   return (
     <div className="w-full">
       <Topbar />
       <LeftSideBar />
-      <section className="ml-30" >
+      <section className=" h-screen  ml-40 [@media(max-width:768px)]:ml-0" >
         <Outlet />
       </section>
       <Bottombar />

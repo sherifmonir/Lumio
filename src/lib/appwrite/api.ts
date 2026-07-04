@@ -6,6 +6,7 @@ import { account, appwriteconfig, databases } from "./config";
 
 export async function createUserAccount(user: INewUser) {
 try{
+    
 
     try {
       await account.deleteSession('current');
@@ -93,13 +94,16 @@ export async function getCurrentUser() {
 
 
 export async function signoutAccount() {
+    
     try {    
 
         return await account.deleteSession("current")
         
-    } catch (error){
+         
+        
+    } catch(error) {
         console.log(error)
-        return null
+        
     }
 
 }

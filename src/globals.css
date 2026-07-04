@@ -240,6 +240,10 @@
   @apply w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
 }
 
+@utility form-bottom {
+  @apply  text-light-2 text-center w-full bg-primary-500 mt-4 mb-0 px-2 py-0.5 rounded-sm
+}
+
 /* Explore */
 @utility explore-container {
   @apply flex flex-col flex-1 items-center overflow-scroll py-10 px-5 md:p-14 custom-scrollbar;
@@ -296,8 +300,9 @@
 }
 
 /* Bottom bar */
+
 @utility bottom-bar {
-  @apply z-50 flex-between w-full sticky bottom-0 rounded-t-[20px] bg-dark-2 px-5 py-4 md:hidden;
+  @apply md:hidden z-50 flex-between w-full fixed bottom-0 rounded-t-[20px] bg-dark-2 h-12 px-5 py-4 ;
 }
 
 /* File uploader */
@@ -322,13 +327,18 @@
   @apply absolute bottom-0 p-5 flex-between w-full bg-gradient-to-t from-dark-3 to-transparent rounded-b-3xl gap-2;
 }
 
-/* Left sidebar 
+/* Left sidebar */
 @utility leftsidebar {
-  @apply  flex px-1 py-1 flex-col justify-between w-20 h-screen bg-dark-2 md:hidden;
+  @apply hidden md:flex flex-col justify-between items-center fixed z-40  pt-20 bottom-0 h-full left-0 w-40  bg-dark-2 ;
 }
+
 @utility leftsidebar-link {
-  @apply rounded-md text-[0.7rem]  font-medium h-6  hover:bg-primary-500 text-white transition;
-}*/
+  @apply gap-2 flex flex-col  font-medium  text-white w-full pl-5  py-2 bg-dark-4;
+}
+
+  @utility leftsidebar-NavLink {
+    @apply text-[0.7rem] text-white h-7 py-0.5 bg-dark-5 hover:bg-primary-500 rounded-sm hidden md:flex items-center gap-6 pl-3 mb-5;
+  }
 
 /* Post Card */
 @utility post-card {
@@ -353,14 +363,14 @@
 }
 
 @utility form-label{
- @apply text-[0.4rem] font-bold text-light-2 mt-2 px-1
+ @apply text-[0.9rem] font-bold text-light-2 mt-4 mb-0.5 px-1
 }
 
 @utility form-input{
- @apply bg-dark-5 h-3.5 rounded-[3px] border-[1px] border-light-5 text-light-2 text-[0.5rem]  placeholder:text-[0.4rem] flex-center text-light-3
+ @apply bg-dark-5 h-6 rounded-[3px] border border-light-5 text-light-2 text-[0.8rem]  placeholder:text-[0.7rem] px-1
 }
 @utility form-error{
- @apply text-red-500 text-[0.5rem]
+ @apply text-red-500 text-[0.6rem]
 }
 
 

@@ -18,12 +18,12 @@ import { useUserContext } from '@/context/UseUserContext'
       (
         <div className="bg-dark-3 flex h-screen  w-full flex-center overflow-auto gap-3">
 
-          <section className="w-1/2 justify-around flex flex-col  h-screen">
+          <section className="w-1/2  flex flex-col items-center h-screen">
 
             <img src="/assets/images/logo.svg" alt="logo" 
-            className="h-10  w-20 mx-auto " />
+            className="h-20  w-60  mb-15 mt-35" />
 
-            <div className=" w-40 m-auto">
+            <div>
               <Outlet />
               </div>
 

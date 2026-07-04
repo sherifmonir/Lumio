@@ -76,10 +76,10 @@ const SignupForm = () => {
   return (
  
   <>
-        <form className="flex flex-col   w-40  rounded-md bg-dark-4 p-3" onSubmit={form.handleSubmit(onSubmit)} >
+        <form className="flex flex-col w-60   rounded-md bg-dark-4 p-3" onSubmit={form.handleSubmit(onSubmit)} >
           <header>
-            <h1 className="text-[0.6rem] font-bold text-light-2  px-1" >Create a new account</h1>
-            <h3 className="text-[0.3rem] text-light-2 px-1">
+            <h1 className="text-[1rem] font-bold text-light-2  px-2" >Create a new account</h1>
+            <h3 className="text-[0.6rem] text-light-2 px-2">
           Update your profile information below.
             </h3>
           </header>
@@ -191,7 +191,7 @@ const SignupForm = () => {
                   )}
                  />  
             
-            <button className="text-small-regular text-light-2 text-center w-full bg-purple-500 mt-3  px-2 rounded-sm" type="submit">
+            <button className="form-bottom" type="submit">
               {isCreatingAccount || isSigningInUser ?
             (
               <div className="flex-center gap-2">
@@ -205,9 +205,9 @@ const SignupForm = () => {
             
         </form>     
       
-        <p className="text-[0.4rem] mt-1 text-light-2 text-center">
+        <p className="text-[0.6rem] mt-2 text-light-2 text-center">
       Already have an account?
-          <Link to="/sign-in" className="text-primary-500 text-[0.5rem] ml-1" >
+          <Link to="/sign-in" className="text-primary-500 text-[0.7rem] ml-2" >
      Log in
           </Link>
         </p>
