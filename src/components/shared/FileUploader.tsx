@@ -1,5 +1,5 @@
 import type { FileUploaderProps } from '@/types'
-import React, {useCallback, useState} from 'react'
+import {useCallback, useState} from 'react'
 import { useDropzone, type FileWithPath } from 'react-dropzone'
 
 const FileUploader = ({fieldChange, mediaUrl}: FileUploaderProps) => {
@@ -40,13 +40,18 @@ const FileUploader = ({fieldChange, mediaUrl}: FileUploaderProps) => {
                 height={77}
                 alt="file-upload"
                 />
-                <h3 className="base-medium text-light-2 mb-2 mt-6">Drag photo here.</h3>
-                <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG</p>
+                <h3 className="base-medium text-light-2 mb-2 mt-6">
+                    Drag photo here.
+                </h3>
+                <p className="text-light-4 small-regular mb-6">
+                    SVG, PNG, JPG
+                </p>
                 <button className="Add-photo-button">
                     Select from computer
                 </button>
             </div>
         )
+        
           
       }
     </div>

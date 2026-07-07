@@ -1,6 +1,6 @@
-import Bottombar from '@/components/ui/shared/Bottombar'
-import LeftSideBar from '@/components/ui/shared/LeftSideBar'
-import Topbar from '@/components/ui/shared/Topbar'
+import Bottombar from '@/components/shared/Bottombar'
+import LeftSideBar from '@/components/shared/LeftSideBar'
+import Topbar from '@/components/shared/Topbar'
 import { useUserContext } from '@/context/UseUserContext'
 import { Outlet, useNavigate } from 'react-router-dom'
 

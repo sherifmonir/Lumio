@@ -1,5 +1,3 @@
-import type { Models } from "appwrite";
-
 export type INavLink = {
   imgURL: string;
   route: string;
@@ -63,8 +61,4 @@ export type IContextType = {
 export type FileUploaderProps ={
   fieldChange: (FILES:File[]) => void
   mediaUrl: string
-}
-
-export type PostFormProps = {
-    post?: Models.Document
 }

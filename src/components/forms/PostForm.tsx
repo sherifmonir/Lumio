@@ -2,13 +2,19 @@ import * as z from "zod"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import  {  postValidation } from "@/lib/validation"
-import FileUploader from "../ui/shared/FileUploader"
+import FileUploader from "../shared/FileUploader"
 import type { Models } from "appwrite"
 
+interface  Ipost extends  Models.Document  {
+  caption?: string,
+  location?: string,
+  tags?: File[],
+  imageUrl: string,
+  documment: Models.Document
+}
 
-
-export type PostFormProps = {
-    post?: Models.Document
+type PostFormProps = {
+    post?: Ipost
 }
 
 const PostForm = ({ post }: PostFormProps) => {
@@ -20,8 +26,6 @@ const PostForm = ({ post }: PostFormProps) => {
           file: [],
           location: post?.location ?? "",
           tags: post?.tags?.join(",") ?? ""
-
-
         }
       })
     
@@ -43,7 +47,7 @@ const PostForm = ({ post }: PostFormProps) => {
 
                 <div className="field" >
                   <label  className="form-label">
-                    Add Post
+                    Caption
                   </label>
                   <textarea 
                     className="Create-Post-textarea"
@@ -63,7 +67,7 @@ const PostForm = ({ post }: PostFormProps) => {
 
                 <div className="field" >
                   <label  className="form-label">
-                    Add Post
+                    Photo
                   </label>
                   <FileUploader
                   fieldChange={field.onChange}
@@ -82,7 +86,7 @@ const PostForm = ({ post }: PostFormProps) => {
 
                 <div className="field" >
                   <label className="form-label">
-                    Add Post
+                    Location
                   </label>
                   <input type="text" className="form-input" {...field}/>
                 </div>
@@ -98,7 +102,7 @@ const PostForm = ({ post }: PostFormProps) => {
 
                 <div className="field" >
                   <label htmlFor="form-rhf-input-email" className="form-label">
-                    Add Post
+                    Tags
                   </label>
                   <input 
                    type="text"
