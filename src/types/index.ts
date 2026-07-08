@@ -1,3 +1,5 @@
+import type { Models } from "appwrite";
+
 export type INavLink = {
   imgURL: string;
   route: string;
@@ -32,6 +34,7 @@ export type IUpdatePost = {
 };
 
 export type IUser = {
+  $id: string;
   id: string;
   name: string;
   username: string;
@@ -62,3 +65,25 @@ export type FileUploaderProps ={
   fieldChange: (FILES:File[]) => void
   mediaUrl: string
 }
+
+
+export interface  Ipost extends  Models.Document  {
+  creator: IUser
+  caption?: string
+  tags?: string[]
+  imageUrl: string
+  imageId: string
+  location?: string
+  likes?: IUser[]
+  save?: ISave[]
+}
+
+
+ export interface ISave extends Models.Document {
+  user: IUser
+  post: Ipost
+}
+
+export type PostcardProps = {
+  post: Ipost
+};

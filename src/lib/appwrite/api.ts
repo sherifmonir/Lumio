@@ -1,5 +1,5 @@
-import type { INewPost, INewUser } from "@/types";
-import { ID, Query } from "appwrite";
+import type { INewPost, INewUser, Ipost } from "@/types";
+import { ID, Permission, Query, Role } from "appwrite";
 import { account, appwriteconfig, databases, storage } from "./config";
 
 
@@ -110,6 +110,7 @@ export async function signoutAccount() {
 
 /*=========Create Post=========*/
 export async function createPost(post: INewPost){
+
     try{
         const uploadedFile =  await uploadFile(post.file[0])
         if (!uploadedFile) throw Error
@@ -121,6 +122,11 @@ export async function createPost(post: INewPost){
         }
 
         const tags = post.tags?.replace(/ /g, "").split(",") || []
+        console.log({
+    databaseId: appwriteconfig.databaseId,
+    postsTableId: appwriteconfig.postsTableId,
+    creator: post.userId
+});
 
         const newPost = await databases.createDocument(
             appwriteconfig.databaseId,
@@ -154,7 +160,13 @@ export async function uploadFile(file: File){
         const uoloadedFile = await storage.createFile(
             appwriteconfig.storageId,
             ID.unique(),
-            file
+            file,
+            [
+                Permission.read(Role.any()),
+                Permission.update(Role.users()),
+                Permission.delete(Role.users()),
+            ]
+            
         )
         return uoloadedFile
 
@@ -198,7 +210,7 @@ export async function deleteFile(fileId: string) {
 /*=========*/
 
 export async function getRecentPost() {
-    const posts = await databases.listDocuments(
+    const posts = await databases.listDocuments<Ipost>(
         appwriteconfig.databaseId,
         appwriteconfig.postsTableId,
         [Query.orderDesc("$createdAt"), Query.limit(20)]

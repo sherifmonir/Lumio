@@ -1,6 +1,5 @@
 import PostCard from '@/components/shared/PostCard';
 import {  useGetRecentPosts } from '@/lib/react-query/queriesAndMutatuins';
-import type { Models } from 'appwrite';
 import { ClipLoader } from "react-spinners";
 
 
@@ -18,8 +17,8 @@ const Home = () => {
           <ClipLoader />
         ):(
         <ul className="flex flex-col flex-1 gap-9 w-full">
-          {posts?.documents.map((post: PostDocument) =>(
-            <PostCard post={post} />
+          {posts?.documents.map((post) =>(
+            <PostCard key={post.$id} post={post} />
           ))}
         </ul>
         )}

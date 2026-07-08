@@ -3,22 +3,25 @@ import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import  {  postValidation } from "@/lib/validation"
 import FileUploader from "../shared/FileUploader"
-import type { Models } from "appwrite"
+import type { Ipost } from "@/types"
+import { useCreatePost } from "@/lib/react-query/queriesAndMutatuins"
+import { useNavigate } from "react-router-dom"
+import { useToast } from "../ui/sonner"
+import { useUserContext } from "@/context/UseUserContext"
+import { ClipLoader } from "react-spinners"
 
-interface  Ipost extends  Models.Document  {
-  caption?: string,
-  location?: string,
-  tags?: File[],
-  imageUrl: string,
-  documment: Models.Document
-}
+
 
 type PostFormProps = {
     post?: Ipost
+    action: "create" | "update"
 }
 
-const PostForm = ({ post }: PostFormProps) => {
-      
+const PostForm = ({ post, action }: PostFormProps) => {
+      const navigate = useNavigate();
+  const { toast } = useToast();
+  const { user } = useUserContext();
+
       const form = useForm<z.infer<typeof postValidation>>({
         resolver: zodResolver(postValidation),
         defaultValues: {
@@ -28,13 +31,21 @@ const PostForm = ({ post }: PostFormProps) => {
           tags: post?.tags?.join(",") ?? ""
         }
       })
+      const { mutateAsync: createPost, isLoading: isLoadingCreate } =
+    useCreatePost();
     
       async function onSubmit(Values: z.infer<typeof postValidation>) {
 
-        try {//
-        } catch {
-          //
+        const newPost = await createPost({
+          ...Values,
+          userId: user.id
+        })
+        if(!newPost) {
+          toast({
+            title: `${action} post failed. Please try again.`
+          })
         }
+        navigate("/")
       }
   return (
     <form className="flex flex-col gap-9 w-full max-w-5xl bg-dark-4 px-1 mb-2" 
@@ -71,7 +82,7 @@ const PostForm = ({ post }: PostFormProps) => {
                   </label>
                   <FileUploader
                   fieldChange={field.onChange}
-                  mediaUrl={post?.imageUrl}
+                  mediaUrl={post?.imageUrl ?? ""}
                   />
                 </div>
 
@@ -117,12 +128,28 @@ const PostForm = ({ post }: PostFormProps) => {
                  
                  
             <div className="flex gap-4 items-center justify-end">
-                <button className="form-bottom" type="submit">
-                    Submit
+
+                <button
+                  type="submit"
+                  className="form-bottom"
+                  disabled={isLoadingCreate }>
+
+                  {(isLoadingCreate) && <ClipLoader />}
+                  {action}
+
+                  Post
+
                 </button>
-                <button className="form-bottom bg-amber-50 text-dark-1" type="button">
-                    Cancel
+
+                <button 
+                  className="form-bottom bg-amber-50 text-dark-1"
+                  type="button"
+                  onClick={() => navigate(-1)}>
+
+                  Cancel
+
                 </button>
+
             </div>
         </form>     
   )
