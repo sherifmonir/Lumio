@@ -2,6 +2,7 @@ import { useUserContext } from '@/context/UseUserContext'
 import { multiFormatDateString } from '@/lib/utils';
 import type {  PostcardProps  } from '@/types';
 import { Link } from 'react-router-dom';
+import PostStats from './PostStats';
 
 
 
@@ -14,6 +15,7 @@ const PostCard = ({ post }: PostcardProps) => {
   return (
 
     <div className="post-card">
+
       <div className="flex-between">
         <div className="flex items-center gap-3">
           <Link to={`/profile/${post.creator.$id}`}>
@@ -67,6 +69,8 @@ const PostCard = ({ post }: PostcardProps) => {
           alt="post image"
           className="post-card_img" />
       </Link>
+
+      <PostStats post={post} userId={user.id}/>
 
     </div>
   )
