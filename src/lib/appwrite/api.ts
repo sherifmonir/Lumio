@@ -1,4 +1,4 @@
-import type { INewPost, INewUser, Ipost } from "@/types";
+import type { INewPost, INewUser } from "@/types";
 import { ID, Permission, Query, Role } from "appwrite";
 import { account, appwriteconfig, databases, storage } from "./config";
 
@@ -241,7 +241,7 @@ export async function likePost(postId: string, likesArr: string[]) {
 }
 
 
-export async function savePost(postId: string, userId: string[]) {
+export async function savePost(postId: string, userId: string) {
     try {
         const updatedPost = await databases.createDocument(
             appwriteconfig.databaseId,

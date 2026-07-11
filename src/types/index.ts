@@ -33,15 +33,25 @@ export type IUpdatePost = {
   tags?: string;
 };
 
-export type IUser = {
-  $id: string;
+
+export interface IUser extends Models.Document {
+  name: string;
+  username?: string;
+  email: string;
+  accountId: string;
+  bio?: string;
+  imageId?: string;
+  imageUrl: string;
+  save?: ISave[];
+}
+
+export type IContextUser = {
   id: string;
   name: string;
   username: string;
   email: string;
   imageUrl: string;
   bio: string;
-
 };
 
 export type INewUser = {
@@ -49,25 +59,23 @@ export type INewUser = {
   email: string;
   username: string;
   password: string;
-
 };
 
 export type IContextType = {
-  user: IUser;
+  user: IContextUser;
   isLoading: boolean;
-  setUser: React.Dispatch<React.SetStateAction<IUser>>;
+  setUser: React.Dispatch<React.SetStateAction<IContextUser>>;
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
 };
 
-export type FileUploaderProps ={
-  fieldChange: (FILES:File[]) => void
+export type FileUploaderProps = {
+  fieldChange: (FILES: File[]) => void
   mediaUrl: string
 }
 
-
-export interface  Ipost extends  Models.Document  {
+export interface IPost extends Models.Document {
   creator: IUser
   caption?: string
   tags?: string[]
@@ -78,12 +86,7 @@ export interface  Ipost extends  Models.Document  {
   save?: ISave[]
 }
 
-
- export interface ISave extends Models.Document {
+export interface ISave extends Models.Document {
   user: IUser
-  post: Ipost
+  post: IPost
 }
-
-export type PostcardProps = {
-  post: Ipost
-};
