@@ -1,4 +1,4 @@
-import type { INewPost, INewUser } from "@/types";
+import type { INewPost, INewUser, IPost } from "@/types";
 import { ID, Permission, Query, Role } from "appwrite";
 import { account, appwriteconfig, databases, storage } from "./config";
 
@@ -80,7 +80,10 @@ export async function getCurrentUser() {
         const currentUser = await databases.listDocuments(
             appwriteconfig.databaseId,
             appwriteconfig.usersTableId,
-            [Query.equal('accountId', currentAccount.$id)]
+            [
+                Query.equal('accountId', currentAccount.$id),
+                Query.select(['*', 'save.*', 'save.post.$id'])
+            ]
         )
         if(!currentUser) throw Error
 
@@ -210,10 +213,14 @@ export async function deleteFile(fileId: string) {
 /*=========*/
 
 export async function getRecentPost() {
-    const posts = await databases.listDocuments<Ipost>(
+    const posts = await databases.listDocuments<IPost>(
         appwriteconfig.databaseId,
         appwriteconfig.postsTableId,
-        [Query.orderDesc("$createdAt"), Query.limit(20)]
+        [
+            Query.orderDesc("$createdAt"),
+            Query.limit(20),
+            Query.select(['*', 'creator.*', 'likes.*'])
+        ]
     )
     if(!posts) throw Error
 
@@ -250,7 +257,12 @@ export async function savePost(postId: string, userId: string) {
             {
                 user: userId,
                 post: postId
-            }
+            },
+            [
+                Permission.read(Role.any()),
+                Permission.update(Role.any()),
+                Permission.delete(Role.any()),
+            ]
         )
         if(!updatedPost) throw Error
 
