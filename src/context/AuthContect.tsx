@@ -1,11 +1,11 @@
 import { getCurrentUser } from '@/lib/appwrite/api'
-import type {  IUser } from '@/types'
+import type {  IContextUser } from '@/types'
 import { useEffect, useState} from 'react'
 import {  INITIAL_USER, AuthContext } from './AuthConstants'
 
 
 const AuthProvider = ({children}: {children: React.ReactNode}) => {
-  const [user, setUser] = useState<IUser>(INITIAL_USER)
+  const [user, setUser] = useState<IContextUser>(INITIAL_USER)
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 

@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import  {  postValidation } from "@/lib/validation"
 import FileUploader from "../shared/FileUploader"
-import type { Ipost } from "@/types"
+import type { IPost } from "@/types"
 import { useCreatePost } from "@/lib/react-query/queriesAndMutatuins"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../ui/sonner"
@@ -13,7 +13,7 @@ import { ClipLoader } from "react-spinners"
 
 
 type PostFormProps = {
-    post?: Ipost
+    post?: IPost
     action: "create" | "update"
 }
 
@@ -31,8 +31,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
           tags: post?.tags?.join(",") ?? ""
         }
       })
-      const { mutateAsync: createPost, isLoading: isLoadingCreate } =
-    useCreatePost();
+      const { mutateAsync: createPost } = useCreatePost();
+      const { isSubmitting } = form.formState;
     
       async function onSubmit(Values: z.infer<typeof postValidation>) {
 
@@ -49,7 +49,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
       }
   return (
     <form className="flex flex-col gap-9 w-full max-w-5xl bg-dark-4 px-1 mb-2" 
-    onSubmit={form.handleSubmit(onSubmit)} > 
+    onSubmit={form.handleSubmit(onSubmit)}> 
 
             <Controller
                 name="caption"
@@ -132,9 +132,9 @@ const PostForm = ({ post, action }: PostFormProps) => {
                 <button
                   type="submit"
                   className="form-bottom"
-                  disabled={isLoadingCreate }>
+                  disabled={isSubmitting }>
 
-                  {(isLoadingCreate) && <ClipLoader />}
+                  {(isSubmitting) && <ClipLoader />}
                   {action}
 
                   Post

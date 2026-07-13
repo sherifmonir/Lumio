@@ -13,8 +13,8 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     const likesList = post.likes?.map((user) => user.$id) ?? []
    
     const { mutate: likePost } = useLikePost()
-    const { mutate: savePost, isPending: isSavingPost } = useSavePost()
-    const { mutate: deleteSavedPost, isPending: isDeletingSavedPost } = useDeleteSavedPost()
+    const { mutate: savePost } = useSavePost()
+    const { mutate: deleteSavedPost } = useDeleteSavedPost()
     const { data: currentUser } = useGetCurrentUser()
 
     console.log('currentUser:', currentUser)
@@ -83,14 +83,14 @@ console.log('currentUser.save:', currentUser?.save)
 
         <div className="flex gap-2">
 
-                <img
-                    src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
-                    alt="save"
-                    width={20}
-                    height={20}
-                    onClick={handleSavePost}
-                    className="cursor-pointer"
-                />
+            <img
+                src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
+                alt="save"
+                width={20}
+                height={20}
+                onClick={handleSavePost}
+                className="cursor-pointer"
+            />
             
         </div>
 
