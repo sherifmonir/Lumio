@@ -309,7 +309,7 @@ export async function updatePost(post: IUpdatePost) {
 
     try {
         let image = {
-            imageUrl: post.imageUrl.toString(),
+            imageUrl: post.imageUrl,
             imageId: post.imageId
         }
 

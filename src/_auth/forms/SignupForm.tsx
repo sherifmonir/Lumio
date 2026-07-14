@@ -51,7 +51,7 @@ const SignupForm = () => {
         name: newAccount.name,
         email: newAccount.email,
         username: Values.username,
-        imageUrl: avatars.getInitials(Values.name).toString()
+        imageUrl: avatars.getInitials(Values.name)
       })
 
       if(!newUser) {

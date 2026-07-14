@@ -17,9 +17,6 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     const { mutate: deleteSavedPost } = useDeleteSavedPost()
     const { data: currentUser } = useGetCurrentUser()
 
-    console.log('currentUser:', currentUser)
-console.log('currentUser.save:', currentUser?.save)
-
     const savedPostRecord = currentUser?.save?.find(
         (record: ISave) => record.post?.$id === post.$id
     )
