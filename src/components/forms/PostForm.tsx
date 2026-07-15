@@ -14,7 +14,7 @@ import { updatePost } from "@/lib/appwrite/api"
 
 type PostFormProps = {
     post?: IPost
-    action: "create" | "update"
+    action: "Create" | "Update"
 }
 
 
@@ -40,7 +40,7 @@ const { isSubmitting } = form.formState;
 
 async function onSubmit(Values: z.infer<typeof postValidation>) {
   
-  if(post && action ==='update'){
+  if(post && action ==='Update'){
     const updatedPost = await updatePost({
       ...Values,
       postId: post?.$id,
@@ -75,7 +75,7 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
 }
 
   return (
-    <form className="flex flex-col gap-9 w-full max-w-5xl bg-dark-4 px-1 mb-2" 
+    <form className="flex flex-col  gap-5 w-full max-w-5xl bg-dark-4 px-1 mb-5" 
     onSubmit={form.handleSubmit(onSubmit)}> 
 
             <Controller
@@ -159,9 +159,9 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
             <button
               type="submit"
               className="form-bottom"
-              disabled={isSubmitting }>
+              disabled={isSubmitting}>
 
-              {(isSubmitting) && <ClipLoader size={20}/>}
+              {(isSubmitting) && <ClipLoader size={15}/>}
               {action}
 
               <span> Post</span>

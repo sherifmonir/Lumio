@@ -5,12 +5,12 @@ import { useState } from 'react'
 
 
 type PostStatsProps = {
-    post: IPost
+    post?: IPost
     userId: string
 }
 
 const PostStats = ({ post, userId }: PostStatsProps) => {
-    const likesList = post.likes?.map((user) => user.$id) ?? []
+    const likesList = post?.likes?.map((user) => user.$id) ?? []
    
     const { mutate: likePost } = useLikePost()
     const { mutate: savePost } = useSavePost()
@@ -18,7 +18,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     const { data: currentUser } = useGetCurrentUser()
 
     const savedPostRecord = currentUser?.save?.find(
-        (record: ISave) => record.post?.$id === post.$id
+        (record: ISave) => record.post?.$id === post?.$id
     )
 
     const isSaved = !!savedPostRecord
@@ -38,7 +38,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
         ?likes.filter((id) => id!== userId)
         :[...likes, userId]
         setLikes(newLikes)
-        likePost({postId: post.$id, likesArr: newLikes},
+        likePost({postId: post?.$id || "", likesArr: newLikes},
             {
                 onError: () => {
                     setLikes(likes)
@@ -54,7 +54,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     if (savedPostRecord) {
         deleteSavedPost(savedPostRecord.$id)
     } else {
-        savePost({ userId, postId: post.$id })
+        savePost({ userId, postId: post?.$id || ""})
     }
 
     }

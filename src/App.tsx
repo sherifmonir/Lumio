@@ -1,4 +1,5 @@
 import {Routes, Route} from 'react-router-dom'
+import type { ComponentType } from 'react'
 import './globals.css'
 import SignupForm from './_auth/forms/SignupForm'
 import SigninForm from './_auth/forms/SigninForm'
@@ -7,6 +8,8 @@ import AuthLayout from './_auth/forms/AuthLayout'
 import RoutLayout from './_root/RoutLayout'
 import { Toaster } from './components/ui/sonner'
 import Saved from './_root/Pages/Saved'
+
+const RouteWrapper = RoutLayout as ComponentType
 
 const App = () => {
   return (
@@ -18,7 +21,7 @@ const App = () => {
           <Route path='/sign-up' element={<SignupForm />} />
         </Route>
         {/*private routes*/}
-        <Route element={<RoutLayout />}>
+        <Route element={<RouteWrapper />}>
           <Route index element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/saved" element={<Saved />} />

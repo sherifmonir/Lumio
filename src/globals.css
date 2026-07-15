@@ -267,19 +267,19 @@
 }
 
 /* Post Details */
-@utility post_details-container {
+@utility post-details-container {
   @apply flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar items-center;
 }
-@utility post_details-card {
+@utility post-details-card {
   @apply bg-dark-2 w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-dark-4 xl:rounded-l-3xl;
 }
-@utility post_details-img {
+@utility post-details-img {
   @apply h-80 lg:h-120 xl:w-[48%] rounded-t-[30px] xl:rounded-l-3xl xl:rounded-tr-none object-cover p-5 bg-dark-1;
 }
-@utility post_details-info {
+@utility post-details-info {
   @apply bg-dark-2 flex flex-col gap-5 lg:gap-7 flex-1 items-start p-8 rounded-[30px];
 }
-@utility post_details-delete_btn {
+@utility post-details-delete-btn {
   @apply p-0 flex gap-3 hover:bg-transparent hover:text-light-1 text-light-1 small-medium lg:base-medium;
 }
 
@@ -333,7 +333,7 @@
 }
 
 @utility leftsidebar-link {
-  @apply gap-2 flex flex-col  font-medium  text-white w-full pl-5  py-2 bg-dark-4 transition;
+  @apply gap-2 flex flex-col  font-medium  text-white w-full pl-5  py-2 border-y border-primary-500 transition;
 }
 
   @utility leftsidebar-NavLink {
@@ -388,7 +388,7 @@
     @apply h-10 bg-dark-4 border-none placeholder:text-light-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3;
   }
   .Create-Post-textarea {
-    @apply h-36 bg-dark-3 rounded-xl p-2 border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3;
+    @apply h-36 bg-dark-3 rounded-xl p-2 border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 resize-none;
   }
   .shad-button_primary {
     @apply bg-primary-500 hover:bg-primary-500 text-light-1 flex gap-2;
@@ -396,7 +396,7 @@
   .Add-photo-button {
     @apply h-12 bg-dark-4 px-5 text-light-1 flex gap-2 flex-center rounded-md;
   }
-  .shad-button_ghost {
+  .shad-button-ghost {
     @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white;
   }
 }
