@@ -1,5 +1,5 @@
 import type { INewPost, INewUser, IPost, IUpdatePost } from "@/types";
-import { ID, Permission, Query, Role } from "appwrite";
+import {  ID, Permission, Query, Role } from "appwrite";
 import { account, appwriteconfig, databases, storage } from "./config";
 
 
@@ -371,4 +371,47 @@ export async function deletePost(postId: string, imageId: string) {
         console.log(error)
     }
 
+}
+
+
+export async function getInfinitePosts({ pageParam }: {pageParam: number}) {
+    const queries: string[] = [Query.orderDesc('$updateAt'), Query.limit(10)]
+    if(pageParam) {
+        queries.push(Query.cursorAfter(pageParam.toString()))
+    }
+
+    try {
+        const posts = await databases.listDocuments(
+            appwriteconfig.databaseId,
+            appwriteconfig.postsTableId,
+            queries
+        )
+
+        if(!posts) throw Error
+
+        return posts
+
+    }catch(error) {
+        console.log(error)
+    }
+}
+
+
+export async function searchPosts(searchTerm: string) {
+
+
+    try {
+        const posts = await databases.listDocuments(
+            appwriteconfig.databaseId,
+            appwriteconfig.postsTableId,
+            [Query.search('caption', searchTerm)]
+        )
+
+        if(!posts) throw Error
+
+        return posts
+
+    }catch(error) {
+        console.log(error)
+    }
 }
