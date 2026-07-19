@@ -415,3 +415,4 @@ export async function searchPosts(searchTerm: string) {
         console.log(error)
     }
 }
+ 

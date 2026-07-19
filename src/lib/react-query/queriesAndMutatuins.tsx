@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getPostById, getRecentPost, likePost, savePost, saveUserToDB, signinAccount, signoutAccount, updatePost } from '../appwrite/api'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPost, likePost, savePost, saveUserToDB, searchPosts, signinAccount, signoutAccount, updatePost } from '../appwrite/api'
 import type { INewPost, INewUser, IUpdatePost } from '@/types'
 import { queryKeys } from './queryKeys'
 
@@ -168,3 +168,25 @@ export const useDeletePost = () => {
 }
 
 
+export const useGetPosts = () => {
+    const postsLimit = 10
+    return useInfiniteQuery({
+        queryKey: [queryKeys.GET_INFINITE_POSTS],
+        queryFn: getInfinitePosts,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, pages) => {
+            if (!lastPage?.documents?.length) return null
+            if (lastPage.documents.length < postsLimit) return null
+            return pages.length + 1
+        }
+    })
+}
+
+
+export const useSearchPosts = (searchTerm: string) => {
+    return useQuery({
+        queryKey: [queryKeys.SEARCH_POSTS],
+        queryFn: () => searchPosts(searchTerm),
+        enabled: !!searchTerm
+    })
+}

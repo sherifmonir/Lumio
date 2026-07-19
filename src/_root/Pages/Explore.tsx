@@ -1,7 +1,9 @@
+import { useSearchPosts } from "@/lib/react-query/queriesAndMutatuins";
 import { useState } from "react";
 
 const Explore = () => {
-  const [searchValue, setSearchValue] = useState()
+  const [searchValue, setSearchValue] = useState('')
+  const { data: searchPosts, isFetching: isSearchfetching } = useSearchPosts(searchValue)
   return (
     <div className="explore-container">
 
