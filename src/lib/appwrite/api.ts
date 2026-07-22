@@ -381,7 +381,7 @@ export async function getInfinitePosts({ pageParam }: {pageParam: number}) {
     }
 
     try {
-        const posts = await databases.listDocuments(
+        const posts = await databases.listDocuments<IPost>(
             appwriteconfig.databaseId,
             appwriteconfig.postsTableId,
             queries
@@ -401,7 +401,7 @@ export async function searchPosts(searchTerm: string) {
 
 
     try {
-        const posts = await databases.listDocuments(
+        const posts = await databases.listDocuments<IPost>(
             appwriteconfig.databaseId,
             appwriteconfig.postsTableId,
             [Query.search('caption', searchTerm)]

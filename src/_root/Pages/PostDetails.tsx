@@ -13,8 +13,8 @@ const PostDetails = () => {
   const {mutate: deletePost} = useDeletePost()
   
   const handleDeletePost = () => {
-    deletePost({ postId: id || '', imageId: post?.imageId || '' });
-    navigate(-1);
+    deletePost({ postId: id || '', imageId: post?.imageId || '' })
+    navigate(-1)
 
   }
 

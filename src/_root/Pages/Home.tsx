@@ -1,6 +1,6 @@
-import PostCard from '@/components/shared/PostCard';
-import {  useGetRecentPosts } from '@/lib/react-query/queriesAndMutatuins';
-import { ClipLoader } from "react-spinners";
+import PostCard from '@/components/shared/PostCard'
+import {  useGetRecentPosts } from '@/lib/react-query/queriesAndMutatuins'
+import { ClipLoader } from "react-spinners"
 
 
 

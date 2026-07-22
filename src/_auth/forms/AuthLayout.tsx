@@ -5,7 +5,7 @@ import { useUserContext } from '@/context/UseUserContext'
  const AuthLayout = () => {
   
   
-  const { isAuthenticated, isLoading } = useUserContext();
+  const { isAuthenticated, isLoading } = useUserContext()
   if(isLoading) return null
 
   return (

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import  { signupValidation } from "@/lib/validation"
 import { useToast } from "@/components/ui/sonner"
 import { useCreateUserAccount, useSaveUserToDB, useSigninAccount } from "@/lib/react-query/queriesAndMutatuins"
-import { ClipLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners"
 import { useUserContext } from "@/context/UseUserContext"
 import { avatars } from "@/lib/appwrite/config"
 
@@ -43,7 +43,7 @@ const SignupForm = () => {
       if(!session) {
         return toast({ title: 'Sign in failed. please try again.' })
       }
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100))
 
       
       const newUser = await saveUserToDB({

@@ -320,10 +320,10 @@
 @utility grid-container {
   @apply w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
 }
-@utility grid-post_link {
+@utility grid-post-link {
   @apply flex rounded-3xl border border-dark-4 overflow-hidden cursor-pointer w-full h-full;
 }
-@utility grid-post_user {
+@utility grid-post-user {
   @apply absolute bottom-0 p-5 flex-between w-full bg-gradient-to-t from-dark-3 to-transparent rounded-b-3xl gap-2;
 }
 
