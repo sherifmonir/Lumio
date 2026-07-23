@@ -2,12 +2,9 @@ import GridPostList from "@/components/shared/GridPostList"
 import SearchResults from "@/components/shared/SearchResults"
 import { useDebounce } from "@/Hooks/useDebounce"
 import { useGetPosts, useSearchPosts } from "@/lib/react-query/queriesAndMutatuins"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ClipLoader } from "react-spinners"
 import { useInView } from "react-intersection-observer"
-
-
-
 
 
 const Explore = () => {
@@ -16,13 +13,17 @@ const Explore = () => {
   const debouncedSearch = useDebounce(searchValue, 500);
   const { data: searchedPosts, isFetching: isSearchFetching } = useSearchPosts(debouncedSearch)
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts()
+  const searchValueRef = useRef<HTMLInputElement>(null)
+
+  const handleSearchIconClick = () => {
+    searchValueRef.current?.focus()
+  }
 
   useEffect(() => {
     if (inView && !searchValue) {
       fetchNextPage();
     }
   }, [inView, searchValue,fetchNextPage]);
-
 
   if(!posts) {
     return (
@@ -32,7 +33,7 @@ const Explore = () => {
     )
   }
 
-  const shouldShowSearchResults = searchValue !== ''
+  const shouldShowSearchResults = searchValue !== ""
   const shouldShowPosts = !shouldShowSearchResults && posts.pages.every((items) => items?.documents.length === 0)
 
   return (
@@ -42,23 +43,27 @@ const Explore = () => {
         <h2 className="h3-bold md:h2-bold w-full">
           Search Posts
         </h2>
-        <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
+        <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4 explore-search">
           <img
             src="/assets/icons/search.svg"
             width={20}
             height={20}
             alt="search"
+            className="cursor-pointer"
+            onClick={handleSearchIconClick}
           />
           <input
+            ref={searchValueRef}
             type="text"
             placeholder="Search"
             className="explore-search"
             value={searchValue}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target
               setSearchValue(value)
             }}
-          />
+            />
+                
         </div>
       </div>
 
@@ -100,10 +105,6 @@ const Explore = () => {
           <ClipLoader />
         </div>
       )}
-
-      
-      
-
     </div>
   
 )}

@@ -375,10 +375,7 @@ export async function deletePost(postId: string, imageId: string) {
 
 
 export async function getInfinitePosts({ pageParam }: {pageParam: number}) {
-    const queries: string[] = [Query.orderDesc('$updateAt'), Query.limit(10)]
-    if(pageParam) {
-        queries.push(Query.cursorAfter(pageParam.toString()))
-    }
+    const queries: string[] = [Query.orderDesc('$updatedAt'), Query.limit(10),Query.offset((pageParam - 1) * 10)]
 
     try {
         const posts = await databases.listDocuments<IPost>(
