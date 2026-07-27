@@ -1,4 +1,4 @@
-import type { INewPost, INewUser, IPost, IUpdatePost } from "@/types";
+import type { INewPost, INewUser, IPost, IUpdatePost, IUser } from "@/types";
 import {  ID, Permission, Query, Role } from "appwrite";
 import { account, appwriteconfig, databases, storage } from "./config";
 
@@ -82,7 +82,7 @@ export async function getCurrentUser() {
             appwriteconfig.usersTableId,
             [
                 Query.equal('accountId', currentAccount.$id),
-                Query.select(['*', 'save.*', 'save.post.$id'])
+                Query.select(['*', 'save.*', 'save.post.*'])
             ]
         )
         if(!currentUser) throw Error
@@ -329,7 +329,7 @@ export async function updatePost(post: IUpdatePost) {
 
         const tags = post.tags?.replace(/ /g, "").split(",") || []
 
-        const updatePost = await databases.updateDocument(
+        const updatedPost = await databases.updateDocument(
             appwriteconfig.databaseId,
             appwriteconfig.postsTableId,
             post.postId,
@@ -342,12 +342,12 @@ export async function updatePost(post: IUpdatePost) {
                 tags: tags
             }
         )
-        if(!updatePost) {
+        if(!updatedPost) {
             await deleteFile(post.imageId)
             throw Error
         }
 
-        return updatePost
+        return updatedPost
 
     } catch(error) {
         console.log(error)
@@ -411,5 +411,22 @@ export async function searchPosts(searchTerm: string) {
     }catch(error) {
         console.log(error)
     }
+}
+
+
+export async function getUserById(userId: string) {
+
+    try{
+        const user = databases.getDocument<IUser>(
+            appwriteconfig.databaseId,
+            appwriteconfig.usersTableId,
+            userId
+        )
+        return user
+
+    }catch(error){
+        console.log(error)
+    }
+
 }
  

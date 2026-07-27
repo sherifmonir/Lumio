@@ -42,7 +42,8 @@ export interface IUser extends Models.Document {
   bio?: string;
   imageId?: string;
   imageUrl: string;
-  save?: ISave[];
+  saves?: ISave[];
+  posts: IPost[]
 }
 
 export type IContextUser = {

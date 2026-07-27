@@ -8,6 +8,7 @@ import AuthLayout from './_auth/forms/AuthLayout'
 import RoutLayout from './_root/RoutLayout'
 import { Toaster } from './components/ui/sonner'
 import Saved from './_root/Pages/Saved'
+import Profile from './_root/Pages/Profile'
 
 const RouteWrapper = RoutLayout as ComponentType
 
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/update-post/:id" element={<EditPost />} />
           <Route path="/post/:id" element={<PostDetails />} />
           <Route path="/update-profile/:id" element={<UpdateProfile />} />
+          <Route path="/profile/:id" element={<Profile />} />
           <Route path="/liked-posts" element={<LikedPosts />} />
         </Route>
       </Routes>
