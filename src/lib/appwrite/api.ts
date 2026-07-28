@@ -1,4 +1,4 @@
-import type { INewPost, INewUser, IPost, IUpdatePost, IUser } from "@/types";
+import type { INewPost, INewUser, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
 import {  ID, Permission, Query, Role } from "appwrite";
 import { account, appwriteconfig, databases, storage } from "./config";
 
@@ -417,10 +417,11 @@ export async function searchPosts(searchTerm: string) {
 export async function getUserById(userId: string) {
 
     try{
-        const user = databases.getDocument<IUser>(
+        const user = await databases.getDocument<IUser>(
             appwriteconfig.databaseId,
             appwriteconfig.usersTableId,
-            userId
+            userId,
+            [Query.select(['*', 'posts.*'])]
         )
         return user
 
@@ -428,5 +429,54 @@ export async function getUserById(userId: string) {
         console.log(error)
     }
 
+}
+
+
+export async function updateProfile(profile: IUpdateProfile) {
+    const hasFileToUpdate = profile.file.length > 0
+
+    try {
+        let image = {
+            imageUrl: profile.imageUrl,
+            imageId: profile.imageId
+        }
+
+        if(hasFileToUpdate) {
+            const uploadedFile = await uploadFile(profile.file[0])
+            if(!uploadedFile) throw Error
+
+            const fileUrl = getFilePreview(uploadedFile.$id)
+
+
+            if(!fileUrl) {
+                deleteFile(uploadedFile.$id)
+                throw Error
+            }
+            image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id}
+        }
+
+        
+
+        const updatedProfile = await databases.updateDocument(
+            appwriteconfig.databaseId,
+            appwriteconfig.usersTableId,
+            profile.accountId,
+            {
+                accountId: profile.accountId,
+                name: profile.name,
+                username: profile.username,
+                email: profile.email,
+                bio: profile.bio,
+                imageUrl: image.imageUrl,
+                imageId: image.imageId
+            }
+        )
+        
+
+        return updatedProfile
+
+    } catch(error) {
+        console.log(error)
+    }
 }
  

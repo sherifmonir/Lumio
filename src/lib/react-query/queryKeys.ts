@@ -6,6 +6,7 @@ export const queryKeys = {
   GET_CURRENT_USER: "getCurrentUser",
   GET_USERS: "getUsers",
   GET_USER_BY_ID: "getUserById",
+  UPDATE_PROFILE: "updateProfile",
 
   // POST KEYS
   GET_POSTS: "getPosts",

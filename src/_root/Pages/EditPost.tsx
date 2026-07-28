@@ -25,7 +25,7 @@ const EditePost = () => {
               Edite Post
             </h2>
         </div>
-        <PostForm action="Update" post={post as unknown as IPost} />
+        <PostForm action="Update" post={post as IPost} />
       </div>
     </div>
   )

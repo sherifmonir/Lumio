@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, signinAccount, signoutAccount, updatePost } from '../appwrite/api'
-import type { INewPost, INewUser, IUpdatePost } from '@/types'
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, signinAccount, signoutAccount, updatePost, updateProfile } from '../appwrite/api'
+import type { INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
 
 export const useCreateUserAccount = () => {
@@ -197,5 +197,18 @@ export const useGetUserById = (userId: string) => {
         queryKey: [queryKeys.GET_USER_BY_ID, userId],
         queryFn: () => getUserById(userId),
         enabled: !!userId
+    })
+}
+
+
+export const useUpdateProfile = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (profile: IUpdateProfile) => updateProfile(profile),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: [queryKeys.UPDATE_PROFILE, data?.$id]
+            })
+        }
     })
 }

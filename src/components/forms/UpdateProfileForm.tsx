@@ -1,77 +1,53 @@
 import * as z from "zod"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import  {  postValidation } from "@/lib/validation"
+import  { profileValidation } from "@/lib/validation"
 import FileUploader from "../shared/FileUploader"
-import type { IPost } from "@/types"
-import { useCreatePost } from "@/lib/react-query/queriesAndMutatuins"
+import { useUpdateProfile } from "@/lib/react-query/queriesAndMutatuins"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../ui/sonner"
-import { useUserContext } from "@/context/UseUserContext"
 import { ClipLoader } from "react-spinners"
-import { updatePost } from "@/lib/appwrite/api"
+import type { IUpdateProfile } from "@/types"
 
 
-type PostFormProps = {
-    post?: IPost
-    action: "Create" | "Update"
-}
-
-
-const PostForm = ({ post, action }: PostFormProps) => {
+const UpdateProfileForm = (profile: IUpdateProfile) => {
   const navigate = useNavigate()
   const { toast } = useToast()
-  const { user } = useUserContext()
+  const { mutate: updateProfile } = useUpdateProfile()
 
-  const form = useForm<z.infer<typeof postValidation>>({
-    resolver: zodResolver(postValidation),
+  const form = useForm<z.infer<typeof profileValidation>>({
+    resolver: zodResolver(profileValidation),
     defaultValues: {
-      caption: post?.caption ?? "",
-      file: [],
-      location: post?.location ?? "",
-      tags: post?.tags?.join(",") ?? ""
+        name: profile.name,
+        username: profile.username,
+        email: profile.email,
+        bio: profile.bio,          
     }
 })
 
 
-const { mutateAsync: createPost } = useCreatePost();
 const { isSubmitting } = form.formState;
   
 
-async function onSubmit(Values: z.infer<typeof postValidation>) {
-  
-  if(post && action ==='Update'){
-    const updatedPost = await updatePost({
+function onSubmit(Values: z.infer<typeof profileValidation>) {
+  if (profile) return
+
+  updateProfile(
+    {
       ...Values,
-      postId: post?.$id,
-      imageId: post?.imageId,
-      imageUrl: post?.imageUrl
-    })
-    console.log(updatedPost)
-    
-
-    if(!updatedPost) {
-      toast({
-        title: `Please try again.`
-      })
+      accountId: "",
+      imageId: "",
+      imageUrl: "",
+    },
+    {
+      onSuccess: () => {
+        navigate("/profile/:id")
+      },
+      onError: () => {
+        toast({ title: `Please try again.` })
+      },
     }
-
-    return navigate(`/posts/${post.$id}`)
-}
-
-
-  const newPost = await createPost({
-    ...Values,
-    userId: user.id
-  })
-
-  if(!newPost) {
-    toast({
-      title: `${action} post failed. Please try again.`
-    })
-  }
-
-  navigate("/")
+  )
 }
 
   return (
@@ -79,19 +55,19 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
     onSubmit={form.handleSubmit(onSubmit)}> 
 
             <Controller
-                name="caption"
+                name="name"
                 control={form.control}
                 render={({ field }) => (
 
                 <div className="field" >
-                  <label htmlFor="form-rhf-input-caption" className="form-label">
-                    Caption
+                  <label htmlFor="form-rhf-input-name" className="form-label">
+                    Name
                   </label>
                   <textarea 
-                  id="form-rhf-input-caption"
+                  id="form-rhf-input-name"
                     className="Create-Post-textarea"
                     {...field}
-                    placeholder="Add you post here."                    
+                    placeholder="Add you name here."                    
                   />
                 </div>
 
@@ -110,7 +86,7 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
                   </label>
                   <FileUploader
                   fieldChange={field.onChange}
-                  mediaUrl={post?.imageUrl ?? ""}
+                  mediaUrl={profile.imageUrl}
                   />
                 </div>
 
@@ -119,15 +95,21 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
 
 
             <Controller
-                name="location"
+                name="username"
                 control={form.control}
                 render={({ field }) => (
 
                 <div className="field" >
-                  <label htmlFor="form-rhf-input-location" className="form-label">
-                    Location
+                  <label htmlFor="form-rhf-input-username" className="form-label">
+                    Username
                   </label>
-                  <input id="form-rhf-input-location" type="text" className="form-input" {...field}/>
+                  <input 
+                    id="form-rhf-input-username"
+                    type="text"
+                    className="form-input"
+                    placeholder="Add you Username here."
+                    {...field}
+                    />
                 </div>
 
                   )}
@@ -135,19 +117,19 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
 
 
             <Controller
-                name="tags"
+                name="bio"
                 control={form.control}
                 render={({ field }) => (
 
                 <div className="field" >
-                  <label htmlFor="form-rhf-input-tags" className="form-label">
-                    Tags
+                  <label htmlFor="form-rhf-input-bio" className="form-label">
+                    Bio
                   </label>
                   <input 
-                   id="form-rhf-input-tags"
+                   id="form-rhf-input-bio"
                    type="text"
                    className="form-input"
-                   placeholder="Art, Expression, Learn"
+                   placeholder="Add you Bio here."
                    {...field}
                    />
                 </div>
@@ -164,9 +146,9 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
               disabled={isSubmitting}>
 
               {(isSubmitting) && <ClipLoader size={15}/>}
-              {action}
+              
 
-              <span> Post</span>
+              <span> Update </span>
 
             </button>
 
@@ -184,5 +166,4 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
   )
 }
 
-export default PostForm
-
+export default UpdateProfileForm

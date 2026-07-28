@@ -28,3 +28,21 @@ export const postValidation = z.object({
   location: z.string().min(2).max(100),
   tags: z.string()
 })
+
+export const profileValidation = z.object({
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters.")
+    .max(50, "Name must be at most 50 characters."),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters.")
+    .max(20, "Username must be at most 10 characters.")
+    .regex(
+      /^[a-zA-Z0-9_]+$/,
+      "Username can only contain letters, numbers, and underscores."),
+  email: z.string().email("Invalid email address."),
+  bio: z.string().min(1, "Bio must be at least 1 characters.").
+    max(200, "Bio must be at most 200 characters."),
+    file: z.custom<File[]>()
+})

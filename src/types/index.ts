@@ -91,3 +91,14 @@ export interface ISave extends Models.Document {
   user: IUser
   post: IPost
 }
+
+export type IUpdateProfile = {
+  accountId: string
+  name: string
+  username: string
+  email: string
+  bio?: string
+  imageId: string
+  imageUrl: string
+  file: File[]
+}
