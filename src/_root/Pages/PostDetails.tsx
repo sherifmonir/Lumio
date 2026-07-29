@@ -61,9 +61,6 @@ const PostDetails = () => {
                   className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
                 />
 
-          
-          
-
             <div className="flex flex-col gap-1">
 
               <p className="base-meduim lg:body-bold text-light-1subtle-semibold">

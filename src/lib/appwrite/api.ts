@@ -82,7 +82,7 @@ export async function getCurrentUser() {
             appwriteconfig.usersTableId,
             [
                 Query.equal('accountId', currentAccount.$id),
-                Query.select(['*', 'save.*', 'save.post.*'])
+                Query.select(['*', 'save.*', 'save.post.*', 'liked.*'])
             ]
         )
         if(!currentUser) throw Error
@@ -479,4 +479,40 @@ export async function updateProfile(profile: IUpdateProfile) {
         console.log(error)
     }
 }
- 
+
+
+export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
+    const queries: string[] = [Query.orderDesc('$updatedAt'), Query.limit(10),Query.offset((pageParam - 1) * 10)]
+
+    try {
+        const users = await databases.listDocuments<IPost>(
+            appwriteconfig.databaseId,
+            appwriteconfig.usersTableId,
+            queries
+        )
+
+        if(!users) throw Error
+
+        return users
+
+    }catch(error) {
+        console.log(error)
+    }
+}
+
+
+export async function searchUsers(searchTerm: string) {
+  try {
+        const users = await databases.listDocuments(
+            appwriteconfig.databaseId,
+            appwriteconfig.usersTableId,
+            [Query.search("username", searchTerm), Query.search("name", searchTerm)]
+        );
+
+        if (!users) throw new Error();
+
+        return users;
+  } catch (error) {
+    console.log(error);
+  }
+}

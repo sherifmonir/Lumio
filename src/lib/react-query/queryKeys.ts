@@ -7,6 +7,8 @@ export const queryKeys = {
   GET_USERS: "getUsers",
   GET_USER_BY_ID: "getUserById",
   UPDATE_PROFILE: "updateProfile",
+  SEARCH_USERS: "searchUsers",
+  GET_INFINITE_USERS: "getInfiniteUsers",
 
   // POST KEYS
   GET_POSTS: "getPosts",

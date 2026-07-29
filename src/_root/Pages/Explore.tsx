@@ -49,7 +49,7 @@ const Explore = () => {
             width={20}
             height={20}
             alt="search"
-            className="cursor-pointer"
+            className="cursor-pointer fill-primary-500"
             onClick={handleSearchIconClick}
           />
           <input

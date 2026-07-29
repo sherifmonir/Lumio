@@ -9,8 +9,11 @@ import { useToast } from "../ui/sonner"
 import { ClipLoader } from "react-spinners"
 import type { IUpdateProfile } from "@/types"
 
+type UpdateProfileFormProps = {
+  profile: IUpdateProfile
+}
 
-const UpdateProfileForm = (profile: IUpdateProfile) => {
+const UpdateProfileForm = ({profile}: UpdateProfileFormProps) => {
   const navigate = useNavigate()
   const { toast } = useToast()
   const { mutate: updateProfile } = useUpdateProfile()
@@ -21,7 +24,7 @@ const UpdateProfileForm = (profile: IUpdateProfile) => {
         name: profile.name,
         username: profile.username,
         email: profile.email,
-        bio: profile.bio,          
+        bio: profile.bio ?? "",        
     }
 })
 
@@ -30,14 +33,14 @@ const { isSubmitting } = form.formState;
   
 
 function onSubmit(Values: z.infer<typeof profileValidation>) {
-  if (profile) return
+  if (!profile) return
 
   updateProfile(
     {
       ...Values,
-      accountId: "",
-      imageId: "",
-      imageUrl: "",
+      accountId: profile.accountId,
+      imageId: profile.imageId,
+      imageUrl: profile.imageUrl,
     },
     {
       onSuccess: () => {
@@ -51,7 +54,7 @@ function onSubmit(Values: z.infer<typeof profileValidation>) {
 }
 
   return (
-    <form className="flex flex-col  gap-5 w-full max-w-5xl bg-dark-4 px-1 mb-5" 
+    <form className="flex-center flex-col bg-dark-4 " 
     onSubmit={form.handleSubmit(onSubmit)}> 
 
             <Controller
@@ -63,9 +66,9 @@ function onSubmit(Values: z.infer<typeof profileValidation>) {
                   <label htmlFor="form-rhf-input-name" className="form-label">
                     Name
                   </label>
-                  <textarea 
+                  <input 
                   id="form-rhf-input-name"
-                    className="Create-Post-textarea"
+                    className="form-input"
                     {...field}
                     placeholder="Add you name here."                    
                   />

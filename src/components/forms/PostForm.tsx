@@ -47,9 +47,7 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
       imageId: post?.imageId,
       imageUrl: post?.imageUrl
     })
-    console.log(updatedPost)
     
-
     if(!updatedPost) {
       toast({
         title: `Please try again.`

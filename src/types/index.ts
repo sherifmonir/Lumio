@@ -44,6 +44,7 @@ export interface IUser extends Models.Document {
   imageUrl: string;
   saves?: ISave[];
   posts: IPost[]
+  liked?: IPost[]
 }
 
 export type IContextUser = {
@@ -92,13 +93,9 @@ export interface ISave extends Models.Document {
   post: IPost
 }
 
-export type IUpdateProfile = {
-  accountId: string
-  name: string
-  username: string
-  email: string
-  bio?: string
-  imageId: string
-  imageUrl: string
-  file: File[]
+export type IUpdateProfile = Pick<
+  IUser,
+   "name" | "username" | "email" | "imageId" | "imageUrl" | "accountId"
+> & {
+  bio: string | null;
 }

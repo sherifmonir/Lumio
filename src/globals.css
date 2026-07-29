@@ -241,7 +241,7 @@
 }
 
 @utility form-bottom {
-  @apply  text-light-2 text-center w-full bg-primary-500 mt-4 mb-0 px-2 py-0.5 rounded-sm
+  @apply  text-light-2 text-center w-full bg-primary-500 mt-4 mb-0 px-2 py-0.5 rounded-sm cursor-pointer;
 }
 
 /* Explore */
@@ -313,7 +313,7 @@
   @apply text-light-4 text-center small-regular w-full p-4 border-t border-t-dark-4;
 }
 @utility file_uploader-box {
-  @apply flex-center flex-col p-7 h-80 lg:h-[612px];
+  @apply flex-center flex-col p-7 h-80 ;
 }
 
 /* Grid Post List */
