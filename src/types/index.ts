@@ -98,4 +98,7 @@ export type IUpdateProfile = Pick<
    "name" | "username" | "email" | "imageId" | "imageUrl" | "accountId"
 > & {
   bio: string | null;
+  file: File[]
 }
+
+export type ISearchUsers = Pick<IUser,"name" | "username" | "imageUrl">

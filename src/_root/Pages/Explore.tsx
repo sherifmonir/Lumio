@@ -1,5 +1,5 @@
 import GridPostList from "@/components/shared/GridPostList"
-import SearchResults from "@/components/shared/SearchResults"
+import PostsSearchResults from "@/components/shared/PostsSearchResults"
 import { useDebounce } from "@/Hooks/useDebounce"
 import { useGetPosts, useSearchPosts } from "@/lib/react-query/queriesAndMutatuins"
 import { useEffect, useRef, useState } from "react"
@@ -67,14 +67,11 @@ const Explore = () => {
         </div>
       </div>
 
-        <h3 className="body-bold md:h3-bold w-full max-w-5xl mt-16 mb-7">
-          Popular Today
-        </h3>
 
        <div className="flex flex-wrap gap-9 w-full max-w-5xl">
         {shouldShowSearchResults ? (
 
-          <SearchResults
+          <PostsSearchResults
             isSearchFetching={isSearchFetching}
             searchedPosts={searchedPosts ?? { documents: [] }}
           />

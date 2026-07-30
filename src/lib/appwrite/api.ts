@@ -481,38 +481,43 @@ export async function updateProfile(profile: IUpdateProfile) {
 }
 
 
-export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
-    const queries: string[] = [Query.orderDesc('$updatedAt'), Query.limit(10),Query.offset((pageParam - 1) * 10)]
+export async function getUsers(limit?: number) {
+  const queries = [Query.orderDesc("$createdAt")];
 
-    try {
-        const users = await databases.listDocuments<IPost>(
-            appwriteconfig.databaseId,
-            appwriteconfig.usersTableId,
-            queries
-        )
+  if (limit) {
+    queries.push(Query.limit(limit));
+  }
 
-        if(!users) throw Error
+  try {
+    const users = await databases.listDocuments<IUser>(
+      appwriteconfig.databaseId,
+      appwriteconfig.usersTableId,
+      queries
+    );
 
-        return users
+    if (!users) throw Error;
 
-    }catch(error) {
-        console.log(error)
-    }
+    return users;
+  } catch (error) {
+    console.log(error);
+  }
 }
+
 
 
 export async function searchUsers(searchTerm: string) {
   try {
-        const users = await databases.listDocuments(
+        const users = await databases.listDocuments<IUser>(
             appwriteconfig.databaseId,
             appwriteconfig.usersTableId,
-            [Query.search("username", searchTerm), Query.search("name", searchTerm)]
+            [Query.search("name", searchTerm)]
         );
 
-        if (!users) throw new Error();
+        if (!users) throw new Error()
 
-        return users;
+        return users
   } catch (error) {
-    console.log(error);
+    console.log(error)
+    return
   }
 }

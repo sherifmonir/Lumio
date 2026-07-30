@@ -2,21 +2,19 @@ import { ClipLoader } from 'react-spinners'
 import GridPostList from './GridPostList'
 import type { IPost } from '@/types'
 
-type SearchResultsProps = {
+type PostsSearchResultsProps = {
   isSearchFetching: boolean
   searchedPosts: { documents: IPost[] }
 }
 
-const SearchResults = ({ isSearchFetching, searchedPosts }:SearchResultsProps) => {
+const PostsSearchResults = ({ isSearchFetching, searchedPosts }:PostsSearchResultsProps) => {
   if (isSearchFetching) {
     return <ClipLoader />
   } else if (searchedPosts?.documents.length > 0) {
-    return <GridUsersList posts={searchedPosts.documents} />
-  } else if (searchedUsers?.documents.length > 0) {
-    return <GridPostList posts={searchedUsers.documents} />
+    return <GridPostList posts={searchedPosts.documents} />
   } else {
     return <p className="text-light-4 mt-10 text-center w-full">No results found</p>
   }
 }
 
-export default SearchResults
+export default PostsSearchResults
