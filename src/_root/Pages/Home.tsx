@@ -7,8 +7,8 @@ import { ClipLoader } from "react-spinners"
 const Home = () => {
   const { data: posts, isPending: isPostLoading } = useGetRecentPosts()
   return (
-   <div className="flex flex-1">
-    <div className="home-container">
+   <div className="flex flex-1 ">
+    <div className="home-container overflow-auto scrollbar-none">
       <div className="home-posts">
         <h2 className="h3-bold md:h2-bold text-left w-full">
           Home Feed

@@ -56,4 +56,5 @@ const useToast = () => ({ toast: (opts: { title?: string; description?: string }
   }
 }})
 
-export { Toaster, useToast }
+
+export {Toaster, useToast }

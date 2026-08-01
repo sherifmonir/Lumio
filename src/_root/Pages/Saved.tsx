@@ -17,7 +17,7 @@ import { ClipLoader } from "react-spinners";
     .reverse()
   
   return (
-    <div className="saved-container">
+    <div className="saved-container overflow-auto scrollbar-none">
       <div className="flex gap-2 w-full max-w-5xl">
         <img
           src="/assets/icons/save.svg"

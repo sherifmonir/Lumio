@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 
-import { Button } from "../ui/button";
 import type { IUser } from "@/types";
 
 type UserCardProps  = {
@@ -25,9 +24,9 @@ const UserCard = ({ user }: UserCardProps) => {
         </p>
       </div>
 
-      <Button type="button" size="sm" className="shad-button_primary px-5">
+      <button type="button" className="shad-button_primary px-5">
         Follow
-      </Button>
+      </button>
     </Link>
   );
 };

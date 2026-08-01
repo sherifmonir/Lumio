@@ -1,4 +1,4 @@
-import { bottombarLinks } from "@/constants";
+import { barLinks } from "@/constants";
 import {Link, useLocation} from "react-router-dom";
 
 const Bottombar = () => {
@@ -8,7 +8,7 @@ const Bottombar = () => {
       
 
         
-          {bottombarLinks.map((link) => {
+          {barLinks.map((link) => {
             const isActive = pathname === link.route;
 
             return (
@@ -29,7 +29,6 @@ const Bottombar = () => {
                       isActive && "invert-white"
                     }`}
                   />
-                  {link.label}
                 </Link>
               
             );

@@ -1,9 +1,8 @@
 import UserCard from "@/components/shared/UserCard";
 import UsersSearchResults from "@/components/shared/UsersSearchResults";
-import { useToast } from "@/components/ui/sonner";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { useGetUsers, useSearchUsers } from "@/lib/react-query/queriesAndMutatuins";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { ClipLoader } from "react-spinners";
 
@@ -13,20 +12,28 @@ const People = () => {
   const [searchValue, setSearchValue] = useState('')
   const { ref, inView } = useInView()
   const debouncedSearch = useDebounce(searchValue, 500)
-  const { toast } = useToast()
   const { data: searchedUsers, isFetching: isSearchFetching } = useSearchUsers(debouncedSearch)
-  const { data: users, isLoading, isError: isErrorUsers } = useGetUsers()
+  const { data: users, fetchNextPage, hasNextPage } = useGetUsers()
   const searchValueRef = useRef<HTMLInputElement>(null)
 
   const handleSearchIconClick = () => {
     searchValueRef.current?.focus()
   }
+
+  useEffect(() => {
+      if (inView && !searchValue) {
+        fetchNextPage();
+      }
+    }, [inView, searchValue,fetchNextPage]);
   
 
-  if (isErrorUsers) {
-    toast({ title: "Something went wrong." })
-    
-    return
+  
+  if(!users) {
+    return (
+      <div className="flex-center w-full h-full">
+        <ClipLoader />
+      </div>
+    )
   }
 
   const showSearchResults = searchValue !== ""
@@ -63,24 +70,30 @@ const People = () => {
       </div>
       <div className="user-container">
         <h2 className="h3-bold md:h2-bold text-left w-full">People</h2>
-        {isLoading && !users ? (
-          <ClipLoader />
-        ) : showSearchResults ? (
+        {showSearchResults ? (
           <UsersSearchResults
             isSearchFetching={isSearchFetching}
             searchedUsers={searchedUsers ?? { documents: [] }}
           />
         ) : (
           <ul className="user-grid">
-            {users?.documents.map((user) => (
-              <li key={user?.$id} className="flex-1 min-w-[200px] w-full">
-                <UserCard user={user} />
-              </li>
-            ))}
+            {users?.pages.map((page) =>
+              page?.documents.map((user) => (
+                <li key={user?.$id} className="flex-1 min-w-[200px] w-full">
+                  <UserCard user={user} />
+                </li>
+              ))
+            )}
           </ul>
         )}
       </div>
+      {hasNextPage && !searchValue && (
+        <div ref={ref} className="mt-10">
+          <ClipLoader />
+        </div>
+      )}
     </div>
+
   )
 }
 

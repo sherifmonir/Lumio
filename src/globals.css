@@ -225,7 +225,7 @@
   @apply flex justify-start items-center;
 }
 @utility common-container {
-  @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14 custom-scrollbar;
+  @apply flex flex-col flex-1 items-center gap-10 overflow-auto scrollbar-none py-10 px-5 md:px-8 lg:p-14 custom-scrollbar;
 }
 
 @utility lg-block {
@@ -396,8 +396,11 @@
   .Add-photo-button {
     @apply h-12 bg-dark-4 px-5 text-light-1 flex gap-2 flex-center rounded-md;
   }
-  .shad-button-ghost {
+  .button-ghost {
     @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white;
+  }
+  UserCard {
+    @apply flex-center
   }
 }
 

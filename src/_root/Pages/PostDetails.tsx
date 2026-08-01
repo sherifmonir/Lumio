@@ -25,7 +25,7 @@ const PostDetails = () => {
 
       <button
         onClick={() => navigate(-1)}
-        className="shad-button-ghost">
+        className="button-ghost">
 
       <img
         src="/assets/icons/back.svg"

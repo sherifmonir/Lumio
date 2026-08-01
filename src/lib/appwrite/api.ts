@@ -510,7 +510,7 @@ export async function searchUsers(searchTerm: string) {
         const users = await databases.listDocuments<IUser>(
             appwriteconfig.databaseId,
             appwriteconfig.usersTableId,
-            [Query.search("name", searchTerm)]
+            [Query.search("name", searchTerm.toLowerCase())]
         );
 
         if (!users) throw new Error()
@@ -518,6 +518,25 @@ export async function searchUsers(searchTerm: string) {
         return users
   } catch (error) {
     console.log(error)
-    return
+    return null
   }
+}
+
+export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
+    const queries: string[] = [Query.orderDesc('$updatedAt'), Query.limit(10),Query.offset((pageParam - 1) * 10)]
+
+    try {
+        const users = await databases.listDocuments<IUser>(
+            appwriteconfig.databaseId,
+            appwriteconfig.usersTableId,
+            queries
+        )
+
+        if(!users) throw Error
+
+        return users
+
+    }catch(error) {
+        console.log(error)
+    }
 }

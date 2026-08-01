@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "@/context/UseUserContext";
 import { useSignoutAccount } from "@/lib/react-query/queriesAndMutatuins";
 import { ClipLoader } from "react-spinners";
-import { sidebarLinks } from "@/constants";
+import { barLinks } from "@/constants";
 import { useEffect } from "react";
 import type { INavLink } from "@/types";
 import { INITIAL_USER } from "@/context/AuthConstants";
@@ -14,6 +14,7 @@ const LeftSideBar = () => {
   const { user, setUser, setIsAuthenticated, isLoading } = useUserContext()
   const { pathname } = useLocation();
 
+ 
   useEffect(() => {
     
     if (isSuccess) {
@@ -46,11 +47,19 @@ const LeftSideBar = () => {
             </div>
           </Link>
         )}
-        <nav className="flex flex-col  w-30 h-80 ">
+        <nav className="flex flex-col  w-30 h-80">
 
         
-          {sidebarLinks.map((link: INavLink) => {
+          {barLinks.map((link: INavLink) => {
             const isActive = pathname === link.route;
+
+            const handleClick = (e: React.MouseEvent) => {
+              if (isActive) {
+              e.preventDefault()
+              window.location.reload()
+              }
+    }
+
 
             return (
               
@@ -60,6 +69,7 @@ const LeftSideBar = () => {
                 <NavLink
                   to={link.route}
                   key={link.label}
+                   onClick={handleClick}
                   className={`leftsidebar-NavLink ${
                   isActive && " bg-primary-500"
                 } `}>
@@ -71,6 +81,7 @@ const LeftSideBar = () => {
                     }`}
                   />
                   {link.label}
+                  
                 </NavLink>
               
             );

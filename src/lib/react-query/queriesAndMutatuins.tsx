@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPost, getUserById, getUsers, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, updatePost, updateProfile } from '../appwrite/api'
+import { createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getInfiniteUsers, getPostById, getRecentPost, getUserById, getUsers, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, updatePost, updateProfile } from '../appwrite/api'
 import type { INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
 
@@ -214,12 +214,12 @@ export const useUpdateProfile = () => {
 }
 
 
-export const useGetUsers = (limit?: number) => {
+/*export const useGetUsers = (limit?: number) => {
   return useQuery({
     queryKey: [queryKeys.GET_USERS],
     queryFn: () => getUsers(limit),
   });
-}
+}*/
 
 
 export const useSearchUsers = (searchTerm: string) => {
@@ -228,5 +228,20 @@ export const useSearchUsers = (searchTerm: string) => {
     queryFn: () => searchUsers(searchTerm),
     enabled: !!searchTerm,
   });
+}
+
+
+export const useGetUsers = () => {
+    const usersLimit = 10
+    return useInfiniteQuery({
+        queryKey: [queryKeys.GET_INFINITE_USERS],
+        queryFn: getInfiniteUsers,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, pages) => {
+            if (!lastPage?.documents?.length) return null
+            if (lastPage.documents.length < usersLimit) return null
+            return pages.length + 1
+        }
+    })
 }
 

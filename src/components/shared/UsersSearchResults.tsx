@@ -12,11 +12,11 @@ const UsersSearchResults = ({ isSearchFetching, searchedUsers }:UsersSearchResul
     return <ClipLoader />
   } else if (searchedUsers?.documents.length > 0) {
     return (
-      <>
+      <ul className="user-grid">
         {searchedUsers.documents.map((user) => (
-          <UserCard key={user.accountId} user={user} />
+          <UserCard key={user.accountId} user={user}/>
         ))}
-      </>
+      </ul>
     )
   } else {
     return <p className="text-light-4 mt-10 text-center w-full">No results found</p>
