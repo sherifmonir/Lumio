@@ -102,3 +102,8 @@ export type IUpdateProfile = Pick<
 }
 
 export type ISearchUsers = Pick<IUser,"name" | "username" | "imageUrl">
+
+export interface IFollow extends Models.Document {
+  followerId: string;
+  followingId: string;
+}

@@ -20,4 +20,16 @@ export const queryKeys = {
 
   //  SEARCH KEYS
   SEARCH_POSTS: "getSearchPosts",
+
+  // FOLLOW KEYS
+  GET_IS_FOLLOWING: "getIsFollowing",
+  GET_FOLLOWERS_COUNT: "getFollowersCount",
+  GET_FOLLOWING_COUNT: "getFollowingCount",
+  GET_FOLLOWERS: "getFollowers",
+  GET_FOLLOWING: "getFollowing",
+  GET_FOLLOWING_IDS: "getFollowingIds",
+  GET_FOLLOWING_FEED: "getFollowingFeed",
 } as const;
+
+/*GET_IS_FOLLOWING, GET_FOLLOWERS_COUNT, GET_FOLLOWING_COUNT,
+GET_FOLLOWERS, GET_FOLLOWING, GET_FOLLOWING_IDS, GET_FOLLOWING_FEED*/

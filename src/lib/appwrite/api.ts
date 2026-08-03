@@ -1,4 +1,4 @@
-import type { INewPost, INewUser, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
+import type { IFollow, INewPost, INewUser, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
 import {  ID, Permission, Query, Role } from "appwrite";
 import { account, appwriteconfig, databases, storage } from "./config";
 
@@ -522,6 +522,7 @@ export async function searchUsers(searchTerm: string) {
   }
 }
 
+
 export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
     const queries: string[] = [Query.orderDesc('$updatedAt'), Query.limit(10),Query.offset((pageParam - 1) * 10)]
 
@@ -540,3 +541,119 @@ export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
         console.log(error)
     }
 }
+
+/*=========Follow=========*/
+
+export async function followUser(followerId: string, followingId: string) {
+    return databases.createDocument<IFollow>(
+        appwriteconfig.databaseId,
+        appwriteconfig.followsTableId,
+        ID.unique(),
+        { followerId, followingId },
+        [
+            Permission.read(Role.users()),
+            Permission.delete(Role.users()),
+        ])
+}
+
+
+export async function unfollowUser(followDocumentId: string) {
+    return databases.deleteDocument(
+        appwriteconfig.databaseId,
+        appwriteconfig.followsTableId,
+        followDocumentId
+    )
+}
+
+
+export async function checkIsFollowing(followerId: string, followingId: string) {
+    const res = await databases.listDocuments<IFollow>(
+        appwriteconfig.databaseId,
+        appwriteconfig.followsTableId,
+        [
+            Query.equal('followerId', followerId),
+            Query.equal('followingId', followingId),
+            Query.limit(1)
+        ])
+        return res.documents[0] ?? null
+}
+
+
+export async function getFollowersCount(userId: string) {
+    const res = await databases.listDocuments<IFollow>(
+        appwriteconfig.databaseId,
+        appwriteconfig.followsTableId,
+        [
+            Query.equal('followingId', userId),
+            Query.limit(1)
+        ])
+    return res.total
+}
+
+
+export async function getFollowingCount(userId: string) {
+    const res = await databases.listDocuments<IFollow>(
+        appwriteconfig.databaseId,
+        appwriteconfig.followsTableId,
+        [
+            Query.equal('followerId', userId),
+            Query.limit(1)
+        ])
+    return res.total
+}
+
+
+const FOLLOW_PAGE_SIZE = 12
+export async function getFollowers({ pageParam,userId }: {pageParam: number, userId: string}) {
+    const follows = await databases.listDocuments<IFollow>(
+        appwriteconfig.databaseId,
+        appwriteconfig.followsTableId,
+        [
+            Query.equal('followingId', userId),
+            Query.orderDesc('$createdAt'),
+            Query.limit(FOLLOW_PAGE_SIZE),
+            Query.offset((pageParam) * FOLLOW_PAGE_SIZE)
+        ])
+    if(!follows.documents.length) return { users: [], hasMore: false }
+
+    return { 
+        users: follows.documents, 
+        hasMore: true 
+    }
+}
+
+
+export async function getFollowing({ pageParam, userId }: { pageParam: number; userId: string }) {
+  const follows = await databases.listDocuments<IFollow>(
+    appwriteconfig.databaseId,
+    appwriteconfig.followsTableId,
+    [
+        Query.equal('followerId', userId),
+        Query.orderDesc('$createdAt'),
+        Query.limit(FOLLOW_PAGE_SIZE),
+        Query.offset(pageParam * FOLLOW_PAGE_SIZE)])
+  if (!follows.documents.length) return { users: [], hasMore: false };
+
+  const ids = follows.documents.map((f) => f.followingId)
+  const users = await databases.listDocuments<IUser>(
+    appwriteconfig.databaseId,
+    appwriteconfig.usersTableId,
+      [Query.equal('$id', ids)])
+  return { users: users.documents, hasMore: follows.documents.length === FOLLOW_PAGE_SIZE }
+}
+
+
+export async function getFollowingIds(followerId: string) {
+  const res = await databases.listDocuments<IFollow>(
+    appwriteconfig.databaseId,
+    appwriteconfig.followsTableId,
+    [
+        Query.equal('followerId', followerId),
+        Query.limit(500)
+    ])
+  return res.documents.map((f) => f.followingId)
+}
+
+
+/*=========*/
+    

@@ -31,6 +31,7 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
     } catch(error){
       console.log(error)
       return false
+      
     } finally {
       setIsLoading(false)
     }
