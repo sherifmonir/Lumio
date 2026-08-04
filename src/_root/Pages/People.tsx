@@ -37,7 +37,7 @@ const People = () => {
   }
 
   const showSearchResults = searchValue !== ""
-  //const shouldShowPosts = !shouldShowSearchResults && posts.pages.every((items) => items?.documents.length === 0)
+  const shouldShowUsers = !showSearchResults && users.pages.every((items) => items?.documents.length === 0)
 
   return (
     <div className="common-container">
@@ -75,11 +75,13 @@ const People = () => {
             isSearchFetching={isSearchFetching}
             searchedUsers={searchedUsers ?? { documents: [] }}
           />
+        ) :  shouldShowUsers ? (
+          <p className="text-light-4 mt-10 text-center w-full">No More Results</p>
         ) : (
           <ul className="user-grid">
             {users?.pages.map((page) =>
               page?.documents.map((user) => (
-                <li key={user?.$id} className="flex-1 min-w-[200px] w-full">
+                <li key={user?.$id} className="flex-1 min-w-50 w-full">
                   <UserCard user={user} />
                 </li>
               ))

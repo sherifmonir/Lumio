@@ -238,58 +238,60 @@ export const useGetUsers = () => {
 }
 
 
-/*=========Follow=========*/
-
 export const useFollowUser = () => {
-  const qc = useQueryClient();
+  const query = useQueryClient();
   return useMutation({
     mutationFn: ({ followerId, followingId }: { followerId: string; followingId: string }) =>
       followUser(followerId, followingId),
     onSuccess: (_d, v) => {
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_IS_FOLLOWING, v.followerId, v.followingId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS_COUNT, v.followingId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_COUNT, v.followerId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS, v.followingId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING, v.followerId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_IDS, v.followerId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_IS_FOLLOWING, v.followerId, v.followingId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS_COUNT, v.followingId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_COUNT, v.followerId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS, v.followingId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING, v.followerId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_IDS, v.followerId] });
     },
   });
 };
 
+
 export const useUnfollowUser = () => {
-  const qc = useQueryClient();
+  const query = useQueryClient();
   return useMutation({
     mutationFn: (v: { followDocumentId: string; followerId: string; followingId: string }) =>
       unfollowUser(v.followDocumentId),
     onSuccess: (_d, v) => {
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_IS_FOLLOWING, v.followerId, v.followingId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS_COUNT, v.followingId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_COUNT, v.followerId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS, v.followingId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING, v.followerId] });
-      qc.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_IDS, v.followerId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_IS_FOLLOWING, v.followerId, v.followingId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS_COUNT, v.followingId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_COUNT, v.followerId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS, v.followingId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING, v.followerId] });
+      query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_IDS, v.followerId] });
     },
   });
 };
 
+
 export const useCheckIsFollowing = (followerId?: string, followingId?: string) => {
-  useQuery({
+    return useQuery({
     queryKey: [queryKeys.GET_IS_FOLLOWING, followerId, followingId],
     queryFn: () => checkIsFollowing(followerId!, followingId!),
     enabled: !!followerId && !!followingId && followerId !== followingId,
   })
 }
 
+
 export const useGetFollowersCount = (userId?: string) => {
-  useQuery({
+  return useQuery({
     queryKey: [queryKeys.GET_FOLLOWERS_COUNT, userId],
     queryFn: () => getFollowersCount(userId!),
     enabled: !!userId,
   })
 }
 
+
 export const useGetFollowingCount = (userId?: string) => {
-  useQuery({
+  return useQuery({
     queryKey: [queryKeys.GET_FOLLOWING_COUNT, userId],
     queryFn: () => getFollowingCount(userId!),
     enabled: !!userId,
@@ -298,7 +300,7 @@ export const useGetFollowingCount = (userId?: string) => {
 
 
 export const useGetFollowers = (userId?: string, enabled = true) => {
-  useInfiniteQuery({
+  return useInfiniteQuery({
     queryKey: [queryKeys.GET_FOLLOWERS, userId],
     queryFn: ({ pageParam = 0 }) => getFollowers({ pageParam, userId: userId! }),
     getNextPageParam: (last, pages) => (last.hasMore ? pages.length : null),
@@ -307,8 +309,9 @@ export const useGetFollowers = (userId?: string, enabled = true) => {
   })
 }
 
+
 export const useGetFollowing = (userId?: string, enabled = true) => {
-  useInfiniteQuery({
+  return useInfiniteQuery({
     queryKey: [queryKeys.GET_FOLLOWING, userId],
     queryFn: ({ pageParam = 0 }) => getFollowing({ pageParam, userId: userId! }),
     getNextPageParam: (last, pages) => (last.hasMore ? pages.length : null),
@@ -316,6 +319,7 @@ export const useGetFollowing = (userId?: string, enabled = true) => {
     initialPageParam: 0,
   })
 }
+
 
 export const useGetFollowingFeed = (currentUserId?: string) => {
   const { data: followingIds } = useQuery({
@@ -343,5 +347,3 @@ export const useGetFollowingFeed = (currentUserId?: string) => {
     }),
   })
 }
-
-  /*=========*/

@@ -4,6 +4,7 @@ import { useGetUserById } from '@/lib/react-query/queriesAndMutatuins'
 import { Link, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { ClipLoader } from 'react-spinners'
 import LikedPosts from './LikedPosts';
+import FollowButton from '@/components/shared/FollowButton';
 
 interface StabBlockProps {
   value: string | number;
@@ -30,10 +31,10 @@ const Profile = () => {
         <ClipLoader />
       </div>
     )
-console.log(currentUser.posts)
+
   return (
     <div className="profile-container">
-      <div className="profile-inner_container">
+      <div className="profile-inner-container">
         <div className="flex xl:flex-row flex-col max-xl:items-center flex-1 gap-7">
           <img
             src={
@@ -54,13 +55,20 @@ console.log(currentUser.posts)
 
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
               <StatBlock value={currentUser.posts?.length} label="Posts" />
-              <StatBlock value={0} label="Followers" />
-              <StatBlock value={0} label="Following" />
+              <Link to={`/profile/${id}/followers`}>
+                <StatBlock value={0} label="Followers" />
+              </Link>
+              <Link to={`/profile/${id}/following`}>
+                <StatBlock value={0} label="Following" />
+              </Link>
             </div>
 
             <p className="small-medium md:base-medium text-center xl:text-left mt-7 max-w-screen-sm">
               {currentUser.bio}
             </p>
+            <div className={`${user.id === currentUser.$id && "hidden"}`}>
+              <FollowButton targetUserId={currentUser.$id} />
+            </div>
           </div>
 
           <div className="flex justify-center gap-4">
@@ -81,11 +89,7 @@ console.log(currentUser.posts)
                 </p>
               </Link>
             </div>
-            <div className={`${user.id === id && "hidden"}`}>
-              <button type="button" className="shad-button_primary px-8">
-                Follow
-              </button>
-            </div>
+            
           </div>
         </div>
       </div>

@@ -206,7 +206,7 @@ export async function deleteFile(fileId: string) {
         console.log(error)
     }
 }
-/*=========*/
+
 
 export async function getRecentPost() {
     const posts = await databases.listDocuments<IPost>(
@@ -504,7 +504,6 @@ export async function getUsers(limit?: number) {
 }
 
 
-
 export async function searchUsers(searchTerm: string) {
   try {
         const users = await databases.listDocuments<IUser>(
@@ -542,7 +541,6 @@ export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
     }
 }
 
-/*=========Follow=========*/
 
 export async function followUser(followerId: string, followingId: string) {
     return databases.createDocument<IFollow>(
@@ -602,10 +600,9 @@ export async function getFollowingCount(userId: string) {
     return res.total
 }
 
-
 const FOLLOW_PAGE_SIZE = 12
 export async function getFollowers({ pageParam,userId }: {pageParam: number, userId: string}) {
-    const follows = await databases.listDocuments<IFollow>(
+    const follows = await databases.listDocuments<IUser>(
         appwriteconfig.databaseId,
         appwriteconfig.followsTableId,
         [
@@ -631,14 +628,17 @@ export async function getFollowing({ pageParam, userId }: { pageParam: number; u
         Query.equal('followerId', userId),
         Query.orderDesc('$createdAt'),
         Query.limit(FOLLOW_PAGE_SIZE),
-        Query.offset(pageParam * FOLLOW_PAGE_SIZE)])
+        Query.offset(pageParam * FOLLOW_PAGE_SIZE)
+    ]
+  )
   if (!follows.documents.length) return { users: [], hasMore: false };
 
   const ids = follows.documents.map((f) => f.followingId)
   const users = await databases.listDocuments<IUser>(
     appwriteconfig.databaseId,
     appwriteconfig.usersTableId,
-      [Query.equal('$id', ids)])
+    [Query.equal('$id', ids)]
+  )
   return { users: users.documents, hasMore: follows.documents.length === FOLLOW_PAGE_SIZE }
 }
 
@@ -655,5 +655,4 @@ export async function getFollowingIds(followerId: string) {
 }
 
 
-/*=========*/
     

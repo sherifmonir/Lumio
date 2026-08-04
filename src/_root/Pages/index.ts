@@ -7,4 +7,4 @@ export {default as EditPost} from './EditPost'
 export {default as PostDetails} from './PostDetails'
 export {default as UpdateProfile} from './EditProfile'
 export {default as LikedPosts} from './LikedPosts'
-
+export {default as FollowList} from './FollowList'

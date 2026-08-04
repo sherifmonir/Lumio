@@ -225,7 +225,7 @@
   @apply flex justify-start items-center;
 }
 @utility common-container {
-  @apply flex flex-col flex-1 items-center gap-10 overflow-auto scrollbar-none py-10 px-5 md:px-8 lg:p-14 custom-scrollbar;
+  @apply flex flex-col flex-1 items-center gap-10 overflow-auto scrollbar-none py-10 px-5 md:px-8 lg:p-14 ;
 }
 
 @utility lg-block {
@@ -285,10 +285,10 @@
 
 /* Profile */
 @utility profile-container {
-  @apply flex flex-col items-center flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar;
+  @apply flex flex-col items-center flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 scrollbar-none ;
 }
 @utility profile-inner-container {
-  @apply flex items-center md:mb-8 xl:items-start gap-8 flex-col xl:flex-row relative max-w-5xl w-full;
+  @apply flex items-center md:mb-8 xl:items-start gap-8 flex-col xl:flex-row relative max-w-5xl w-full scrollbar-none overflow-scroll ;
 }
 @utility profile-tab {
   @apply flex-center gap-3 py-4 w-48 bg-dark-2 transition flex-1 xl:flex-initial;
@@ -296,7 +296,7 @@
 
 /* Saved */
 @utility saved-container {
-  @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar;
+  @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14 scrollbar-none;
 }
 
 /* Bottom bar */
@@ -355,8 +355,17 @@
 
 /* User card */
 @utility user-card {
-  @apply flex-center flex-col gap-4 border border-dark-4 rounded-[20px] px-5 py-8;
+  @apply h-60 w-50 bg-dark-1 flex-center flex-col  border border-dark-4 rounded-[20px];
 }
+
+/* Follow Button */
+@utility follow {
+  @apply bg-primary-500 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80
+}
+@utility unfollow {
+  @apply bg-dark-5 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80
+}
+
 /*****************************************/
 @utility field {
   @apply flex flex-col justify-between

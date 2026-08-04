@@ -11,6 +11,7 @@ import Saved from './_root/Pages/Saved'
 import Profile from './_root/Pages/Profile'
 import EditProfile from './_root/Pages/EditProfile'
 import People from './_root/Pages/People'
+import FollowList from './_root/Pages/FollowList'
 
 const RouteWrapper = RoutLayout as ComponentType
 const UpdateProfileFormWrapper = EditProfile as ComponentType
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/post/:id" element={<PostDetails />} />
           <Route path="/edit-profile/:id" element={<UpdateProfileFormWrapper />} />
           <Route path="/profile/:id/*" element={<Profile />} />
+          <Route path="/profile/:id/:mode" element={<FollowList />} />
           <Route path="/liked-posts" element={<LikedPosts />} />
         </Route>
       </Routes>
