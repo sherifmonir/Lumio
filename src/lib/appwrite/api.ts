@@ -375,7 +375,11 @@ export async function deletePost(postId: string, imageId: string) {
 
 
 export async function getInfinitePosts({ pageParam }: {pageParam: number}) {
-    const queries: string[] = [Query.orderDesc('$updatedAt'), Query.limit(10),Query.offset((pageParam - 1) * 10)]
+    const queries: string[] = [
+         Query.orderDesc('$updatedAt'),
+         Query.limit(10),Query.offset((pageParam - 1) * 10),
+         Query.select(['*', 'creator.*'])
+        ]
 
     try {
         const posts = await databases.listDocuments<IPost>(
@@ -654,5 +658,3 @@ export async function getFollowingIds(followerId: string) {
   return res.documents.map((f) => f.followingId)
 }
 
-
-    

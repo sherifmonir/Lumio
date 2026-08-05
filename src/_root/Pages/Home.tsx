@@ -1,11 +1,27 @@
 import PostCard from '@/components/shared/PostCard'
-import {  useGetRecentPosts } from '@/lib/react-query/queriesAndMutatuins'
+import { useUserContext } from '@/context/UseUserContext'
+import {   useGetFollowingIds, useGetRecentPosts } from '@/lib/react-query/queriesAndMutatuins'
+import { useMemo } from 'react'
 import { ClipLoader } from "react-spinners"
 
 
 
 const Home = () => {
+  const { user } = useUserContext()
+  const { data: followingIds } = useGetFollowingIds(user.id)
   const { data: posts, isPending: isPostLoading } = useGetRecentPosts()
+
+  const postsMemo = useMemo(() => {
+  if (!posts?.documents) return []
+  if (!followingIds?.length) return posts.documents;
+  const followed = new Set(followingIds)
+  const a: typeof posts.documents = []
+  const b: typeof posts.documents = []
+  for (const post of posts.documents) (followed.has(post.creator.$id) ? a : b).push(post);
+  return [...a, ...b]
+}, [posts, followingIds])
+
+
   return (
    <div className="flex flex-1 ">
     <div className="home-container overflow-auto scrollbar-none">

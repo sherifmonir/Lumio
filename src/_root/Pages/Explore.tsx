@@ -35,7 +35,6 @@ const Explore = () => {
 
   const shouldShowSearchResults = searchValue !== ""
   const shouldShowPosts = !shouldShowSearchResults && posts.pages.every((items) => items?.documents.length === 0)
-
   return (
     <div className="explore-container overflow-auto scrollbar-none">
 

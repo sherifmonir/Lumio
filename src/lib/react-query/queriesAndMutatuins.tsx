@@ -346,4 +346,12 @@ export const useGetFollowingFeed = (currentUserId?: string) => {
       })),
     }),
   })
-}
+} /*Dead*/
+
+
+export const useGetFollowingIds = (currentUserId?: string) => {
+  return useQuery({
+    queryKey: [queryKeys.GET_FOLLOWING_IDS, currentUserId],
+    queryFn: () => getFollowingIds(currentUserId!),
+    enabled: !!currentUserId,
+  })}
