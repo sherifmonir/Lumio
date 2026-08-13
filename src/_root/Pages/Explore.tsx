@@ -1,10 +1,11 @@
 import GridPostList from "@/components/shared/GridPostList"
 import PostsSearchResults from "@/components/shared/PostsSearchResults"
 import { useDebounce } from "@/Hooks/useDebounce"
-import { useGetPosts, useSearchPosts } from "@/lib/react-query/queriesAndMutatuins"
-import { useEffect, useRef, useState } from "react"
+import { useGetPosts, useSearchPosts, useGetFollowingRelations } from "@/lib/react-query/queriesAndMutatuins"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { ClipLoader } from "react-spinners"
 import { useInView } from "react-intersection-observer"
+import { useUserContext } from "@/context/UseUserContext"
 
 
 const Explore = () => {
@@ -14,6 +15,22 @@ const Explore = () => {
   const { data: searchedPosts, isFetching: isSearchFetching } = useSearchPosts(debouncedSearch)
   const { data: posts, fetchNextPage, hasNextPage } = useGetPosts()
   const searchValueRef = useRef<HTMLInputElement>(null)
+  const { user } = useUserContext()
+  const { data: relations } = useGetFollowingRelations(user.id)
+  const followingIds = useMemo(() => relations?.map((r) => r.followingId) ?? [], [relations]);
+
+ const postsMemo = useMemo(() => {
+  if (!posts?.pages) return [];
+  const followed = new Set(followingIds);
+  return posts.pages.map((page) => {
+    const docs = page?.documents ?? [];
+    const notFollowed: typeof docs = [];
+    const followedDocs: typeof docs = [];
+    for (const post of docs) (followed.has(post.creator.$id) ? followedDocs : notFollowed).push(post);
+    return { documents: [...notFollowed, ...followedDocs] }; // not-followed first, matches Explore's reversed priority
+  });
+}, [posts, followingIds])
+
 
   const handleSearchIconClick = () => {
     searchValueRef.current?.focus()
@@ -78,7 +95,7 @@ const Explore = () => {
         ) : shouldShowPosts ? (
           <p className="text-light-4 mt-10 text-center w-full">End of posts</p>
         ) : (
-          posts.pages.map((item, index) => (
+          postsMemo.map((item, index) => (
             <GridPostList key={`page-${index}`} posts={item?.documents ?? []} />
           ))
         )}

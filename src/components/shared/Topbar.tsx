@@ -26,10 +26,10 @@ const Topbar = () => {
       <div className="flex-between py-4 px-5">
         <Link to='/' className="flex gap-3 items-center">
         <img
-          src="/assets/images/logo.svg"
+          src="/assets/images/logo.png"
           alt="Logo"
-          width={130}
-          height={325}
+          width={140}
+          height={300}
         />
         </Link>
         <div className="flex gap-3">
@@ -37,6 +37,7 @@ const Topbar = () => {
             <img 
             src="/assets/icons/logout.svg"
             alt="logout"
+            className="cursor-pointer"
             />
           </button>
           <Link to={`/profile/${user.id}`} className="flex-center gap-3">

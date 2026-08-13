@@ -94,6 +94,7 @@ const LeftSideBar = () => {
             <img 
             src="/assets/icons/logout.svg"
             alt="logout"
+            className="cursor-pointer"
             />
             <p className="text-[1rem] text-white ">Log out</p>
       </button>

@@ -1,6 +1,6 @@
 import PostCard from '@/components/shared/PostCard'
 import { useUserContext } from '@/context/UseUserContext'
-import {   useGetFollowingIds, useGetRecentPosts } from '@/lib/react-query/queriesAndMutatuins'
+import {  useGetFollowingRelations, useGetRecentPosts } from '@/lib/react-query/queriesAndMutatuins'
 import { useMemo } from 'react'
 import { ClipLoader } from "react-spinners"
 
@@ -8,7 +8,8 @@ import { ClipLoader } from "react-spinners"
 
 const Home = () => {
   const { user } = useUserContext()
-  const { data: followingIds } = useGetFollowingIds(user.id)
+  const { data: relations } = useGetFollowingRelations(user.id)
+  const followingIds = useMemo(() => relations?.map((r) => r.followingId) ?? [], [relations]);  
   const { data: posts, isPending: isPostLoading } = useGetRecentPosts()
 
   const postsMemo = useMemo(() => {
@@ -33,7 +34,7 @@ const Home = () => {
           <ClipLoader />
         ):(
         <ul className="flex flex-col flex-1 gap-9 w-full">
-          {posts?.documents.map((post) =>(
+          {postsMemo?.map((post) =>(
             <li key={post.$id} >
             <PostCard  post={post} />
             </li>

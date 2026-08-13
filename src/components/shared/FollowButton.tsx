@@ -1,6 +1,6 @@
 import { useUserContext } from '@/context/UseUserContext';
-import { useCheckIsFollowing, useFollowUser, useUnfollowUser } from '@/lib/react-query/queriesAndMutatuins';
-import { useState } from 'react'
+import {  useFollowUser, useGetFollowingRelations, useUnfollowUser } from '@/lib/react-query/queriesAndMutatuins';
+import { useMemo, useState } from 'react'
 
 
 type FollowButtonProps = { targetUserId: string };
@@ -8,10 +8,13 @@ type FollowButtonProps = { targetUserId: string };
 
 const FollowButton = ({ targetUserId }: FollowButtonProps) => {
     const { user } = useUserContext()
-    const { data: existingFollow, isPending } = useCheckIsFollowing(user.id, targetUserId)
+    const { data: relations, isPending } = useGetFollowingRelations(user.id)
+    const existingFollow = useMemo(
+      () => relations?.find((f) => f.followingId === targetUserId) ?? null,
+      [relations, targetUserId]
+    )
     const { mutateAsync: follow } = useFollowUser()
     const { mutateAsync: unfollow } = useUnfollowUser()
-
     const [ optimistic, setOptimistic ] = useState<boolean | null>(null)
     const [ prevServerState, setPrevServerState ] = useState(!!existingFollow)
 

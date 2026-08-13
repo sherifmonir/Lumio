@@ -1,6 +1,6 @@
 import GridPostList from '@/components/shared/GridPostList';
 import { useUserContext } from '@/context/UseUserContext'
-import { useGetUserById } from '@/lib/react-query/queriesAndMutatuins'
+import { useGetFollowersCount, useGetFollowingCount, useGetUserById } from '@/lib/react-query/queriesAndMutatuins'
 import { Link, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { ClipLoader } from 'react-spinners'
 import LikedPosts from './LikedPosts';
@@ -22,8 +22,9 @@ const Profile = () => {
   const { id } = useParams()
   const { user } = useUserContext()
   const { pathname } = useLocation()
-
   const { data: currentUser } = useGetUserById(id || "")
+  const { data: followersCount } = useGetFollowersCount(currentUser?.$id)
+const { data: followingCount } = useGetFollowingCount(currentUser?.$id)
 
   if (!currentUser)
     return (
@@ -56,10 +57,10 @@ const Profile = () => {
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
               <StatBlock value={currentUser.posts?.length} label="Posts" />
               <Link to={`/profile/${id}/followers`}>
-                <StatBlock value={0} label="Followers" />
+                <StatBlock value={followersCount ?? 0} label="Followers" />
               </Link>
               <Link to={`/profile/${id}/following`}>
-                <StatBlock value={0} label="Following" />
+                <StatBlock value={followingCount ?? 0} label="Following" />
               </Link>
             </div>
 

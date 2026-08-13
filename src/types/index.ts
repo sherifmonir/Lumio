@@ -97,7 +97,7 @@ export type IUpdateProfile = Pick<
   IUser,
    "name" | "username" | "email" | "imageId" | "imageUrl" | "accountId"
 > & {
-  bio: string | null;
+  bio: string
   file: File[]
 }
 

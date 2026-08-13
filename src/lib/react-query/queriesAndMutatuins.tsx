@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { checkIsFollowing, createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingIds, getInfinitePosts, getInfiniteUsers, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, updatePost, updateProfile } from '../appwrite/api'
+import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, updatePost, updateProfile } from '../appwrite/api'
 import type { INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
 
@@ -244,7 +244,6 @@ export const useFollowUser = () => {
     mutationFn: ({ followerId, followingId }: { followerId: string; followingId: string }) =>
       followUser(followerId, followingId),
     onSuccess: (_d, v) => {
-      query.invalidateQueries({ queryKey: [queryKeys.GET_IS_FOLLOWING, v.followerId, v.followingId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS_COUNT, v.followingId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_COUNT, v.followerId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS, v.followingId] });
@@ -261,7 +260,6 @@ export const useUnfollowUser = () => {
     mutationFn: (v: { followDocumentId: string; followerId: string; followingId: string }) =>
       unfollowUser(v.followDocumentId),
     onSuccess: (_d, v) => {
-      query.invalidateQueries({ queryKey: [queryKeys.GET_IS_FOLLOWING, v.followerId, v.followingId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS_COUNT, v.followingId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_COUNT, v.followerId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS, v.followingId] });
@@ -270,15 +268,6 @@ export const useUnfollowUser = () => {
     },
   });
 };
-
-
-export const useCheckIsFollowing = (followerId?: string, followingId?: string) => {
-    return useQuery({
-    queryKey: [queryKeys.GET_IS_FOLLOWING, followerId, followingId],
-    queryFn: () => checkIsFollowing(followerId!, followingId!),
-    enabled: !!followerId && !!followingId && followerId !== followingId,
-  })
-}
 
 
 export const useGetFollowersCount = (userId?: string) => {
@@ -321,37 +310,9 @@ export const useGetFollowing = (userId?: string, enabled = true) => {
 }
 
 
-export const useGetFollowingFeed = (currentUserId?: string) => {
-  const { data: followingIds } = useQuery({
-    queryKey: [queryKeys.GET_FOLLOWING_IDS, currentUserId],
-    queryFn: () => getFollowingIds(currentUserId!),
-    enabled: !!currentUserId,
-  })
-
-  return useInfiniteQuery({
-    queryKey: [queryKeys.GET_FOLLOWING_FEED, currentUserId],
-    queryFn: ({ pageParam = 1 }) => getInfinitePosts({ pageParam }),
-    getNextPageParam: (lastPage, pages) => {
-      if (!lastPage?.documents?.length) return null;
-      if (lastPage.documents.length < 10) return null;
-      return pages.length + 1;
-    },
-    enabled: !!followingIds,
-    initialPageParam: 1,
-    select: (data) => ({
-      ...data,
-      pages: data.pages.map((page) => ({
-        ...page,
-        documents: page?.documents.filter((post) => followingIds!.includes(post.creator?.$id)),
-      })),
-    }),
-  })
-} /*Dead*/
-
-
-export const useGetFollowingIds = (currentUserId?: string) => {
+export const useGetFollowingRelations  = (currentUserId?: string) => {
   return useQuery({
     queryKey: [queryKeys.GET_FOLLOWING_IDS, currentUserId],
-    queryFn: () => getFollowingIds(currentUserId!),
+    queryFn: () => getFollowingRelations(currentUserId!),
     enabled: !!currentUserId,
   })}
