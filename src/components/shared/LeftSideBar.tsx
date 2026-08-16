@@ -1,7 +1,6 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "@/context/UseUserContext";
 import { useSignoutAccount } from "@/lib/react-query/queriesAndMutatuins";
-import { ClipLoader } from "react-spinners";
 import { barLinks } from "@/constants";
 import { useEffect } from "react";
 import type { INavLink } from "@/types";
@@ -11,7 +10,7 @@ import { INITIAL_USER } from "@/context/AuthConstants";
 const LeftSideBar = () => {
   const { mutate: signout, isSuccess } = useSignoutAccount()
   const navigate = useNavigate()
-  const { user, setUser, setIsAuthenticated, isLoading } = useUserContext()
+  const { setUser, setIsAuthenticated } = useUserContext()
   const { pathname } = useLocation();
 
  
@@ -28,26 +27,7 @@ const LeftSideBar = () => {
   return (
     <aside className="leftsidebar">
 
-    
-        
-        {isLoading  ? (
-          <div className="h-14 bg-amber-100">
-            <ClipLoader />
-          </div>
-        ):(
-          <Link to={`/profile/${user.id}`} className="leftsidebar-link">
-            <img
-              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
-              alt="profile"
-              className="h-10 w-10  rounded-full"
-            />
-            <div className="flex flex-col">
-              <p className="bold-body text-[0.8rem] text-light-1">{user.name}</p>
-              <p className=" small-regular text-[0.6rem] text-light-3">@{user.username}</p>
-            </div>
-          </Link>
-        )}
-        <nav className="flex flex-col  w-30 h-80">
+        <nav className="flex flex-col m-auto   w-30 h-80">
 
         
           {barLinks.map((link: INavLink) => {
@@ -60,12 +40,8 @@ const LeftSideBar = () => {
               }
     }
 
-
             return (
-              
-              
-                
-                
+
                 <NavLink
                   to={link.route}
                   key={link.label}
@@ -99,7 +75,6 @@ const LeftSideBar = () => {
             <p className="text-[1rem] text-white ">Log out</p>
       </button>
       </aside>
-    
   )
 }
 

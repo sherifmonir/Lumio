@@ -5,17 +5,10 @@ const Bottombar = () => {
   const { pathname } = useLocation();
   return (
     <section className="bottom-bar">
-      
 
-        
           {barLinks.map((link) => {
             const isActive = pathname === link.route;
-
             return (
-              
-              
-                
-                
                 <Link
                   to={link.route}
                   key={link.label}
@@ -30,7 +23,6 @@ const Bottombar = () => {
                     }`}
                   />
                 </Link>
-              
             );
           })}
         

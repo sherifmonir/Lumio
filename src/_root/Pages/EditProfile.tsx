@@ -1,5 +1,6 @@
 import UpdateProfileForm from '@/components/forms/UpdateProfileForm'
 import { useGetUserById } from '@/lib/react-query/queriesAndMutatuins'
+import type { IUpdateProfile } from '@/types'
 import { useParams } from 'react-router-dom'
 import { ClipLoader } from 'react-spinners'
 
@@ -21,7 +22,7 @@ const EditProfile = () => {
         </div>
     )
  }
-         return <UpdateProfileForm profile={currentUser} />
+         return <UpdateProfileForm profile={currentUser as unknown as IUpdateProfile} />
 }
 
 export default EditProfile

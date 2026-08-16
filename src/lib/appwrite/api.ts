@@ -647,7 +647,7 @@ export async function getFollowing({ pageParam, userId }: { pageParam: number; u
 }
 
 
-export async function getFollowingIds(followerId: string) {
+export async function getFollowingRelations(followerId: string) {
   const res = await databases.listDocuments<IFollow>(
     appwriteconfig.databaseId,
     appwriteconfig.followsTableId,
@@ -655,6 +655,6 @@ export async function getFollowingIds(followerId: string) {
         Query.equal('followerId', followerId),
         Query.limit(500)
     ])
-  return res.documents.map((f) => f.followingId)
+  return res.documents
 }
 

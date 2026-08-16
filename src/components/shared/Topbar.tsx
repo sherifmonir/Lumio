@@ -3,11 +3,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useUserContext } from '@/context/UseUserContext'
 import { INITIAL_USER } from '@/context/AuthConstants'
+import { ClipLoader } from 'react-spinners'
 
 const Topbar = () => {
   const { mutate: signout, isSuccess } = useSignoutAccount()
   const navigate = useNavigate()
-  const { user, setUser, setIsAuthenticated } = useUserContext()
+  const { user, setUser, setIsAuthenticated, isLoading } = useUserContext()
 
   useEffect(() => {
     
@@ -23,32 +24,39 @@ const Topbar = () => {
   
   return (
     <section className="topbar">
-      <div className="flex-between py-4 px-5">
-        <Link to='/' className="flex gap-3 items-center">
+      <div className="py-4 px-5 flex  justify-between">
+
+        {isLoading  ? (
+          <div className="h-14 bg-amber-100">
+            <ClipLoader />
+          </div>
+        ):(
+          <Link to={`/profile/${user.id}`} className="leftsidebar-link">
+            <img
+              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+              alt="profile"
+              className="rounded-full w-12 lg:h-12"
+            />
+            
+          </Link>
+        )}
+
+        <Link to='/' className="gap-3">
         <img
-          src="/assets/images/logo.png"
+          src="/assets/images/logo.svg"
           alt="Logo"
           width={140}
           height={300}
         />
         </Link>
-        <div className="flex gap-3">
-          <button type="button"  onClick={() => signout()}>
+        
+          <button type="button" className=""  onClick={() => signout()}>
             <img 
             src="/assets/icons/logout.svg"
             alt="logout"
             className="cursor-pointer"
             />
           </button>
-          <Link to={`/profile/${user.id}`} className="flex-center gap-3">
-            <img
-              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
-              alt="profile"
-              className="h-8 w-8 rounded-full"
-            />
-          </Link>
-        </div>
-
       </div>
     </section>
   )

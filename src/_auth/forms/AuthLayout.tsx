@@ -20,7 +20,7 @@ import { useUserContext } from '@/context/UseUserContext'
 
           <section className="w-1/2  flex flex-col items-center h-screen">
 
-            <img src="/assets/images/logo.png" alt="logo" 
+            <img src="/assets/images/logo.svg" alt="logo" 
             className="h-20  w-60  mb-15 mt-35" />
 
             <div>
