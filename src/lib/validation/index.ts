@@ -42,7 +42,7 @@ export const profileValidation = z.object({
       /^[a-zA-Z0-9_]+$/,
       "Username can only contain letters, numbers, and underscores."),
   email: z.string().email("Invalid email address."),
-  bio: z.string().min(1, "Bio must be at least 1 characters.").
+  bio: z.string().
     max(200, "Bio must be at most 200 characters."),
     file: z.custom<File[]>()
 })

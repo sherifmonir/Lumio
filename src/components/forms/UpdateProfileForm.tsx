@@ -7,10 +7,10 @@ import { useUpdateProfile } from "@/lib/react-query/queriesAndMutatuins"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../ui/sonner"
 import { ClipLoader } from "react-spinners"
-import type { IUpdateProfile } from "@/types"
+import type { IUserProfile } from "@/types"
 
 type UpdateProfileFormProps = {
-  profile: IUpdateProfile
+  profile: IUserProfile
 }
 
 const UpdateProfileForm = ({profile}: UpdateProfileFormProps) => {
@@ -24,7 +24,8 @@ const UpdateProfileForm = ({profile}: UpdateProfileFormProps) => {
         name: profile.name,
         username: profile.username,
         email: profile.email,
-        bio: profile.bio ?? "",        
+        bio: profile.bio ?? "",
+        file:[]      
     }
 })
 
@@ -35,19 +36,20 @@ const { isSubmitting } = form.formState;
 function onSubmit(Values: z.infer<typeof profileValidation>) {
   if (!profile) return
 
-  updateProfile(
+   updateProfile(
     {
       ...Values,
+      $id: profile.$id,
       accountId: profile.accountId,
       imageId: profile.imageId,
       imageUrl: profile.imageUrl,
     },
     {
-      onSuccess: () => {
-        navigate("/profile/:id")
+       onSuccess: () => {
+         navigate(`/profile/${profile.$id}`)
       },
       onError: () => {
-        toast({ title: `Please try again.` })
+        toast({ title: `Something went wrong, Please try again.` })
       },
     }
   )

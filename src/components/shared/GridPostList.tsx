@@ -14,10 +14,10 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }: GridPos
   const { user } = useUserContext()
 
   return (
-    <ul className="grid-container">
+    <ul className="grid-container ">
       {posts.map((post) => (
         <li key={post.$id} className="relative min-w-80 h-80">
-          <Link to={`/post/${post.$id}`} className="grid-post-link">
+          <Link to={`/post/${post.$id}`} className="grid-post-link ">
             <img
               src={post?.imageUrl}
               alt="post"
@@ -27,7 +27,7 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }: GridPos
 
           <div className="grid-post-user">
             {showUser && (
-              <div className="flex items-center justify-start gap-2 flex-1">
+              <div className="flex items-center justify-start gap-2 flex-1 ">
                 <img
                   src={post?.creator.imageUrl || "/assets/icons/profile-placeholder.svg"}
                   alt="creator"

@@ -399,21 +399,30 @@ export async function getInfinitePosts({ pageParam }: {pageParam: number}) {
 
 
 export async function searchPosts(searchTerm: string) {
-
+  const cleanedTerm = searchTerm.replace(/^#+/, '').trim() // strip any leading '#'s before matching
 
     try {
-        const posts = await databases.listDocuments<IPost>(
-            appwriteconfig.databaseId,
-            appwriteconfig.postsTableId,
-            [Query.search('caption', searchTerm)]
-        )
+        const [byCaption, byTag] = await Promise.all([
+            databases.listDocuments<IPost>(
+                appwriteconfig.databaseId,
+                appwriteconfig.postsTableId,
+                [Query.search('caption', searchTerm)]
+            ),
+            databases.listDocuments<IPost>(
+                appwriteconfig.databaseId,
+                appwriteconfig.postsTableId,
+                [Query.contains('tags', cleanedTerm)]
+            )
+        ])
 
-        if(!posts) throw Error
+        const merged = [...byCaption.documents,...byTag.documents]
+        const unique = Array.from(new Map(merged.map((u) => [u.$id, u])).values())
 
-        return posts
+        return { documents: unique, total: unique.length }
 
     }catch(error) {
         console.log(error)
+        return null
     }
 }
 
@@ -464,7 +473,7 @@ export async function updateProfile(profile: IUpdateProfile) {
         const updatedProfile = await databases.updateDocument(
             appwriteconfig.databaseId,
             appwriteconfig.usersTableId,
-            profile.accountId,
+            profile.$id,
             {
                 accountId: profile.accountId,
                 name: profile.name,

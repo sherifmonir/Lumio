@@ -93,11 +93,12 @@ export interface ISave extends Models.Document {
   post: IPost
 }
 
-export type IUpdateProfile = Pick<
+export type IUserProfile = Pick<
   IUser,
-   "name" | "username" | "email" | "imageId" | "imageUrl" | "accountId"
-> & {
-  bio: string
+  "$id" | "name" | "username" | "email" | "imageId" | "imageUrl" | "accountId" | "bio"
+>
+
+export type IUpdateProfile = IUserProfile & {
   file: File[]
 }
 

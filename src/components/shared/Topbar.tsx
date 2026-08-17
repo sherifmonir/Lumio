@@ -24,14 +24,14 @@ const Topbar = () => {
   
   return (
     <section className="topbar">
-      <div className="py-4 px-5 flex  justify-between">
+      <div className="py-4 px-5 flex-center  justify-between">
 
         {isLoading  ? (
           <div className="h-14 bg-amber-100">
             <ClipLoader />
           </div>
         ):(
-          <Link to={`/profile/${user.id}`} className="leftsidebar-link">
+          <Link to={`/profile/${user.id}`}>
             <img
               src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
               alt="profile"
@@ -41,16 +41,16 @@ const Topbar = () => {
           </Link>
         )}
 
-        <Link to='/' className="gap-3">
+        <Link to='/'>
         <img
           src="/assets/images/logo.svg"
           alt="Logo"
-          width={140}
+          width={170}
           height={300}
         />
         </Link>
         
-          <button type="button" className=""  onClick={() => signout()}>
+          <button type="button"  onClick={() => signout()}>
             <img 
             src="/assets/icons/logout.svg"
             alt="logout"

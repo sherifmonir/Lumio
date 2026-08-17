@@ -26,7 +26,7 @@ const FileUploader = ({fieldChange, mediaUrl}: FileUploaderProps) => {
                 <img
                 src={fileUrl}
                 alt="image"
-                className="file_uploader-img"
+                className="file-uploader-img"
                 />
             </div>
             

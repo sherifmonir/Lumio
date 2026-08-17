@@ -207,7 +207,7 @@ export const useUpdateProfile = () => {
         mutationFn: (profile: IUpdateProfile) => updateProfile(profile),
         onSuccess: (data) => {
             queryClient.invalidateQueries({
-                queryKey: [queryKeys.UPDATE_PROFILE, data?.$id]
+                queryKey: [queryKeys.GET_USER_BY_ID, data?.$id]
             })
         }
     })
