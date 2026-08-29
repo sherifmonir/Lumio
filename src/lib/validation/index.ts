@@ -23,16 +23,16 @@ export const signinValidation = z.object({
 })
 
 export const postValidation = z.object({
-  caption: z.string().min(1).max(2000),
+  caption: z.string().max(2000),
   file: z.custom<File[]>(),
-  location: z.string().min(2).max(100),
+  location: z.string().max(100),
   tags: z.string()
 })
 
 export const profileValidation = z.object({
   name: z
     .string()
-    .min(2, "Name must be at least 2 characters.")
+    .min(1, "Name must be at least 1 characters.")
     .max(50, "Name must be at most 50 characters."),
   username: z
     .string()

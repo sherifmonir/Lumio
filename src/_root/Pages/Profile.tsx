@@ -39,7 +39,7 @@ const { data: followingCount } = useGetFollowingCount(currentUser?.$id)
         <div className="flex xl:flex-row flex-col max-xl:items-center flex-1 gap-7">
           <img
             src={
-              currentUser.imageUrl || "/assets/icons/profile-placeholder.svg"
+              user.id === currentUser.$id ? (user.imageUrl) : ("/assets/icons/profile-placeholder.svg")
             }
             alt="profile"
             className="w-28 h-28 lg:h-36 lg:w-36 rounded-full"
@@ -75,7 +75,7 @@ const { data: followingCount } = useGetFollowingCount(currentUser?.$id)
           <div className="flex justify-center gap-4">
             <div className={`${user.id !== currentUser.$id && "hidden"}`}>
               <Link
-                to={`/edit-profile/${currentUser.$id}`}
+                to={`/update-profile/${currentUser.$id}`}
                 className={`h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg ${
                   user.id !== currentUser.$id && "hidden"
                 }`}>
@@ -86,7 +86,7 @@ const { data: followingCount } = useGetFollowingCount(currentUser?.$id)
                   height={20}
                 />
                 <p className="flex whitespace-nowrap small-medium">
-                  Edit Profile
+                  Update Profile
                 </p>
               </Link>
             </div>

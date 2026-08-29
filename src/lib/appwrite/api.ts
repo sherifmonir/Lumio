@@ -1,6 +1,6 @@
 import type { IFollow, INewPost, INewUser, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
 import {  ID, Permission, Query, Role } from "appwrite";
-import { account, appwriteconfig, databases, storage } from "./config";
+import { account, appwriteconfig, avatars, databases, storage } from "./config";
 
 
 
@@ -157,7 +157,7 @@ export async function createPost(post: INewPost){
 export async function uploadFile(file: File){
     try{
         const uoloadedFile = await storage.createFile(
-            appwriteconfig.storageId,
+            appwriteconfig.bucketId,
             ID.unique(),
             file,
             [
@@ -179,7 +179,7 @@ export async function uploadFile(file: File){
 export function getFilePreview(fileId: string) {
     try {
         const fileUrl = storage.getFilePreview(
-            appwriteconfig.storageId,
+            appwriteconfig.bucketId,
             fileId,
             2000,
             2000,
@@ -198,7 +198,7 @@ export function getFilePreview(fileId: string) {
 
 export async function deleteFile(fileId: string) {
     try{
-        await storage.deleteFile(appwriteconfig.storageId, fileId)
+        await storage.deleteFile(appwriteconfig.bucketId, fileId)
 
         return { status: "ok"}
 
@@ -490,6 +490,34 @@ export async function updateProfile(profile: IUpdateProfile) {
 
     } catch(error) {
         console.log(error)
+    }
+}
+
+
+export async function deleteProfilePicture(userId: string, imageId: string, name: string) {
+    try{
+        if (imageId) {
+      try {
+        await storage.deleteFile(appwriteconfig.bucketId, imageId);
+      } catch (storageError) {
+        console.warn("Storage file deletion skipped or file not found:", storageError);
+      }
+    }
+        const defaultAvatarUrl = avatars.getInitials({name})
+
+        const updateUser = await databases.updateDocument(
+            appwriteconfig.databaseId,
+            appwriteconfig.usersTableId,
+            userId,{
+                imageId: "",
+                imageUrl: defaultAvatarUrl
+            }
+        )
+        return updateUser
+
+    } catch (error){
+        console.error("Failed to update profile document:", error);
+        throw error;
     }
 }
 

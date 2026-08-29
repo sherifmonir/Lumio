@@ -3,7 +3,7 @@ import { useGetUserById } from '@/lib/react-query/queriesAndMutatuins'
 import { useParams } from 'react-router-dom'
 import { ClipLoader } from 'react-spinners'
 
-const EditProfile = () => {
+const UpdateProfile = () => {
 
   const { id } = useParams()
   const {data: currentUser, isPending } = useGetUserById(id || '')
@@ -24,4 +24,4 @@ const EditProfile = () => {
          return <UpdateProfileForm profile={currentUser} />
 }
 
-export default EditProfile
+export default UpdateProfile

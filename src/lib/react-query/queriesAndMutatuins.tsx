@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, updatePost, updateProfile } from '../appwrite/api'
+import { createPost, createUserAccount, deletePost, deleteProfilePicture, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, updatePost, updateProfile } from '../appwrite/api'
 import type { INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
 
@@ -214,6 +214,19 @@ export const useUpdateProfile = () => {
 }
 
 
+export const useDeleteProfilePicture = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ userId, imageId, name }: { userId: string; imageId: string; name: string }) =>
+      deleteProfilePicture(userId, imageId, name),
+    onSuccess: (_data, v) => {
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_USER_BY_ID, v.userId]})
+      
+    }
+  })
+}
+
+
 export const useSearchUsers = (searchTerm: string) => {
     return useQuery({
     queryKey: [queryKeys.SEARCH_USERS, searchTerm],
@@ -243,7 +256,7 @@ export const useFollowUser = () => {
   return useMutation({
     mutationFn: ({ followerId, followingId }: { followerId: string; followingId: string }) =>
       followUser(followerId, followingId),
-    onSuccess: (_d, v) => {
+    onSuccess: (_data, v) => {
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS_COUNT, v.followingId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_COUNT, v.followerId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS, v.followingId] });
@@ -259,7 +272,7 @@ export const useUnfollowUser = () => {
   return useMutation({
     mutationFn: (v: { followDocumentId: string; followerId: string; followingId: string }) =>
       unfollowUser(v.followDocumentId),
-    onSuccess: (_d, v) => {
+    onSuccess: (_data, v) => {
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS_COUNT, v.followingId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_COUNT, v.followerId] });
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWERS, v.followingId] });

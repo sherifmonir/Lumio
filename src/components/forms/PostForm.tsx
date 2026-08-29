@@ -4,12 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import  {  postValidation } from "@/lib/validation"
 import FileUploader from "../shared/FileUploader"
 import type { IPost } from "@/types"
-import { useCreatePost } from "@/lib/react-query/queriesAndMutatuins"
+import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutatuins"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../ui/sonner"
 import { useUserContext } from "@/context/UseUserContext"
 import { ClipLoader } from "react-spinners"
-import { updatePost } from "@/lib/appwrite/api"
 
 
 type PostFormProps = {
@@ -22,6 +21,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
   const navigate = useNavigate()
   const { toast } = useToast()
   const { user } = useUserContext()
+  const { mutateAsync: updatePost } = useUpdatePost();
+
 
   const form = useForm<z.infer<typeof postValidation>>({
     resolver: zodResolver(postValidation),
@@ -54,7 +55,7 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
       })
     }
 
-    return navigate(`/posts/${post.$id}`)
+    return navigate(`/post/${post.$id}`)
 }
 
 

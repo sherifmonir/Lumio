@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import  { profileValidation } from "@/lib/validation"
 import FileUploader from "../shared/FileUploader"
-import { useUpdateProfile } from "@/lib/react-query/queriesAndMutatuins"
+import { useDeleteProfilePicture, useUpdateProfile } from "@/lib/react-query/queriesAndMutatuins"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../ui/sonner"
 import { ClipLoader } from "react-spinners"
@@ -17,7 +17,7 @@ const UpdateProfileForm = ({profile}: UpdateProfileFormProps) => {
   const navigate = useNavigate()
   const { toast } = useToast()
   const { mutate: updateProfile } = useUpdateProfile()
-
+  const { mutate: deleteProfilePicture, isPending } = useDeleteProfilePicture()
   const form = useForm<z.infer<typeof profileValidation>>({
     resolver: zodResolver(profileValidation),
     defaultValues: {
@@ -31,6 +31,19 @@ const UpdateProfileForm = ({profile}: UpdateProfileFormProps) => {
 
 
 const { isSubmitting } = form.formState;
+const handleDeleteProfilePicture = () => {
+  deleteProfilePicture(
+    { userId: profile.$id, imageId: profile.imageId ?? "", name: profile.name },
+    {
+      onSuccess: () => {
+        toast({ title: "Photo removed" })
+      },
+      onError: () => {
+        toast({ title: "Please try again." })
+      },
+    }
+  )
+}
   
 
 function onSubmit(Values: z.infer<typeof profileValidation>) {
@@ -85,7 +98,7 @@ function onSubmit(Values: z.infer<typeof profileValidation>) {
                 control={form.control}
                 render={({ field }) => (
 
-                <div className="field" >
+                <div className="field flex-col" >
                   <label  className="form-label">
                     Photo
                   </label>
@@ -93,10 +106,20 @@ function onSubmit(Values: z.infer<typeof profileValidation>) {
                   fieldChange={field.onChange}
                   mediaUrl={profile.imageUrl}
                   />
-                </div>
-
+                  {profile.imageId && (
+                    <button
+                      type="button"
+                      onClick={handleDeleteProfilePicture}
+                      disabled={isPending}
+                      className="text-light-3 small-medium mt-2 underline cursor-pointer"
+                    >
+                      {isPending ? "Removing..." : "Remove photo"}
+                    </button>
                   )}
+                </div>
+                )}
             />
+            
 
 
             <Controller
@@ -115,6 +138,7 @@ function onSubmit(Values: z.infer<typeof profileValidation>) {
                     placeholder="Add you Username here."
                     {...field}
                     />
+                    
                 </div>
 
                   )}
