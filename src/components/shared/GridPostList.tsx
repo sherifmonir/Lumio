@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { useUserContext } from "@/context/UseUserContext"
 import PostStats from "./PostStats"
 import type { IPost } from "@/types"
+import { getFilePreview } from "@/lib/appwrite/api"
 
 
 type GridPostListProps = {
@@ -19,7 +20,7 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }: GridPos
         <li key={post.$id} className="relative min-w-80 h-80">
           <Link to={`/post/${post.$id}`} className="grid-post-link ">
             <img
-              src={post?.imageUrl}
+              src={getFilePreview(post.imageId)}
               alt="post"
               className="h-full w-full object-cover"
             />
@@ -29,7 +30,9 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }: GridPos
             {showUser && (
               <div className="flex items-center justify-start gap-2 flex-1 ">
                 <img
-                  src={post?.creator.imageUrl || "/assets/icons/profile-placeholder.svg"}
+                  src={user.imageId
+                  ?getFilePreview(user.imageId)
+                  :"/assets/icons/profile-placeholder.svg"}
                   alt="creator"
                   className="w-8 h-8 rounded-full"
                 />

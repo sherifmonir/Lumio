@@ -51,7 +51,7 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
     
     if(!updatedPost) {
       toast({
-        title: `Please try again.`
+        title: `${action} post failed. Please try again.`
       })
     }
 
@@ -165,7 +165,7 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
               {(isSubmitting) && <ClipLoader size={15}/>}
               {action}
 
-              <span> Post</span>
+              <span> Post </span>
 
             </button>
 

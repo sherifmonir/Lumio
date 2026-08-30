@@ -1,5 +1,6 @@
 import PostStats from "@/components/shared/PostStats"
 import { useUserContext } from "@/context/UseUserContext"
+import { getFilePreview } from "@/lib/appwrite/api"
 import { useDeletePost, useGetPostById } from "@/lib/react-query/queriesAndMutatuins"
 import { multiFormatDateString } from "@/lib/utils"
 import { Link, useNavigate, useParams } from "react-router-dom"
@@ -25,7 +26,7 @@ const PostDetails = () => {
 
       <button
         onClick={() => navigate(-1)}
-        className="button-ghost">
+        className="back-button">
 
       <img
         src="/assets/icons/back.svg"
@@ -43,7 +44,7 @@ const PostDetails = () => {
 
     <div className="post-details-card">
       <img
-            src={post?.imageUrl}
+            src={getFilePreview(post.imageId)}
             alt="post"
             className="post-details-img"
           />
@@ -56,7 +57,9 @@ const PostDetails = () => {
             to={`/profile/${post?.creator.$id}`}
             className="flex items-center gap-3">
               <img
-                  src={post?.creator.imageUrl ||"/assets/icons/profile-placeholder.svg"}
+                  src={user.imageId
+              ?getFilePreview(user.imageId)
+              :"/assets/icons/profile-placeholder.svg"}
                   alt="creator"
                   className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
                 />

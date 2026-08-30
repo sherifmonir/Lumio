@@ -5,6 +5,7 @@ import { Link, Outlet, Route, Routes, useLocation, useParams } from 'react-route
 import { ClipLoader } from 'react-spinners'
 import LikedPosts from './LikedPosts';
 import FollowButton from '@/components/shared/FollowButton';
+import { getFilePreview } from '@/lib/appwrite/api';
 
 interface StabBlockProps {
   value: string | number;
@@ -24,7 +25,7 @@ const Profile = () => {
   const { pathname } = useLocation()
   const { data: currentUser } = useGetUserById(id || "")
   const { data: followersCount } = useGetFollowersCount(currentUser?.$id)
-const { data: followingCount } = useGetFollowingCount(currentUser?.$id)
+  const { data: followingCount } = useGetFollowingCount(currentUser?.$id)
 
   if (!currentUser)
     return (
@@ -38,9 +39,9 @@ const { data: followingCount } = useGetFollowingCount(currentUser?.$id)
       <div className="profile-inner-container">
         <div className="flex xl:flex-row flex-col max-xl:items-center flex-1 gap-7">
           <img
-            src={
-              user.id === currentUser.$id ? (user.imageUrl) : ("/assets/icons/profile-placeholder.svg")
-            }
+            src={user.imageId
+              ?getFilePreview(user.imageId)
+              :"/assets/icons/profile-placeholder.svg"}
             alt="profile"
             className="w-28 h-28 lg:h-36 lg:w-36 rounded-full"
           />

@@ -274,7 +274,7 @@
   @apply bg-dark-2 w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-dark-4 xl:rounded-l-3xl;
 }
 @utility post-details-img {
-  @apply h-80 lg:h-120 xl:w-[48%] rounded-t-[30px] xl:rounded-l-3xl xl:rounded-tr-none object-cover p-5 bg-dark-1;
+  @apply h-full  xl:w-[50%] rounded-t-[30px] xl:rounded-l-3xl xl:rounded-tr-none object-cover p-5 bg-dark-1;
 }
 @utility post-details-info {
   @apply bg-dark-2 flex flex-col gap-5 lg:gap-7 flex-1 items-start p-8 rounded-[30px];
@@ -403,8 +403,8 @@
   .Add-photo-button {
     @apply h-12 bg-dark-4 px-5 text-light-1 flex gap-2 flex-center rounded-md;
   }
-  .button-ghost {
-    @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white;
+  .back-button {
+    @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white cursor-pointer;
   }
   UserCard {
     @apply flex-center

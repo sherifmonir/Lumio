@@ -53,6 +53,7 @@ export type IContextUser = {
   username: string;
   email: string;
   imageUrl: string;
+  imageId: string;
   bio: string;
 };
 

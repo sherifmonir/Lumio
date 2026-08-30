@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useUserContext } from '@/context/UseUserContext'
 import { INITIAL_USER } from '@/context/AuthConstants'
 import { ClipLoader } from 'react-spinners'
+import { getFilePreview } from '@/lib/appwrite/api'
 
 const Topbar = () => {
   const { mutate: signout, isSuccess } = useSignoutAccount()
@@ -33,7 +34,9 @@ const Topbar = () => {
         ):(
           <Link to={`/profile/${user.id}`}>
             <img
-              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+              src={user.imageId
+                ?getFilePreview(user.imageId)
+                :"/assets/icons/profile-placeholder.svg"}
               alt="profile"
               className="rounded-full w-12 lg:h-12"
             />

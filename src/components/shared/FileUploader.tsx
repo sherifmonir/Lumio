@@ -5,6 +5,13 @@ import { useDropzone, type FileWithPath } from 'react-dropzone'
 const FileUploader = ({fieldChange, mediaUrl}: FileUploaderProps) => {
     const [file, setFile] = useState<File[]>([])
     const [fileUrl, setFileUrl] = useState(mediaUrl)
+    const [prevMediaUrl, setPrevMediaUrl] = useState(mediaUrl)
+
+    if (mediaUrl !== prevMediaUrl) {
+        setPrevMediaUrl(mediaUrl)
+        setFileUrl(mediaUrl)
+    }
+
 
     const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
         setFile(acceptedFiles)
@@ -44,7 +51,7 @@ const FileUploader = ({fieldChange, mediaUrl}: FileUploaderProps) => {
                 <p className="text-light-4 small-regular mb-6">
                     SVG, PNG, JPG
                 </p>
-                <button className="Add-photo-button">
+                <button type="button" className="Add-photo-button">
                     Select from computer
                 </button>
             </div>

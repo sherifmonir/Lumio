@@ -3,6 +3,7 @@ import { multiFormatDateString } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import PostStats from './PostStats';
 import type {  IPost } from '@/types';
+import { getFilePreview } from '@/lib/appwrite/api';
 
 
 type PostCardProps = {
@@ -23,7 +24,9 @@ const PostCard = ({ post }: PostCardProps) => {
         <div className="flex items-center gap-3">
           <Link to={`/profile/${post.creator.$id}`}>
           <img
-            src={post?.creator?.imageUrl || '/assets/icons/profile-placeholder.svg'}
+            src={user.imageId
+              ?getFilePreview(user.imageId)
+              :"/assets/icons/profile-placeholder.svg"}
             alt="creator"
             className="rounded-full w-12 lg:h-12"
           />
@@ -68,7 +71,7 @@ const PostCard = ({ post }: PostCardProps) => {
           </ul>
         </div>
         <img
-          src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
+          src={getFilePreview(post.imageId)}
           alt="post image"
           className="post-card_img" />
       </Link>

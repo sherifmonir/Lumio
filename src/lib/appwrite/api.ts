@@ -124,7 +124,7 @@ export async function createPost(post: INewPost){
             throw Error
         }
 
-        const tags = post.tags?.replace(/ /g, "").split(",") || []
+        const tags = post.tags?.replace(/ /g, "").split(",").filter((tag) => tag.length > 0) || []
         
 
         const newPost = await databases.createDocument(
@@ -177,21 +177,23 @@ export async function uploadFile(file: File){
 
 
 export function getFilePreview(fileId: string) {
+      console.log("imageId received:", fileId);       // ← is it defined?
+
     try {
-        const fileUrl = storage.getFilePreview(
-            appwriteconfig.bucketId,
-            fileId,
-            2000,
-            2000,
-            undefined,
-            100
-        )
+        const fileUrl = storage.getFileView({
+            bucketId: appwriteconfig.bucketId,
+            fileId: fileId
+        })
+            console.log("fileUrl returned:", fileUrl, typeof fileUrl);  // ← what type is it?
+
         if (!fileUrl) throw Error
 
         return fileUrl
 
     }catch (error){
         console.log(error)
+            console.log("getFilePreview error:", error);   // ← is it erroring?
+
     }
 }
 
@@ -327,7 +329,7 @@ export async function updatePost(post: IUpdatePost) {
             image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id}
         }
 
-        const tags = post.tags?.replace(/ /g, "").split(",") || []
+        const tags = post.tags?.replace(/ /g, "").split(",").filter((tag) => tag.length > 0) || []
 
         const updatedPost = await databases.updateDocument(
             appwriteconfig.databaseId,
