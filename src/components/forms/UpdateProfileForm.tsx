@@ -3,11 +3,12 @@ import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import  { profileValidation } from "@/lib/validation"
 import FileUploader from "../shared/FileUploader"
-import { useDeleteProfilePicture, useUpdateProfile } from "@/lib/react-query/queriesAndMutatuins"
+import { useUpdateProfile } from "@/lib/react-query/queriesAndMutatuins"
 import { useNavigate } from "react-router-dom"
 import { useToast } from "../ui/sonner"
 import { ClipLoader } from "react-spinners"
 import type { IUserProfile } from "@/types"
+import { useState } from "react"
 
 type UpdateProfileFormProps = {
   profile: IUserProfile
@@ -17,7 +18,7 @@ const UpdateProfileForm = ({profile}: UpdateProfileFormProps) => {
   const navigate = useNavigate()
   const { toast } = useToast()
   const { mutate: updateProfile } = useUpdateProfile()
-  const { mutate: deleteProfilePicture, isPending } = useDeleteProfilePicture()
+  const [removePhoto, setRemovePhoto] = useState(false)
   const form = useForm<z.infer<typeof profileValidation>>({
     resolver: zodResolver(profileValidation),
     defaultValues: {
@@ -31,19 +32,7 @@ const UpdateProfileForm = ({profile}: UpdateProfileFormProps) => {
 
 
 const { isSubmitting } = form.formState;
-const handleDeleteProfilePicture = () => {
-  deleteProfilePicture(
-    { userId: profile.$id, imageId: profile.imageId ?? "", name: profile.name },
-    {
-      onSuccess: () => {
-        toast({ title: "Photo removed" })
-      },
-      onError: () => {
-        toast({ title: "Please try again." })
-      },
-    }
-  )
-}
+
   
 
 function onSubmit(Values: z.infer<typeof profileValidation>) {
@@ -56,6 +45,7 @@ function onSubmit(Values: z.infer<typeof profileValidation>) {
       accountId: profile.accountId,
       imageId: profile.imageId,
       imageUrl: profile.imageUrl,
+      removePhoto
     },
     {
        onSuccess: () => {
@@ -103,17 +93,17 @@ function onSubmit(Values: z.infer<typeof profileValidation>) {
                     Photo
                   </label>
                   <FileUploader
-                  fieldChange={field.onChange}
-                  mediaUrl={profile.imageUrl}
+                  fieldChange={(files) => {
+                  field.onChange(files)
+                  if (files.length > 0) setRemovePhoto(false)
+                  }}
+                  mediaUrl={removePhoto ? "" : profile.imageUrl}
+      
                   />
-                  {profile.imageId && (
-                    <button
-                      type="button"
-                      onClick={handleDeleteProfilePicture}
-                      disabled={isPending}
-                      className="text-light-3 small-medium mt-2 underline cursor-pointer"
-                    >
-                      {isPending ? "Removing..." : "Remove photo"}
+                  {!removePhoto && profile.imageId && (
+                    <button type="button" onClick={() => setRemovePhoto(true)} 
+                    className="text-light-3 small-medium mt-2 underline cursor-pointer">
+                      Remove photo
                     </button>
                   )}
                 </div>

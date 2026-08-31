@@ -12,7 +12,8 @@ const UsersSearchResults = ({ isSearchFetching, searchedUsers }:UsersSearchResul
     return <ClipLoader />
   } else if (searchedUsers?.documents.length > 0) {
     return (
-      <ul className="user-grid">
+
+      <ul className="user-grid-container">
         {searchedUsers.documents.map((user) => (
           <UserCard key={user.accountId} user={user}/>
         ))}

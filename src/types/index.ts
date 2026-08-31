@@ -101,6 +101,7 @@ export type IUserProfile = Pick<
 
 export type IUpdateProfile = IUserProfile & {
   file: File[]
+  removePhoto?: boolean
 }
 
 export type ISearchUsers = Pick<IUser,"name" | "username" | "imageUrl">

@@ -30,9 +30,7 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }: GridPos
             {showUser && (
               <div className="flex items-center justify-start gap-2 flex-1 ">
                 <img
-                  src={user.imageId
-                  ?getFilePreview(user.imageId)
-                  :"/assets/icons/profile-placeholder.svg"}
+                  src={user.imageUrl}
                   alt="creator"
                   className="w-8 h-8 rounded-full"
                 />

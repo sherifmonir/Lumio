@@ -68,7 +68,7 @@ const People = () => {
                 
         </div>
       </div>
-      <div className="user-container">
+      <div className="people-container">
         <h2 className="h3-bold md:h2-bold text-left w-full">People</h2>
         {showSearchResults ? (
           <UsersSearchResults
@@ -78,7 +78,7 @@ const People = () => {
         ) :  shouldShowUsers ? (
           <p className="text-light-4 mt-10 text-center w-full">No More Results</p>
         ) : (
-          <ul className="user-grid">
+          <ul className="user-grid-container">
             {users?.pages.map((page) =>
               page?.documents.map((user) => (
                 <li key={user?.$id} className="flex-1 min-w-50 w-full">

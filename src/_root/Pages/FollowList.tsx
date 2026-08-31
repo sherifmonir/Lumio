@@ -33,7 +33,7 @@ const FollowList = () => {
   }
 
   return (
-    <ul className="user-grid">
+    <ul className="user-grid-container">
       {users.map((user) => (
         <li key={user.$id} className="flex-1 min-w-50">
             <UserCard user={user} />
