@@ -233,11 +233,14 @@
 }
 
 /* All Users */
-@utility user-container {
+@utility people-container {
   @apply max-w-5xl flex flex-col items-start w-full gap-6 md:gap-9;
 }
-@utility user-grid {
-  @apply w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
+
+
+
+@utility user-grid-container {
+  @apply  w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
 }
 
 @utility form-bottom {

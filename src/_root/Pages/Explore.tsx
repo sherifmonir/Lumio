@@ -27,7 +27,7 @@ const Explore = () => {
     const notFollowed: typeof docs = [];
     const followedDocs: typeof docs = [];
     for (const post of docs) (followed.has(post.creator.$id) ? followedDocs : notFollowed).push(post);
-    return { documents: [...notFollowed, ...followedDocs] }; // not-followed first, matches Explore's reversed priority
+    return { documents: [...notFollowed, ...followedDocs] }; 
   });
 }, [posts, followingIds])
 

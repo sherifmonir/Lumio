@@ -5,7 +5,6 @@ import { Link, Outlet, Route, Routes, useLocation, useParams } from 'react-route
 import { ClipLoader } from 'react-spinners'
 import LikedPosts from './LikedPosts';
 import FollowButton from '@/components/shared/FollowButton';
-import { getFilePreview } from '@/lib/appwrite/api';
 
 interface StabBlockProps {
   value: string | number;
@@ -39,9 +38,7 @@ const Profile = () => {
       <div className="profile-inner-container">
         <div className="flex xl:flex-row flex-col max-xl:items-center flex-1 gap-7">
           <img
-            src={user.imageId
-              ?getFilePreview(user.imageId)
-              :"/assets/icons/profile-placeholder.svg"}
+            src={currentUser?.imageUrl || user.imageUrl}
             alt="profile"
             className="w-28 h-28 lg:h-36 lg:w-36 rounded-full"
           />
@@ -112,9 +109,9 @@ const Profile = () => {
             Posts
           </Link>
           <Link
-            to={`/profile/${id}/liked-posts`}
+            to={`/profile/${id}/LikedPosts`}
             className={`profile-tab rounded-r-lg ${
-              pathname === `/profile/${id}/liked-posts` && "bg-dark-3!"
+              pathname === `/profile/${id}/LikedPosts` && "bg-dark-3!"
             }`}>
             <img
               src={"/assets/icons/like.svg"}
@@ -133,7 +130,7 @@ const Profile = () => {
           element={<GridPostList posts={currentUser.posts} showUser={false} />}
         />
         {currentUser.$id === user.id && (
-          <Route path="/liked-posts" element={<LikedPosts />} />
+          <Route path="/LikedPosts" element={<LikedPosts />} />
         )}
       </Routes>
       

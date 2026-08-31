@@ -11,14 +11,14 @@ type GridPostListProps = {
   showStats?: boolean
 }
 
-const GridPostList = ({ posts = [], showUser = true, showStats = true }: GridPostListProps) => {
+const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPostListProps) => {
+  console.log(posts[0])
   const { user } = useUserContext()
-
   return (
     <ul className="grid-container ">
       {posts.map((post) => (
         <li key={post.$id} className="relative min-w-80 h-80">
-          <Link to={`/post/${post.$id}`} className="grid-post-link ">
+          <Link to={`/post/${post.$id}`} className="grid-post-link">
             <img
               src={getFilePreview(post.imageId)}
               alt="post"
@@ -28,16 +28,14 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }: GridPos
 
           <div className="grid-post-user">
             {showUser && (
-              <div className="flex items-center justify-start gap-2 flex-1 ">
+              <Link to={`/post/${post.creator.$id}`} className="flex items-center justify-start gap-2 flex-1 ">
                 <img
-                  src={user.imageId
-                  ?getFilePreview(user.imageId)
-                  :"/assets/icons/profile-placeholder.svg"}
+                  src={post.creator.imageUrl}
                   alt="creator"
                   className="w-8 h-8 rounded-full"
                 />
                 <p className="line-clamp-1">{post?.creator.name}</p>
-              </div>
+              </Link>
             )}
             {showStats && <PostStats post={post} userId={user.id} />}
           </div>

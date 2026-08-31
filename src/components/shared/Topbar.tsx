@@ -1,15 +1,15 @@
-import { useSignoutAccount } from '@/lib/react-query/queriesAndMutatuins'
+import { useGetUserById, useSignoutAccount } from '@/lib/react-query/queriesAndMutatuins'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useUserContext } from '@/context/UseUserContext'
 import { INITIAL_USER } from '@/context/AuthConstants'
 import { ClipLoader } from 'react-spinners'
-import { getFilePreview } from '@/lib/appwrite/api'
 
 const Topbar = () => {
   const { mutate: signout, isSuccess } = useSignoutAccount()
   const navigate = useNavigate()
   const { user, setUser, setIsAuthenticated, isLoading } = useUserContext()
+  const { data: currentUser } = useGetUserById(user.id)
 
   useEffect(() => {
     
@@ -34,9 +34,7 @@ const Topbar = () => {
         ):(
           <Link to={`/profile/${user.id}`}>
             <img
-              src={user.imageId
-                ?getFilePreview(user.imageId)
-                :"/assets/icons/profile-placeholder.svg"}
+              src={currentUser?.imageUrl || user.imageUrl}
               alt="profile"
               className="rounded-full w-12 lg:h-12"
             />

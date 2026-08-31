@@ -35,8 +35,9 @@ const App = () => {
           <Route path="/post/:id" element={<PostDetails />} />
           <Route path="/update-profile/:id" element={<UpdateProfileFormWrapper />} />
           <Route path="/profile/:id/*" element={<Profile />} />
-          <Route path="/profile/:id/:mode" element={<FollowList />} />
-          <Route path="/liked-posts" element={<LikedPosts />} />
+          <Route path="/profile/:id/followers" element={<FollowList />} />
+          <Route path="/profile/:id/following" element={<FollowList />} />
+          <Route path="/LikedPosts" element={<LikedPosts />} />
         </Route>
       </Routes>
       <Toaster />

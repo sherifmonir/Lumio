@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteProfilePicture, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, updatePost, updateProfile } from '../appwrite/api'
+import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, updatePost, updateProfile } from '../appwrite/api'
 import type { INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
 
@@ -211,19 +211,6 @@ export const useUpdateProfile = () => {
             })
         }
     })
-}
-
-
-export const useDeleteProfilePicture = () => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: ({ userId, imageId, name }: { userId: string; imageId: string; name: string }) =>
-      deleteProfilePicture(userId, imageId, name),
-    onSuccess: (_data, v) => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_USER_BY_ID, v.userId]})
-      
-    }
-  })
 }
 
 

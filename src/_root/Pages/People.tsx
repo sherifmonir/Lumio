@@ -1,8 +1,9 @@
 import UserCard from "@/components/shared/UserCard";
 import UsersSearchResults from "@/components/shared/UsersSearchResults";
+import { useUserContext } from "@/context/UseUserContext";
 import { useDebounce } from "@/Hooks/useDebounce";
-import { useGetUsers, useSearchUsers } from "@/lib/react-query/queriesAndMutatuins";
-import { useEffect, useRef, useState } from "react";
+import { useGetFollowingRelations, useGetUsers, useSearchUsers } from "@/lib/react-query/queriesAndMutatuins";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { ClipLoader } from "react-spinners";
 
@@ -15,10 +16,27 @@ const People = () => {
   const { data: searchedUsers, isFetching: isSearchFetching } = useSearchUsers(debouncedSearch)
   const { data: users, fetchNextPage, hasNextPage } = useGetUsers()
   const searchValueRef = useRef<HTMLInputElement>(null)
+  const { user } = useUserContext()
+  const { data: relations } = useGetFollowingRelations(user.id)
+  const followingIds = useMemo(() => relations?.map((r) => r.followingId) ?? [], [relations])
 
-  const handleSearchIconClick = () => {
-    searchValueRef.current?.focus()
-  }
+const usersMemo = useMemo(() => {
+  if (!users?.pages) return []
+  const followed = new Set(followingIds)
+  const allUsers = users.pages.flatMap((page) => page?.documents ?? []).filter((u) => u.$id !== user.id)
+
+  const notFollowed: typeof allUsers = []
+  const followedDocs: typeof allUsers = []
+  for (const u of allUsers) (followed.has(u.$id) ? followedDocs : notFollowed).push(u)
+
+  return [{ documents: [...notFollowed, ...followedDocs] }]
+}, [users, followingIds, user.id])
+
+
+
+    const handleSearchIconClick = () => {
+      searchValueRef.current?.focus()
+    }
 
   useEffect(() => {
       if (inView && !searchValue) {
@@ -37,7 +55,7 @@ const People = () => {
   }
 
   const showSearchResults = searchValue !== ""
-  const shouldShowUsers = !showSearchResults && users.pages.every((items) => items?.documents.length === 0)
+  const shouldShowUsers = !showSearchResults && usersMemo.every((page) => page.documents.length === 0)
 
   return (
     <div className="common-container">
@@ -68,7 +86,7 @@ const People = () => {
                 
         </div>
       </div>
-      <div className="user-container">
+      <div className="people-container">
         <h2 className="h3-bold md:h2-bold text-left w-full">People</h2>
         {showSearchResults ? (
           <UsersSearchResults
@@ -78,11 +96,11 @@ const People = () => {
         ) :  shouldShowUsers ? (
           <p className="text-light-4 mt-10 text-center w-full">No More Results</p>
         ) : (
-          <ul className="user-grid">
-            {users?.pages.map((page) =>
-              page?.documents.map((user) => (
-                <li key={user?.$id} className="flex-1 min-w-50 w-full">
-                  <UserCard user={user} />
+          <ul className="user-grid-container">
+            {usersMemo.map((page) =>
+              page.documents.map((u) => (
+                <li key={u?.$id} className="flex-1 min-w-50 w-full">
+                  <UserCard user={u} />
                 </li>
               ))
             )}

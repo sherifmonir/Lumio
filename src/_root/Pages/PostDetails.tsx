@@ -18,7 +18,7 @@ const PostDetails = () => {
     navigate(-1)
 
   }
-
+console.log(post)
   return (
   <div className="post-details-container">
 
@@ -54,12 +54,10 @@ const PostDetails = () => {
         <div className="flex-between w-full">
 
           <Link
-            to={`/profile/${post?.creator.$id}`}
+            to={`/profile/${post?.creator}`}
             className="flex items-center gap-3">
               <img
-                  src={user.imageId
-              ?getFilePreview(user.imageId)
-              :"/assets/icons/profile-placeholder.svg"}
+                  src={user.imageUrl}
                   alt="creator"
                   className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
                 />

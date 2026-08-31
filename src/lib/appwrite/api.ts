@@ -177,14 +177,14 @@ export async function uploadFile(file: File){
 
 
 export function getFilePreview(fileId: string) {
-      console.log("imageId received:", fileId);       // ← is it defined?
+      
 
     try {
         const fileUrl = storage.getFileView({
             bucketId: appwriteconfig.bucketId,
             fileId: fileId
         })
-            console.log("fileUrl returned:", fileUrl, typeof fileUrl);  // ← what type is it?
+            
 
         if (!fileUrl) throw Error
 
@@ -192,8 +192,7 @@ export function getFilePreview(fileId: string) {
 
     }catch (error){
         console.log(error)
-            console.log("getFilePreview error:", error);   // ← is it erroring?
-
+   
     }
 }
 
@@ -468,6 +467,12 @@ export async function updateProfile(profile: IUpdateProfile) {
                 throw Error
             }
             image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id}
+
+        } else if (profile.removePhoto) {
+            if (profile.imageId) {
+                await storage.deleteFile(appwriteconfig.bucketId, profile.imageId)
+            }
+            image = { imageUrl: avatars.getInitials({ name: profile.name }), imageId: "" }
         }
 
         
@@ -495,33 +500,6 @@ export async function updateProfile(profile: IUpdateProfile) {
     }
 }
 
-
-export async function deleteProfilePicture(userId: string, imageId: string, name: string) {
-    try{
-        if (imageId) {
-      try {
-        await storage.deleteFile(appwriteconfig.bucketId, imageId);
-      } catch (storageError) {
-        console.warn("Storage file deletion skipped or file not found:", storageError);
-      }
-    }
-        const defaultAvatarUrl = avatars.getInitials({name})
-
-        const updateUser = await databases.updateDocument(
-            appwriteconfig.databaseId,
-            appwriteconfig.usersTableId,
-            userId,{
-                imageId: "",
-                imageUrl: defaultAvatarUrl
-            }
-        )
-        return updateUser
-
-    } catch (error){
-        console.error("Failed to update profile document:", error);
-        throw error;
-    }
-}
 
 
 export async function getUsers(limit?: number) {

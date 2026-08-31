@@ -12,7 +12,7 @@ type PostCardProps = {
 
 
 const PostCard = ({ post }: PostCardProps) => {
-  
+  console.log(post)
   const { user } = useUserContext()
   if (!post.creator) return;
 
@@ -22,13 +22,11 @@ const PostCard = ({ post }: PostCardProps) => {
 
       <div className="flex-between">
         <div className="flex items-center gap-3">
-          <Link to={`/profile/${post.creator.$id}`}>
+          <Link to={`/profile/${post?.creator.$id}`}>
           <img
-            src={user.imageId
-              ?getFilePreview(user.imageId)
-              :"/assets/icons/profile-placeholder.svg"}
+            src={user.imageUrl}
             alt="creator"
-            className="rounded-full w-12 lg:h-12"
+            className="rounded-full w-12 lg:h-12 cursor-pointer"
           />
           </Link>
           <div className="flex flex-col">

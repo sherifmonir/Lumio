@@ -12,7 +12,7 @@ const UserCard = ({ user }: UserCardProps) => {
     <div className="user-card">
     <Link to={`/profile/${user.$id}`} className="flex-center flex-col gap-2 mb-5">
       <img
-        src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+        src={user.imageUrl || (user.imageUrl)}
         alt="creator"
         className="rounded-full w-14 h-14"
       />
