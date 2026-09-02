@@ -35,12 +35,9 @@ const App = () => {
           <Route path="/post/:id" element={<PostDetails />} />
           <Route path="/update-profile/:id" element={<UpdateProfileFormWrapper />} />
           <Route path="/profile/:id/*" element={<Profile />} />
-<<<<<<< HEAD
           <Route path="/profile/:id/followers" element={<FollowList />} />
           <Route path="/profile/:id/following" element={<FollowList />} />
-=======
-          <Route path="/profile/:id/:mode" element={<FollowList />} />
->>>>>>> 50199f104dbf3f46397349842b01e1e912203278
+
           <Route path="/LikedPosts" element={<LikedPosts />} />
         </Route>
       </Routes>
