@@ -18,7 +18,6 @@ const PostDetails = () => {
     navigate(-1)
 
   }
-console.log(post)
   return (
   <div className="post-details-container">
 

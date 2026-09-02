@@ -15,7 +15,7 @@ const RoutLayout = () => {
     <div className="w-full bg-dark-4 text-amber-50">
       <Topbar />
       <LeftSideBar />
-      <section className=" h-screen  ml-40 [@media(max-width:768px)]:ml-0" >
+      <section className=" h-screen  ml-40  [@media(max-width:64rem)]:ml-0" >
         <Outlet />
       </section>
       <Bottombar />

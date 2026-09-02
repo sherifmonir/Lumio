@@ -12,12 +12,11 @@ type GridPostListProps = {
 }
 
 const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPostListProps) => {
-  console.log(posts[0])
   const { user } = useUserContext()
   return (
-    <ul className="grid-container ">
+    <ul className="post-grid-container">
       {posts.map((post) => (
-        <li key={post.$id} className="relative min-w-80 h-80">
+        <li key={post.$id} className="relative gap-4  w-80  h-80">
           <Link to={`/post/${post.$id}`} className="grid-post-link">
             <img
               src={getFilePreview(post.imageId)}
@@ -28,7 +27,7 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPost
 
           <div className="grid-post-user">
             {showUser && (
-              <Link to={`/post/${post.creator.$id}`} className="flex items-center justify-start gap-2 flex-1 ">
+              <Link to={`/profile/${post.creator.$id}`} className="flex items-center justify-start gap-2 flex-1 ">
                 <img
                   src={post.creator.imageUrl}
                   alt="creator"

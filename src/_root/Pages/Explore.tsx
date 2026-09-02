@@ -84,7 +84,7 @@ const Explore = () => {
       </div>
 
 
-       <div className="flex flex-wrap gap-9 w-full max-w-5xl mt-8">
+       <div className=" gap-9 flex w-full max-w-5xl mt-8 mb-3">
         {shouldShowSearchResults ? (
 
           <PostsSearchResults

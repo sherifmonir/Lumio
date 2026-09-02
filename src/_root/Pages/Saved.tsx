@@ -9,14 +9,11 @@ import { ClipLoader } from "react-spinners";
     const savePosts = currentUser?.save
     .map((savePost: ISave) => ({
       ...savePost.post,
-      creator: {
-        imageUrl: currentUser.imageUrl,
-      },
     }))
     .reverse()
   
   return (
-    <div className="saved-container overflow-auto scrollbar-none">
+    <div className="liked-container">
       <div className="flex gap-2 w-full max-w-5xl">
         <img
           src="/assets/icons/save.svg"
@@ -35,7 +32,7 @@ import { ClipLoader } from "react-spinners";
           {savePosts.length === 0 ? (
             <p className="text-light-4">No available posts</p>
           ) : (
-            <GridPostList posts={savePosts} showStats={true} />
+            <GridPostList posts={savePosts} showUser={false} showStats={true} />
           )}
         </ul>
       )}

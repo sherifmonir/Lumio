@@ -225,7 +225,7 @@
   @apply flex justify-start items-center;
 }
 @utility common-container {
-  @apply flex flex-col flex-1 items-center gap-10 overflow-auto scrollbar-none py-10 px-5 md:px-8 lg:p-14 ;
+  @apply flex flex-col flex-1 flex-center gap-10 overflow-auto scrollbar-none py-10 px-5 md:px-8 lg:p-14 ;
 }
 
 @utility lg-block {
@@ -234,13 +234,13 @@
 
 /* All Users */
 @utility people-container {
-  @apply max-w-5xl flex flex-col items-start w-full gap-6 md:gap-9;
+  @apply max-w-5xl flex-center flex-col items-start w-full gap-6 md:gap-9;
 }
 
 
 
 @utility user-grid-container {
-  @apply  w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
+  @apply  w-full grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 max-w-5xl;
 }
 
 @utility form-bottom {
@@ -296,8 +296,10 @@
 @utility profile-tab {
   @apply flex-center gap-3 py-4 w-48 bg-dark-2 transition flex-1 xl:flex-initial;
 }
+@utility liked-container {
+  @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14 scrollbar-none;
+}
 
-/* Saved */
 @utility saved-container {
   @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14 scrollbar-none;
 }
@@ -305,7 +307,7 @@
 /* Bottom bar */
 
 @utility bottom-bar {
-  @apply md:hidden z-50 flex-between w-full fixed bottom-0 bg-dark-2 h-12 px-5 py-4 transition;
+  @apply lg:hidden z-50 flex-between w-full fixed bottom-0 bg-dark-2 h-12 px-5 py-4 transition;
 }
 
 /* File uploader */
@@ -320,8 +322,8 @@
 }
 
 /* Grid Post List */
-@utility grid-container {
-  @apply w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
+@utility post-grid-container {
+  @apply  w-full gap-7 max-w-5xl  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
 }
 @utility grid-post-link {
   @apply flex rounded-3xl border border-dark-4 overflow-hidden cursor-pointer w-full h-full bg-dark-2;
@@ -332,7 +334,7 @@
 
 /* Left sidebar */
 @utility leftsidebar {
-  @apply hidden md:flex flex-col justify-between items-center fixed z-40  pt-20 bottom-0 h-full left-0 w-40  bg-dark-1 ;
+  @apply hidden lg:flex flex-col justify-between items-center fixed z-40  pt-20 bottom-0 h-full left-0 w-40  bg-dark-1 ;
 }
 
 
@@ -356,15 +358,15 @@
 
 /* User card */
 @utility user-card {
-  @apply h-60 w-50 bg-dark-1 flex-center flex-col  border border-dark-4 rounded-[20px];
+  @apply h-60 w-50 bg-dark-1 flex-center flex-col justify-evenly p-2 border border-dark-4 rounded-[20px];
 }
 
 /* Follow Button */
 @utility follow {
-  @apply bg-primary-500 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80
+  @apply bg-primary-500 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80 mt-5
 }
 @utility unfollow {
-  @apply bg-dark-5 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80
+  @apply bg-dark-5 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80 mt-5
 }
 
 /*****************************************/

@@ -33,7 +33,7 @@ const Home = () => {
         {isPostLoading && !posts ?(
           <ClipLoader />
         ):(
-        <ul className="flex flex-col flex-1 gap-9 w-full">
+        <ul className="flex flex-col flex-1 w-full">
           {postsMemo?.map((post) =>(
             <li key={post.$id} >
             <PostCard  post={post} />

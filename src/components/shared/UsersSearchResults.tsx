@@ -15,7 +15,9 @@ const UsersSearchResults = ({ isSearchFetching, searchedUsers }:UsersSearchResul
 
       <ul className="user-grid-container">
         {searchedUsers.documents.map((user) => (
-          <UserCard key={user.accountId} user={user}/>
+          <li key={user.accountId} className="flex-1 flex-wrap flex-center min-w-50 w-full">
+          <UserCard  user={user}/>
+          </li>
         ))}
       </ul>
     )
