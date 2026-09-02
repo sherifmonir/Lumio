@@ -85,7 +85,7 @@ const PostDetails = () => {
         <div className="flex-center gap-4">
 
           <Link to={`/update-post/${post?.$id}`}
-            className={`${user.id !== post?.creator.$id} && "hidden"`}>
+            className={`${user.id !== post?.creator.$id}` ? 'hidden' : 'post-details-edit-btn'}>
 
             <img 
               src="/assets/icons/edit.svg" 
@@ -98,7 +98,7 @@ const PostDetails = () => {
 
         <button
           onClick={handleDeletePost}
-          className={`post-details-delete-btn ${user.id !== post?.creator.$id }&& "hidden"`}>
+          className={`${user.id !== post?.creator.$id}` ? 'hidden' : `post-details-delete-btn`}>
 
             <img
               src={"/assets/icons/delete.svg"}
