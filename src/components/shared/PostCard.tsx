@@ -23,7 +23,11 @@ const PostCard = ({ post }: PostCardProps) => {
         <div className="flex items-center gap-3">
           <Link to={`/profile/${post?.creator.$id}`}>
           <img
+<<<<<<< HEAD
             src={post.creator.imageUrl}
+=======
+            src={user.imageUrl}
+>>>>>>> 50199f104dbf3f46397349842b01e1e912203278
             alt="creator"
             className="rounded-full w-12 lg:h-12 cursor-pointer"
           />
