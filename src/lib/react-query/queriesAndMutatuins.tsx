@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, updatePost, updateProfile } from '../appwrite/api'
+import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
 import type { INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
 
@@ -62,7 +62,7 @@ export const useGetRecentPosts = () => {
 }
 
 
-export const useLikePost = () => {
+/*export const useLikePost = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
@@ -82,7 +82,7 @@ export const useLikePost = () => {
             })
         }
     })
-}
+}*/
 
 
 export const useSavePost = () => {
@@ -316,3 +316,51 @@ export const useGetFollowingRelations  = (currentUserId?: string) => {
     queryFn: () => getFollowingRelations(currentUserId!),
     enabled: !!currentUserId,
   })}
+
+
+  export const useLikePost = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ userId, postId }: { userId: string; postId: string }) => likePost(userId, postId),
+    onSuccess: (_data, v) => {
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_RELATIONS, v.userId] })
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKES_COUNT, v.postId] })
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_POSTS, v.userId] })
+    },
+  })
+}
+
+export const useUnlikePost = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (v: { likeDocumentId: string; userId: string; postId: string }) => unlikePost(v.likeDocumentId),
+    onSuccess: (_data, v) => {
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_RELATIONS, v.userId] })
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKES_COUNT, v.postId] })
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_POSTS, v.userId] })
+    },
+  })
+}
+
+export const useGetLikedRelations = (userId?: string) =>
+  useQuery({
+    queryKey: [queryKeys.GET_LIKED_RELATIONS, userId],
+    queryFn: () => getLikedRelations(userId!),
+    enabled: !!userId,
+  })
+
+export const useGetLikesCount = (postId?: string) =>
+  useQuery({
+    queryKey: [queryKeys.GET_LIKES_COUNT, postId],
+    queryFn: () => getLikesCount(postId!),
+    enabled: !!postId,
+  })
+
+export const useGetLikedPosts = (userId?: string) =>
+  useInfiniteQuery({
+    queryKey: [queryKeys.GET_LIKED_POSTS, userId],
+    queryFn: ({ pageParam = 0 }) => getLikedPosts({ pageParam, userId: userId! }),
+    getNextPageParam: (last, pages) => (last.hasMore ? pages.length : null),
+    enabled: !!userId,
+    initialPageParam: 0,
+  })

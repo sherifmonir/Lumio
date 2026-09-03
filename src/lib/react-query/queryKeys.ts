@@ -29,4 +29,10 @@ export const queryKeys = {
   GET_FOLLOWING: "getFollowing",
   GET_FOLLOWING_IDS: "getFollowingIds",
   GET_FOLLOWING_FEED: "getFollowingFeed",
+
+  // LIKE KEYS
+  GET_LIKED_RELATIONS: "getLikedRelations",
+  GET_LIKES_COUNT: "getLikesCount",
+  GET_LIKED_POSTS: "getLikedPosts",
+
 } as const;

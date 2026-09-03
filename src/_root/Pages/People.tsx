@@ -97,17 +97,10 @@ const usersMemo = useMemo(() => {
           <p className="text-light-4 mt-10 text-center w-full">No More Results</p>
         ) : (
           <ul className="user-grid-container">
-<<<<<<< HEAD
             {usersMemo.map((page) =>
               page.documents.map((u) => (
                 <li key={u?.$id} className="flex-1 flex-wrap flex-center min-w-50 w-full">
                   <UserCard user={u} />
-=======
-            {users?.pages.map((page) =>
-              page?.documents.map((user) => (
-                <li key={user?.$id} className="flex-1 min-w-50 w-full">
-                  <UserCard user={user} />
->>>>>>> 50199f104dbf3f46397349842b01e1e912203278
                 </li>
               ))
             )}

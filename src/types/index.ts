@@ -110,3 +110,7 @@ export interface IFollow extends Models.Document {
   followerId: string;
   followingId: string;
 }
+export interface ILike extends Models.Document {
+  userId: string
+  postId: string
+}

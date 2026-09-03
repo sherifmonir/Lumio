@@ -320,7 +320,7 @@
 
 /* Grid Post List */
 @utility post-grid-container {
-  @apply  w-full gap-7 max-w-5xl  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  @apply  w-full gap-7 max-w-5xl  grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
 }
 @utility grid-post-link {
   @apply flex rounded-3xl border border-dark-4 overflow-hidden cursor-pointer w-full h-full bg-dark-2;

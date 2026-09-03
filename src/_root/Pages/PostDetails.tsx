@@ -14,10 +14,16 @@ const PostDetails = () => {
   const {mutate: deletePost} = useDeletePost()
   
   const handleDeletePost = () => {
-    deletePost({ postId: id || '', imageId: post?.imageId || '' })
-    navigate(-1)
-
+    deletePost(
+      { postId: id || '', imageId: post?.imageId || '' },
+      {
+        onSuccess: () => {
+          navigate(-1)
+        },
+      }
+    )
   }
+
   return (
   <div className="post-details-container">
 
@@ -85,7 +91,7 @@ const PostDetails = () => {
         <div className="flex-center gap-4">
 
           <Link to={`/update-post/${post?.$id}`}
-            className={`${user.id !== post?.creator.$id}` ? 'hidden' : 'post-details-edit-btn'}>
+            className={user.id === post?.creator.$id ? 'post-details-edit-btn' : 'hidden'}>
 
             <img 
               src="/assets/icons/edit.svg" 
@@ -98,7 +104,7 @@ const PostDetails = () => {
 
         <button
           onClick={handleDeletePost}
-          className={`${user.id !== post?.creator.$id}` ? 'hidden' : `post-details-delete-btn`}>
+          className={user.id === post?.creator.$id ? 'post-details-edit-btn' : 'hidden'}>
 
             <img
               src={"/assets/icons/delete.svg"}

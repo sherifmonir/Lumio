@@ -16,7 +16,7 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPost
   return (
     <ul className="post-grid-container">
       {posts.map((post) => (
-        <li key={post.$id} className="relative gap-4  w-80  h-80">
+        <li key={post.$id} className="relative gap-4  w-80  h-80 ">
           <Link to={`/post/${post.$id}`} className="grid-post-link">
             <img
               src={getFilePreview(post.imageId)}
@@ -29,11 +29,8 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPost
             {showUser && (
               <Link to={`/profile/${post.creator.$id}`} className="flex items-center justify-start gap-2 flex-1 ">
                 <img
-<<<<<<< HEAD
                   src={post.creator.imageUrl}
-=======
-                  src={user.imageUrl}
->>>>>>> 50199f104dbf3f46397349842b01e1e912203278
+
                   alt="creator"
                   className="w-8 h-8 rounded-full"
                 />

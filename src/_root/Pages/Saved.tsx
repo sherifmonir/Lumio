@@ -1,16 +1,22 @@
 import GridPostList from "@/components/shared/GridPostList";
 import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutatuins"
 import type { ISave } from "@/types";
+import { useMemo } from "react";
 import { ClipLoader } from "react-spinners";
 
 
   const Saved = () => {
     const { data: currentUser } = useGetCurrentUser()
-    const savePosts = currentUser?.save
-    .map((savePost: ISave) => ({
-      ...savePost.post,
-    }))
-    .reverse()
+    
+
+    const savedPosts = currentUser?.save
+
+    const savePosts = useMemo(() => {
+  if (!savedPosts) return []
+  return [...savedPosts]
+    .sort((a: ISave, b: ISave) => new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime())
+    .map((savePost: ISave) => ({ ...savePost.post }))
+}, [savedPosts])
   
   return (
     <div className="liked-container">

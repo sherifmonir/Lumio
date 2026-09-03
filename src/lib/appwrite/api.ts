@@ -1,4 +1,4 @@
-import type { IFollow, INewPost, INewUser, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
+import type { IFollow, ILike, INewPost, INewUser, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
 import {  ID, Permission, Query, Role } from "appwrite";
 import { account, appwriteconfig, avatars, databases, storage } from "./config";
 
@@ -225,7 +225,7 @@ export async function getRecentPost() {
 }
 
 
-export async function likePost(postId: string, likesArr: string[]) {
+/*export async function likePost(postId: string, likesArr: string[]) {
     try {
         const updatedPost = await databases.updateDocument(
             appwriteconfig.databaseId,
@@ -242,7 +242,7 @@ export async function likePost(postId: string, likesArr: string[]) {
      }catch(error) {
         console.log(error)
      }
-}
+}*/
 
 
 export async function savePost(postId: string, userId: string) {
@@ -363,13 +363,20 @@ export async function deletePost(postId: string, imageId: string) {
         await databases.deleteDocument(
             appwriteconfig.databaseId,
             appwriteconfig.postsTableId,
-            postId
+            postId,
         )
+
+        if (imageId) {
+            await storage.deleteFile(
+                appwriteconfig.bucketId,
+                imageId
+            )}
 
         return { status: 'ok' }
 
     } catch(error) {
         console.log(error)
+        throw error
     }
 
 }
@@ -675,3 +682,56 @@ export async function getFollowingRelations(followerId: string) {
   return res.documents
 }
 
+export async function likePost(userId: string, postId: string) {
+  const currentAccount = await account.get() // account ID, not the Users-table $id — same lesson as follows
+  return databases.createDocument<ILike>(
+    appwriteconfig.databaseId,
+    appwriteconfig.likesTableId,
+    ID.unique(),
+    { userId, postId },
+    [Permission.read(Role.users()), Permission.delete(Role.user(currentAccount.$id))]
+  )
+}
+
+export async function unlikePost(likeDocumentId: string) {
+  return databases.deleteDocument(appwriteconfig.databaseId, appwriteconfig.likesTableId, likeDocumentId)
+}
+
+export async function getLikesCount(postId: string) {
+  const res = await databases.listDocuments(
+    appwriteconfig.databaseId, appwriteconfig.likesTableId,
+    [Query.equal('postId', postId), Query.limit(1)]
+  )
+  return res.total
+}
+
+
+export async function getLikedRelations(userId: string) {
+  const res = await databases.listDocuments<ILike>(
+    appwriteconfig.databaseId, appwriteconfig.likesTableId,
+    [Query.equal('userId', userId), Query.limit(500)]
+  )
+  return res.documents
+}
+
+const LIKES_PAGE_SIZE = 12
+
+export async function getLikedPosts({ pageParam, userId }: { pageParam: number; userId: string }) {
+  const likes = await databases.listDocuments<ILike>(
+    appwriteconfig.databaseId, appwriteconfig.likesTableId,
+    [Query.equal('userId', userId), Query.orderDesc('$createdAt'),
+     Query.limit(LIKES_PAGE_SIZE), Query.offset(pageParam * LIKES_PAGE_SIZE)]
+  )
+  if (!likes.documents.length) return { posts: [], hasMore: false }
+
+  const postIds = likes.documents.map((l) => l.postId)
+  const posts = await databases.listDocuments<IPost>(
+    appwriteconfig.databaseId, appwriteconfig.postsTableId,
+    [Query.equal('$id', postIds), Query.select(['*', 'creator.*'])]
+  )
+
+  const postsById = new Map(posts.documents.map((p) => [p.$id, p]))
+  const orderedPosts = postIds.map((id) => postsById.get(id)).filter(Boolean) as IPost[]
+
+  return { posts: orderedPosts, hasMore: likes.documents.length === LIKES_PAGE_SIZE }
+}

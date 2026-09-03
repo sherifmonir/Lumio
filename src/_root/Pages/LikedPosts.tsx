@@ -1,26 +1,39 @@
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import GridPostList from "@/components/shared/GridPostList";
-import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutatuins";
+import { useUserContext } from "@/context/UseUserContext";
+import { useGetLikedPosts } from "@/lib/react-query/queriesAndMutatuins";
 import { ClipLoader } from "react-spinners";
 
 const LikedPosts = () => {
-  const { data: currentUser } = useGetCurrentUser();
+  const { user } = useUserContext();
+  const { ref, inView } = useInView();
+  const { data, fetchNextPage, hasNextPage, isFetching } = useGetLikedPosts(user.id);
 
-  if (!currentUser)
+  useEffect(() => {
+    if (inView && hasNextPage) fetchNextPage();
+  }, [inView, hasNextPage, fetchNextPage]);
+
+  const likedPosts = data?.pages.flatMap((page) => page.posts) ?? [];
+
+  if (!likedPosts.length && !isFetching) {
     return (
-      <div className="flex-center w-full h-full">
-        <ClipLoader />
+      <div className="liked-container">
+        <p className="text-light-4">No liked posts</p>
       </div>
     );
+  }
 
   return (
     <div className="liked-container">
-      {currentUser.liked.length === 0 && (
-        <p className="text-light-4">No liked posts</p>
+      <GridPostList posts={likedPosts} showUser={false} showStats={false} />
+      {hasNextPage && (
+        <div ref={ref} className="mt-10 flex justify-center w-full">
+          <ClipLoader />
+        </div>
       )}
-
-      <GridPostList posts={currentUser.liked} showUser={false} showStats={false} />
     </div>
   );
 };
 
-export default LikedPosts;
+export default LikedPosts

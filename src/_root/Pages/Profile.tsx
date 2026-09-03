@@ -5,6 +5,7 @@ import { Link, Outlet, Route, Routes, useLocation, useParams } from 'react-route
 import { ClipLoader } from 'react-spinners'
 import LikedPosts from './LikedPosts';
 import FollowButton from '@/components/shared/FollowButton';
+import { useMemo } from 'react';
 
 interface StabBlockProps {
   value: string | number;
@@ -25,6 +26,15 @@ const Profile = () => {
   const { data: currentUser } = useGetUserById(id || "")
   const { data: followersCount } = useGetFollowersCount(currentUser?.$id)
   const { data: followingCount } = useGetFollowingCount(currentUser?.$id)
+
+  const posts = currentUser?.posts
+  
+  const sortedPosts = useMemo(() => {
+    if (!posts) return []
+    return [...posts].sort(
+      (a, b) => new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime()
+    )
+  }, [posts])
 
   if (!currentUser)
     return (
@@ -129,7 +139,7 @@ const Profile = () => {
       <Routes>
         <Route
           index
-          element={<GridPostList posts={currentUser.posts} showUser={false} />}
+          element={<GridPostList posts={sortedPosts} showUser={false} />}
         />
         {currentUser.$id === user.id && (
           <Route path="/LikedPosts" element={<LikedPosts />} />

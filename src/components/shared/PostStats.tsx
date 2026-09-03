@@ -1,8 +1,14 @@
-import { useDeleteSavedPost, useGetCurrentUser, useLikePost, useSavePost } from '@/lib/react-query/queriesAndMutatuins'
-import { checkIsLiked } from '@/lib/utils'
+import { useMemo, useState } from 'react'
+import {
+  useDeleteSavedPost,
+  useGetCurrentUser,
+  useSavePost,
+  useGetLikedRelations,
+  useLikePost,
+  useUnlikePost,
+  useGetLikesCount,
+} from '@/lib/react-query/queriesAndMutatuins'
 import type { IPost, ISave } from '@/types'
-import { useState } from 'react'
-
 
 type PostStatsProps = {
     post?: IPost
@@ -10,53 +16,61 @@ type PostStatsProps = {
 }
 
 const PostStats = ({ post, userId }: PostStatsProps) => {
-    const likesList = post?.likes?.map((user) => user.$id) ?? []
-   
-    const { mutate: likePost } = useLikePost()
+    const { data: relations, isPending: isCheckingLike } = useGetLikedRelations(userId)
+    const { data: likesCount } = useGetLikesCount(post?.$id)
+    const { mutateAsync: likePost } = useLikePost()
+    const { mutateAsync: unlikePost } = useUnlikePost()
+
+    const existingLike = useMemo(
+        () => relations?.find((r) => r.postId === post?.$id) ?? null,
+        [relations, post?.$id]
+    )
+
+    const [optimistic, setOptimistic] = useState<boolean | null>(null)
+    const [prevServerState, setPrevServerState] = useState(!!existingLike)
+    if (!!existingLike !== prevServerState) {
+        setPrevServerState(!!existingLike)
+        setOptimistic(null)
+    }
+
+    const isLiked = optimistic ?? !!existingLike
+    const displayLikesCount = (likesCount ?? 0) + (optimistic === null ? 0 : optimistic ? 1 : -1)
+
+    const { data: currentUser } = useGetCurrentUser()
     const { mutate: savePost } = useSavePost()
     const { mutate: deleteSavedPost } = useDeleteSavedPost()
-    const { data: currentUser } = useGetCurrentUser()
 
     const savedPostRecord = currentUser?.save?.find(
         (record: ISave) => record.post?.$id === post?.$id
     )
-
     const isSaved = !!savedPostRecord
 
-    const [likes, setLikes] = useState(likesList)
-    
-
-
-    
-
-
-    const handleLikePost = (e: React.MouseEvent) => {
+    const handleLikePost = async (e: React.MouseEvent) => {
         e.stopPropagation()
-
-        const hasLiked = likes.includes(userId)
-        const newLikes = hasLiked
-        ?likes.filter((id) => id!== userId)
-        :[...likes, userId]
-        setLikes(newLikes)
-        likePost({postId: post?.$id || "", likesArr: newLikes},
-            {
-                onError: () => {
-                    setLikes(likes)
-                }
+        if (isLiked) {
+            setOptimistic(false)
+            try {
+                await unlikePost({ likeDocumentId: existingLike!.$id, userId, postId: post?.$id || "" })
+            } catch {
+                setOptimistic(true)
             }
-        )
+        } else {
+            setOptimistic(true)
+            try {
+                await likePost({ userId, postId: post?.$id || "" })
+            } catch {
+                setOptimistic(false)
+            }
+        }
     }
 
     const handleSavePost = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-
-    if (savedPostRecord) {
-        deleteSavedPost(savedPostRecord.$id)
-    } else {
-        savePost({ userId, postId: post?.$id || ""})
-    }
-
+        e.stopPropagation();
+        if (savedPostRecord) {
+            deleteSavedPost(savedPostRecord.$id)
+        } else {
+            savePost({ userId, postId: post?.$id || ""})
+        }
     }
 
   return (
@@ -64,22 +78,19 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
         <div className="flex gap-2 mr-5">
             <img
-                src={checkIsLiked(likes, userId)
-                ? "/assets/icons/liked.svg"
-                : "/assets/icons/like.svg"}
+                src={isLiked ? "/assets/icons/liked.svg" : "/assets/icons/like.svg"}
                 alt="like"
                 width={20}
                 height={20}
-                onClick={handleLikePost}
+                onClick={isCheckingLike ? undefined : handleLikePost}
                 className="cursor-pointer"
             />
             <p className="small-meduim lg:base-meduim">
-                {likes.length}
+                {displayLikesCount}
             </p>
         </div>
 
         <div className="flex gap-2">
-
             <img
                 src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
                 alt="save"
@@ -88,7 +99,6 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
                 onClick={handleSavePost}
                 className="cursor-pointer"
             />
-            
         </div>
 
     </div>
