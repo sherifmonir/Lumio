@@ -1,4 +1,4 @@
-import type { IFollow, ILike, INewPost, INewUser, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
+import type { IFollow, ILike, INewPost, INewUser, INotification, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
 import {  ID, Permission, Query, Role } from "appwrite";
 import { account, appwriteconfig, avatars, databases, storage } from "./config";
 
@@ -156,18 +156,19 @@ export async function createPost(post: INewPost){
 
 export async function uploadFile(file: File){
     try{
-        const uoloadedFile = await storage.createFile(
+        const currentAccount = await account.get()
+        const uploadedFile = await storage.createFile(
             appwriteconfig.bucketId,
             ID.unique(),
             file,
             [
                 Permission.read(Role.any()),
-                Permission.update(Role.users()),
-                Permission.delete(Role.users()),
+                Permission.update(Role.user(currentAccount.$id)),
+                Permission.delete(Role.user(currentAccount.$id)),
             ]
             
         )
-        return uoloadedFile
+        return uploadedFile
 
     }catch(error){
         console.log(error)
@@ -223,26 +224,6 @@ export async function getRecentPost() {
 
     return posts
 }
-
-
-/*export async function likePost(postId: string, likesArr: string[]) {
-    try {
-        const updatedPost = await databases.updateDocument(
-            appwriteconfig.databaseId,
-            appwriteconfig.postsTableId,
-            postId,
-            {
-                likes: likesArr
-            }
-        )
-        if(!updatedPost) throw Error
-
-            return updatedPost
-
-     }catch(error) {
-        console.log(error)
-     }
-}*/
 
 
 export async function savePost(postId: string, userId: string) {
@@ -571,15 +552,30 @@ export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
 
 
 export async function followUser(followerId: string, followingId: string) {
-    return databases.createDocument<IFollow>(
-        appwriteconfig.databaseId,
-        appwriteconfig.followsTableId,
-        ID.unique(),
-        { followerId, followingId },
-        [
-            Permission.read(Role.users()),
-            Permission.delete(Role.users()),
-        ])
+  const currentAccount = await account.get()
+  const newFollow = await databases.createDocument<IFollow>(
+    appwriteconfig.databaseId,
+    appwriteconfig.followsTableId,
+    ID.unique(),
+    { followerId, followingId },
+    [
+      Permission.read(Role.users()),
+      Permission.delete(Role.user(currentAccount.$id)),
+    ]
+  )
+
+  databases.getDocument<IUser>(appwriteconfig.databaseId, appwriteconfig.usersTableId, followingId)
+    .then((targetUser) =>
+      createNotification({
+        type: "follow",
+        recipientId: followingId,
+        recipientAccountId: targetUser.accountId,
+        actorId: followerId,
+      })
+    )
+    .catch((error) => console.log(error))
+
+  return newFollow
 }
 
 
@@ -682,20 +678,46 @@ export async function getFollowingRelations(followerId: string) {
   return res.documents
 }
 
-export async function likePost(userId: string, postId: string) {
-  const currentAccount = await account.get() // account ID, not the Users-table $id — same lesson as follows
-  return databases.createDocument<ILike>(
+
+export async function likePost({
+  userId,
+  postId,
+  creatorId,
+  creatorAccountId,
+}: {
+  userId: string
+  postId: string
+  creatorId: string
+  creatorAccountId: string
+}) {
+  const currentAccount = await account.get()
+  const newLike = await databases.createDocument<ILike>(
     appwriteconfig.databaseId,
     appwriteconfig.likesTableId,
     ID.unique(),
     { userId, postId },
     [Permission.read(Role.users()), Permission.delete(Role.user(currentAccount.$id))]
   )
+
+  if (creatorId && creatorAccountId) {
+    createNotification({
+      type: "like",
+      recipientId: creatorId,
+      recipientAccountId: creatorAccountId,
+      actorId: userId,
+      postId,
+    })
+  }
+
+  return newLike
 }
+
 
 export async function unlikePost(likeDocumentId: string) {
   return databases.deleteDocument(appwriteconfig.databaseId, appwriteconfig.likesTableId, likeDocumentId)
 }
+
+
 
 export async function getLikesCount(postId: string) {
   const res = await databases.listDocuments(
@@ -734,4 +756,128 @@ export async function getLikedPosts({ pageParam, userId }: { pageParam: number; 
   const orderedPosts = postIds.map((id) => postsById.get(id)).filter(Boolean) as IPost[]
 
   return { posts: orderedPosts, hasMore: likes.documents.length === LIKES_PAGE_SIZE }
+}
+
+
+export async function createNotification({
+  type,
+  recipientId,
+  recipientAccountId,
+  actorId,
+  postId,
+}: {
+  type: "follow" | "like";
+  recipientId: string;
+  recipientAccountId: string;
+  actorId: string;
+  postId?: string;
+}) {
+  if (actorId === recipientId) return;
+
+  try {
+    const newNotification = await databases.createDocument(
+      appwriteconfig.databaseId,
+      appwriteconfig.notificationsTableId,
+      ID.unique(),
+      {
+        type,
+        recipientId,
+        actorId,
+        postId: postId ?? null,
+        isRead: false,
+      },
+      [
+        Permission.read(Role.user(recipientAccountId)),
+        Permission.update(Role.user(recipientAccountId)),
+      ]
+    );
+
+    if (!newNotification) throw Error;
+    return newNotification;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+const NOTIFICATIONS_PAGE_SIZE = 15
+
+export async function getNotifications({
+  pageParam,
+  userId,
+}: {
+  pageParam?: string
+  userId: string
+}) {
+  const queries = [
+    Query.equal('recipientId', userId),
+    Query.orderDesc('$createdAt'),
+    Query.limit(NOTIFICATIONS_PAGE_SIZE),
+  ]
+  if (pageParam) queries.push(Query.cursorAfter(pageParam))
+
+  const notifications = await databases.listDocuments<INotification>(
+    appwriteconfig.databaseId,
+    appwriteconfig.notificationsTableId,
+    queries
+  )
+
+  const hasMore = notifications.documents.length === NOTIFICATIONS_PAGE_SIZE
+  const nextCursor = hasMore
+    ? notifications.documents[notifications.documents.length - 1].$id
+    : undefined
+
+  const actorIds = [...new Set(notifications.documents.map((n) => n.actorId))]
+  if (actorIds.length === 0) return { documents: [], hasMore, nextCursor }
+
+  const actors = await databases.listDocuments<IUser>(
+    appwriteconfig.databaseId,
+    appwriteconfig.usersTableId,
+    [Query.equal('$id', actorIds)]
+  )
+
+  const actorMap = new Map(actors.documents.map((actor) => [actor.$id, actor]))
+  const documents = notifications.documents.map((n) => ({
+    ...n,
+    actor: actorMap.get(n.actorId),
+  }))
+
+  return { documents, hasMore, nextCursor }
+}
+
+export async function getUnreadNotificationsCount(userId: string) {
+  const response = await databases.listDocuments(
+    appwriteconfig.databaseId,
+    appwriteconfig.notificationsTableId,
+    [
+      Query.equal('recipientId', userId),
+      Query.equal('isRead', false),
+      Query.limit(1),
+    ]
+  )
+  return response.total
+}
+
+export async function markAllNotificationsAsRead(userId: string) {
+  const unread = await databases.listDocuments(
+    appwriteconfig.databaseId,
+    appwriteconfig.notificationsTableId,
+    [
+      Query.equal('recipientId', userId),
+      Query.equal('isRead', false),
+      Query.limit(100),
+    ]
+  )
+  if (unread.documents.length === 0) return
+
+  await Promise.all(
+    unread.documents.map((doc) =>
+      databases.updateDocument(
+        appwriteconfig.databaseId,
+        appwriteconfig.notificationsTableId,
+        doc.$id,
+        { isRead: true }
+      )
+    )
+  )
 }

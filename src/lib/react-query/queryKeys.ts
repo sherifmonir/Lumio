@@ -35,4 +35,8 @@ export const queryKeys = {
   GET_LIKES_COUNT: "getLikesCount",
   GET_LIKED_POSTS: "getLikedPosts",
 
+  // NOTIFICATION KEYS
+  GET_NOTIFICATIONS : "getNotifications",
+  GET_UNREAD_NOTIFICATIONS_COUNT : "getUnreadNotificationsCount"
 } as const;
+

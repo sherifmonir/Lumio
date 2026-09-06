@@ -103,9 +103,7 @@ export type IUpdateProfile = IUserProfile & {
   file: File[]
   removePhoto?: boolean
 }
-
 export type ISearchUsers = Pick<IUser,"name" | "username" | "imageUrl">
-
 export interface IFollow extends Models.Document {
   followerId: string;
   followingId: string;
@@ -113,4 +111,16 @@ export interface IFollow extends Models.Document {
 export interface ILike extends Models.Document {
   userId: string
   postId: string
+}
+
+export interface INotification extends Models.Document {
+  type: "follow" | "like";
+  recipientId: string;
+  actorId: string;
+  postId: string | null;
+  isRead: boolean;
+}
+
+export interface INotificationWithActor extends INotification {
+  actor: IUser;
 }

@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getPostById, getRecentPost, getUserById, likePost, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
+import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
 import type { INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
 
@@ -60,29 +60,6 @@ export const useGetRecentPosts = () => {
         queryFn: getRecentPost
     })
 }
-
-
-/*export const useLikePost = () => {
-    const queryClient = useQueryClient()
-
-    return useMutation({
-        mutationFn: ({ postId, likesArr }: {postId: string, likesArr: string[]})=> likePost(postId, likesArr),
-        onSuccess: (data) => {
-            queryClient.invalidateQueries({
-                queryKey: [queryKeys.GET_POST_BY_ID, data?.$id]
-            })
-            queryClient.invalidateQueries({
-                queryKey: [queryKeys.GET_RECENT_POSTS]
-            })
-            queryClient.invalidateQueries({
-                queryKey: [queryKeys.GET_POSTS]
-            })
-            queryClient.invalidateQueries({
-                queryKey: [queryKeys.GET_CURRENT_USER]
-            })
-        }
-    })
-}*/
 
 
 export const useSavePost = () => {
@@ -251,7 +228,7 @@ export const useFollowUser = () => {
       query.invalidateQueries({ queryKey: [queryKeys.GET_FOLLOWING_IDS, v.followerId] });
     },
   });
-};
+}
 
 
 export const useUnfollowUser = () => {
@@ -318,10 +295,11 @@ export const useGetFollowingRelations  = (currentUserId?: string) => {
   })}
 
 
-  export const useLikePost = () => {
+export const useLikePost = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ userId, postId }: { userId: string; postId: string }) => likePost(userId, postId),
+    mutationFn: (v: { userId: string; postId: string; creatorId: string; creatorAccountId: string }) =>
+      likePost(v),
     onSuccess: (_data, v) => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_RELATIONS, v.userId] })
       queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKES_COUNT, v.postId] })
@@ -329,6 +307,7 @@ export const useGetFollowingRelations  = (currentUserId?: string) => {
     },
   })
 }
+
 
 export const useUnlikePost = () => {
   const queryClient = useQueryClient()
@@ -342,6 +321,7 @@ export const useUnlikePost = () => {
   })
 }
 
+
 export const useGetLikedRelations = (userId?: string) =>
   useQuery({
     queryKey: [queryKeys.GET_LIKED_RELATIONS, userId],
@@ -349,12 +329,14 @@ export const useGetLikedRelations = (userId?: string) =>
     enabled: !!userId,
   })
 
+
 export const useGetLikesCount = (postId?: string) =>
   useQuery({
     queryKey: [queryKeys.GET_LIKES_COUNT, postId],
     queryFn: () => getLikesCount(postId!),
     enabled: !!postId,
   })
+
 
 export const useGetLikedPosts = (userId?: string) =>
   useInfiniteQuery({
@@ -364,3 +346,35 @@ export const useGetLikedPosts = (userId?: string) =>
     enabled: !!userId,
     initialPageParam: 0,
   })
+
+
+  export const useGetNotifications = (userId?: string, enabled = true) => {
+  return useInfiniteQuery({
+    queryKey: [queryKeys.GET_NOTIFICATIONS, userId],
+    queryFn: ({ pageParam }) => getNotifications({ pageParam, userId: userId! }),
+    getNextPageParam: (last) => (last.hasMore ? last.nextCursor : undefined),
+    initialPageParam: undefined as string | undefined,
+    enabled: !!userId && enabled,
+  })
+}
+
+
+export const useGetUnreadNotificationsCount = (userId?: string) => {
+  return useQuery({
+    queryKey: [queryKeys.GET_UNREAD_NOTIFICATIONS_COUNT, userId],
+    queryFn: () => getUnreadNotificationsCount(userId!),
+    enabled: !!userId,
+  })
+}
+
+
+export const useMarkAllNotificationsAsRead = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (userId: string) => markAllNotificationsAsRead(userId),
+    onSuccess: (_data, userId) => {
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_NOTIFICATIONS, userId] })
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_UNREAD_NOTIFICATIONS_COUNT, userId] })
+    },
+  })
+}
