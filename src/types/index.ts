@@ -122,5 +122,5 @@ export interface INotification extends Models.Document {
 }
 
 export interface INotificationWithActor extends INotification {
-  actor: IUser;
+  actor: IUser | undefined;
 }

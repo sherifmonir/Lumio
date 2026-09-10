@@ -57,12 +57,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
         } else {
             setOptimistic(true)
             try {
-                await likePost({
-                userId,
-                postId: post?.$id || "",
-                creatorId: post?.creator?.$id || "",
-                creatorAccountId: post?.creator?.accountId || "",
-                })
+                await likePost({ userId, postId: post?.$id || "" })
             } catch {
                 setOptimistic(false)
             }

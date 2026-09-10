@@ -1,7 +1,9 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
+import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, subscribeToNotifications, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
 import type { INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
+import { useEffect } from 'react'
+
 
 export const useCreateUserAccount = () => {
     return useMutation({
@@ -298,8 +300,7 @@ export const useGetFollowingRelations  = (currentUserId?: string) => {
 export const useLikePost = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (v: { userId: string; postId: string; creatorId: string; creatorAccountId: string }) =>
-      likePost(v),
+    mutationFn: ({ userId, postId }: { userId: string; postId: string }) => likePost(userId, postId),
     onSuccess: (_data, v) => {
       queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_RELATIONS, v.userId] })
       queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKES_COUNT, v.postId] })
@@ -307,7 +308,6 @@ export const useLikePost = () => {
     },
   })
 }
-
 
 export const useUnlikePost = () => {
   const queryClient = useQueryClient()
@@ -378,3 +378,28 @@ export const useMarkAllNotificationsAsRead = () => {
     },
   })
 }
+
+
+export const useNotificationsRealtime = (userId?: string) => {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!userId) return;
+
+    let isActive = true;
+    let subscription: Awaited<ReturnType<typeof subscribeToNotifications>> | null = null;
+
+    subscribeToNotifications(userId, () => {
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_NOTIFICATIONS, userId] });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_UNREAD_NOTIFICATIONS_COUNT, userId] });
+    }).then((sub) => {
+      if (isActive) subscription = sub;
+      else sub.unsubscribe();
+    });
+
+    return () => {
+      isActive = false;
+      subscription?.unsubscribe();
+    };
+  }, [userId, queryClient]);
+};

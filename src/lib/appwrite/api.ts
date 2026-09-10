@@ -1,6 +1,6 @@
 import type { IFollow, ILike, INewPost, INewUser, INotification, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
-import {  ID, Permission, Query, Role } from "appwrite";
-import { account, appwriteconfig, avatars, databases, storage } from "./config";
+import {  Channel, ID, Permission, Query, Realtime, Role } from "appwrite";
+import { account, appwriteconfig, avatars, client, databases, storage } from "./config";
 
 
 
@@ -553,29 +553,13 @@ export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
 
 export async function followUser(followerId: string, followingId: string) {
   const currentAccount = await account.get()
-  const newFollow = await databases.createDocument<IFollow>(
+  return databases.createDocument<IFollow>(
     appwriteconfig.databaseId,
     appwriteconfig.followsTableId,
     ID.unique(),
     { followerId, followingId },
-    [
-      Permission.read(Role.users()),
-      Permission.delete(Role.user(currentAccount.$id)),
-    ]
+    [Permission.read(Role.users()), Permission.delete(Role.user(currentAccount.$id))]
   )
-
-  databases.getDocument<IUser>(appwriteconfig.databaseId, appwriteconfig.usersTableId, followingId)
-    .then((targetUser) =>
-      createNotification({
-        type: "follow",
-        recipientId: followingId,
-        recipientAccountId: targetUser.accountId,
-        actorId: followerId,
-      })
-    )
-    .catch((error) => console.log(error))
-
-  return newFollow
 }
 
 
@@ -679,37 +663,15 @@ export async function getFollowingRelations(followerId: string) {
 }
 
 
-export async function likePost({
-  userId,
-  postId,
-  creatorId,
-  creatorAccountId,
-}: {
-  userId: string
-  postId: string
-  creatorId: string
-  creatorAccountId: string
-}) {
+export async function likePost(userId: string, postId: string) {
   const currentAccount = await account.get()
-  const newLike = await databases.createDocument<ILike>(
+  return databases.createDocument<ILike>(
     appwriteconfig.databaseId,
     appwriteconfig.likesTableId,
     ID.unique(),
     { userId, postId },
     [Permission.read(Role.users()), Permission.delete(Role.user(currentAccount.$id))]
   )
-
-  if (creatorId && creatorAccountId) {
-    createNotification({
-      type: "like",
-      recipientId: creatorId,
-      recipientAccountId: creatorAccountId,
-      actorId: userId,
-      postId,
-    })
-  }
-
-  return newLike
 }
 
 
@@ -758,46 +720,6 @@ export async function getLikedPosts({ pageParam, userId }: { pageParam: number; 
   return { posts: orderedPosts, hasMore: likes.documents.length === LIKES_PAGE_SIZE }
 }
 
-
-export async function createNotification({
-  type,
-  recipientId,
-  recipientAccountId,
-  actorId,
-  postId,
-}: {
-  type: "follow" | "like";
-  recipientId: string;
-  recipientAccountId: string;
-  actorId: string;
-  postId?: string;
-}) {
-  if (actorId === recipientId) return;
-
-  try {
-    const newNotification = await databases.createDocument(
-      appwriteconfig.databaseId,
-      appwriteconfig.notificationsTableId,
-      ID.unique(),
-      {
-        type,
-        recipientId,
-        actorId,
-        postId: postId ?? null,
-        isRead: false,
-      },
-      [
-        Permission.read(Role.user(recipientAccountId)),
-        Permission.update(Role.user(recipientAccountId)),
-      ]
-    );
-
-    if (!newNotification) throw Error;
-    return newNotification;
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 
 const NOTIFICATIONS_PAGE_SIZE = 15
@@ -880,4 +802,16 @@ export async function markAllNotificationsAsRead(userId: string) {
       )
     )
   )
+}
+
+
+export function subscribeToNotifications(userId: string, onEvent: () => void) {
+  const realtime = new Realtime(client);
+
+  const channel = Channel
+    .database(appwriteconfig.databaseId)
+    .collection(appwriteconfig.notificationsTableId)
+    .document();
+
+  return realtime.subscribe(channel, onEvent, [Query.equal("recipientId", [userId])]);
 }
