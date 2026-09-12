@@ -63,7 +63,7 @@ const usersMemo = useMemo(() => {
         <h2 className="h3-bold md:h2-bold w-full">
           Search Users
         </h2>
-        <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4 explore-search">
+        <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4 page-search">
           <img
             src="/assets/icons/search.svg"
             width={20}
@@ -76,7 +76,7 @@ const usersMemo = useMemo(() => {
             ref={searchValueRef}
             type="text"
             placeholder="Search"
-            className="explore-search"
+            className="page-search"
             value={searchValue}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target
@@ -87,7 +87,7 @@ const usersMemo = useMemo(() => {
         </div>
       </div>
       <div className="people-container">
-        <h2 className="h3-bold md:h2-bold text-left w-full">People</h2>
+        <h2 className="h3-bold mb-4 md:h2-bold text-left w-full">People</h2>
         {showSearchResults ? (
           <UsersSearchResults
             isSearchFetching={isSearchFetching}

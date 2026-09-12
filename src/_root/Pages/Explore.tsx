@@ -59,7 +59,7 @@ const Explore = () => {
         <h2 className="h3-bold md:h2-bold w-full">
           Search Posts
         </h2>
-        <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4 explore-search">
+        <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4 page-search">
           <img
             src="/assets/icons/search.svg"
             width={20}
@@ -72,7 +72,7 @@ const Explore = () => {
             ref={searchValueRef}
             type="text"
             placeholder="Search"
-            className="explore-search"
+            className="page-search"
             value={searchValue}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               const { value } = e.target

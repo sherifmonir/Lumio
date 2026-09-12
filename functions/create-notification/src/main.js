@@ -1,5 +1,7 @@
 import { Client, Databases, Query, Permission, Role, ID } from 'node-appwrite';
 
+const APPWRITE_ENDPOINT = 'https://fra.cloud.appwrite.io/v1';
+const APPWRITE_PROJECT_ID = '69e3c340000f6996ebc6';
 const DATABASE_ID = '6a27ca0b0011cdc4840d';
 const USERS_COLLECTION_ID = 'users';
 const POSTS_COLLECTION_ID = 'posts';
@@ -9,23 +11,24 @@ const NOTIFICATIONS_COLLECTION_ID = 'notifications';
 
 export default async ({ req, res, log, error }) => {
   const client = new Client()
-    .setEndpoint(process.env.APPWRITE_FUNCTION_API_ENDPOINT)
-    .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
+    .setEndpoint(APPWRITE_ENDPOINT)
+    .setProject(APPWRITE_PROJECT_ID)
     .setKey(req.headers['x-appwrite-key'] ?? '');
 
   const databases = new Databases(client);
   const event = req.headers['x-appwrite-event'] ?? '';
+    log(`RAW EVENT: ${event}`);
   const payload = req.bodyJson;
 
   try {
     let type, recipientId, actorId;
     let postId = null;
 
-    if (event.includes(`.collections.${FOLLOWS_COLLECTION_ID}.`)) {
+    if (event.includes(`.tables.${FOLLOWS_COLLECTION_ID}.rows.`)) {
       type = 'follow';
       recipientId = payload.followingId;
       actorId = payload.followerId;
-    } else if (event.includes(`.collections.${LIKES_COLLECTION_ID}.`)) {
+    } else if (event.includes(`.tables.${LIKES_COLLECTION_ID}.rows.`)) {
       type = 'like';
       actorId = payload.userId;
       postId = payload.postId;

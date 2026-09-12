@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import type { INavLink } from "@/types";
 import { INITIAL_USER } from "@/context/AuthConstants";
 
-
 const LeftSideBar = () => {
   const { mutate: signout, isSuccess } = useSignoutAccount()
   const navigate = useNavigate()
@@ -62,7 +61,7 @@ const LeftSideBar = () => {
               
             );
           })}
-        
+          
         </nav>
       
       <button type="button" className="flex gap-2 mb-5"

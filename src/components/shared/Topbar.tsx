@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useUserContext } from '@/context/UseUserContext'
 import { INITIAL_USER } from '@/context/AuthConstants'
 import { ClipLoader } from 'react-spinners'
+import NotificationBell from '@/components/shared/NotificationBell'
 
 const Topbar = () => {
   const { mutate: signout, isSuccess } = useSignoutAccount()
@@ -50,7 +51,8 @@ const Topbar = () => {
           height={300}
         />
         </Link>
-        
+        <div className="flex-center">
+          <NotificationBell anchor="topbar" />
           <button type="button"  onClick={() => signout()}>
             <img 
             src="/assets/icons/logout.svg"
@@ -58,6 +60,7 @@ const Topbar = () => {
             className="cursor-pointer"
             />
           </button>
+        </div>
       </div>
     </section>
   )

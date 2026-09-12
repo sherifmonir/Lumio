@@ -1,20 +1,6 @@
 {
     "organizationId": "69e3c32d0004ac86d8da",
     "projectId": "69e3c340000f6996ebc6",
-    "functions": [
-    {
-      "$id": "create-notification",
-      "name": "create-notification",
-      "runtime": "node-26",
-      "path": "functions/create-notification",
-      "entrypoint": "src/main.js",
-      "ignore": ["node_modules", ".git"],
-      "execute": [],
-      "events": [],
-      "schedule": "",
-      "timeout": 15
-    }
-  ],
     "projectName": "Lumio_Project",
     "endpoint": "https://fra.cloud.appwrite.io/v1",
     "settings": {
@@ -59,6 +45,41 @@
             }
         }
     },
+    "functions": [
+        {
+            "$id": "create-notification",
+            "name": "create-notification",
+            "runtime": "node-26",
+            "path": "functions/create-notification",
+            "previewDomainTarget": "edge",
+            "previewDomainLabel": "6aa297f1001fc6d3977f",
+            "entrypoint": "src/main.js",
+            "execute": [],
+            "enabled": true,
+            "logging": true,
+            "events": [
+                "databases.6a27ca0b0011cdc4840d.tables.follows.rows.*.create",
+                "databases.6a27ca0b0011cdc4840d.tables.likes.rows.*.create"
+            ],
+            "schedule": "",
+            "timeout": 15,
+            "commands": "npm install",
+            "scopes": [
+                "documents.read",
+                "documents.write"
+            ],
+            "installationId": "",
+            "providerRepositoryId": "",
+            "providerBranch": "",
+            "providerSilentMode": false,
+            "providerRootDirectory": "",
+            "providerBranches": [],
+            "providerPaths": [],
+            "buildSpecification": "s-2vcpu-2gb",
+            "runtimeSpecification": "s-0.5vcpu-512mb",
+            "deploymentRetention": 0
+        }
+    ],
     "tablesDB": [
         {
             "$id": "6a27ca0b0011cdc4840d",
