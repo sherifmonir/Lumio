@@ -26,7 +26,7 @@ const Topbar = () => {
   
   return (
     <section className="topbar">
-      <div className="py-4 px-5 flex-center  justify-between">
+      <div className="  flex-center items-center justify-between gap-4 px-4 lg:px-8">
 
         {isLoading  ? (
           <div className="h-14 bg-amber-100">
@@ -51,7 +51,7 @@ const Topbar = () => {
           height={300}
         />
         </Link>
-        <div className="flex-center">
+        <div className="flex-center border">
           <NotificationBell anchor="topbar" />
           <button type="button"  onClick={() => signout()}>
             <img 

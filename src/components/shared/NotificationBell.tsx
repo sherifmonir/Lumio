@@ -28,16 +28,16 @@ const NotificationBell = ({ anchor }: NotificationBellProps) => {
     anchor === "topbar" ? "absolute right-0 top-full mt-2" : "absolute left-full bottom-0 ml-2";
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="" ref={containerRef}>
       <button
         type="button"
-        className={anchor === "sidebar" ? "leftsidebar-NavLink relative" : "relative"}
+        className=""
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <img
           src="/assets/icons/notification.svg"
           alt="notifications"
-          className={anchor === "sidebar" ? "size-3 invert-white" : "size-6 cursor-pointer"}
+          className={anchor === "sidebar" ? "size-16 invert-white" : " pt-2 size-16 cursor-pointer"}
         />
         {!!unreadCount && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] leading-none rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
