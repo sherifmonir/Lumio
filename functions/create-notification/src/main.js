@@ -18,6 +18,10 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
   const event = req.headers['x-appwrite-event'] ?? '';
     log(`RAW EVENT: ${event}`);
+  const dynamicKey = req.headers['x-appwrite-key'];
+    log(`KEY TYPE: ${typeof dynamicKey}`);
+    log(`KEY LENGTH: ${dynamicKey ? dynamicKey.length : 'MISSING'}`);
+    log(`ALL HEADER NAMES: ${JSON.stringify(Object.keys(req.headers))}`);
   const payload = req.bodyJson;
 
   try {
@@ -64,7 +68,8 @@ export default async ({ req, res, log, error }) => {
     log(`Notification created: ${type} -> ${recipientId}`);
     return res.json({ success: true });
   } catch (e) {
-    error('Failed to create notification: ' + e.message);
-    return res.json({ success: false, error: e.message }, 500);
-  }
+  error('Failed to create notification: ' + e.message);
+  error('Cause: ' + JSON.stringify(e.cause));
+  return res.json({ success: false, error: e.message, cause: e.cause?.message ?? null }, 500);
+}
 };

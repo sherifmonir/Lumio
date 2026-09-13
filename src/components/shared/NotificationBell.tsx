@@ -3,11 +3,9 @@ import { useUserContext } from "@/context/UseUserContext";
 import { useGetUnreadNotificationsCount } from "@/lib/react-query/queriesAndMutatuins";
 import NotificationsPanel from "./NotificationsPanel";
 
-type NotificationBellProps = {
-  anchor: "topbar" | "sidebar";
-};
 
-const NotificationBell = ({ anchor }: NotificationBellProps) => {
+
+const NotificationBell = () => {
   const { user } = useUserContext();
   const { data: unreadCount } = useGetUnreadNotificationsCount(user.id);
   const [isOpen, setIsOpen] = useState(false);
@@ -24,20 +22,18 @@ const NotificationBell = ({ anchor }: NotificationBellProps) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  const panelPositionClass =
-    anchor === "topbar" ? "absolute right-0 top-full mt-2" : "absolute left-full bottom-0 ml-2";
 
   return (
-    <div className="" ref={containerRef}>
+    <div className="relative" ref={containerRef}>
       <button
         type="button"
-        className=""
+        className="relative"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <img
           src="/assets/icons/notification.svg"
           alt="notifications"
-          className={anchor === "sidebar" ? "size-16 invert-white" : " pt-2 size-16 cursor-pointer"}
+          className=" pt-2 size-16 cursor-pointer"
         />
         {!!unreadCount && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] leading-none rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
@@ -47,7 +43,7 @@ const NotificationBell = ({ anchor }: NotificationBellProps) => {
       </button>
 
       {isOpen && (
-        <NotificationsPanel userId={user.id} isOpen={isOpen} className={panelPositionClass} />
+        <NotificationsPanel userId={user.id} isOpen={isOpen}  />
       )}
     </div>
   );

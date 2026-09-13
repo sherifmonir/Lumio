@@ -9,10 +9,10 @@ import NotificationItem from "./NotificationItem";
 type NotificationsPanelProps = {
   userId: string;
   isOpen: boolean;
-  className?: string;
+  
 };
 
-const NotificationsPanel = ({ userId, isOpen, className }: NotificationsPanelProps) => {
+const NotificationsPanel = ({ userId, isOpen }: NotificationsPanelProps) => {
   const { data, isLoading } = useGetNotifications(userId, isOpen);
   const { mutate: markAllRead } = useMarkAllNotificationsAsRead();
 
@@ -23,7 +23,7 @@ const NotificationsPanel = ({ userId, isOpen, className }: NotificationsPanelPro
   const notifications = data?.pages.flatMap((page) => page.documents) ?? [];
 
   return (
-    <div className={`bg-dark-2 rounded-xl shadow-lg w-80 max-h-96 overflow-y-auto z-50 ${className ?? ""}`}>
+    <div className="bg-dark-2 rounded-xl shadow-lg w-80 max-h-96 overflow-y-auto z-50 absolute right-0 top-full mt-2">
       <div className="px-4 py-3 border-b border-dark-4">
         <p className="text-white font-semibold">Notifications</p>
       </div>

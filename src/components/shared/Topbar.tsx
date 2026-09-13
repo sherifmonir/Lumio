@@ -52,7 +52,7 @@ const Topbar = () => {
         />
         </Link>
         <div className="flex-center border">
-          <NotificationBell anchor="topbar" />
+          <NotificationBell />
           <button type="button"  onClick={() => signout()}>
             <img 
             src="/assets/icons/logout.svg"
