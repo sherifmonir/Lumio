@@ -1,3 +1,4 @@
+import FollowButton from "@/components/shared/FollowButton"
 import PostStats from "@/components/shared/PostStats"
 import { useUserContext } from "@/context/UseUserContext"
 import { getFilePreview } from "@/lib/appwrite/api"
@@ -88,10 +89,10 @@ const PostDetails = () => {
             </div>
           </Link>
 
-        <div className="flex-center gap-4">
-
+        {user.id === post?.creator.$id
+        ?(<div className="flex-center gap-4">
           <Link to={`/update-post/${post?.$id}`}
-            className={user.id === post?.creator.$id ? 'post-details-edit-btn' : 'hidden'}>
+            className='post-details-edit-btn'>
 
             <img 
               src="/assets/icons/edit.svg" 
@@ -104,7 +105,7 @@ const PostDetails = () => {
 
         <button
           onClick={handleDeletePost}
-          className={user.id === post?.creator.$id ? 'post-details-edit-btn' : 'hidden'}>
+          className="post-details-edit-btn">
 
             <img
               src={"/assets/icons/delete.svg"}
@@ -113,7 +114,11 @@ const PostDetails = () => {
               height={24}
             />
         </button>
-      </div>
+      </div>)
+      :(
+
+      <FollowButton targetUserId={post?.creator.$id || ''} />
+      )}
     </div>
 
 

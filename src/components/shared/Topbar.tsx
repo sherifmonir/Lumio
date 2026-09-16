@@ -26,14 +26,14 @@ const Topbar = () => {
   
   return (
     <section className="topbar">
-      <div className="  flex-center items-center justify-between gap-4 px-4 lg:px-8">
+      <div className="flex gap-4 relative items-center h-full">
 
         {isLoading  ? (
           <div className="h-14 bg-amber-100">
             <ClipLoader />
           </div>
         ):(
-          <Link to={`/profile/${user.id}`}>
+          <Link to={`/profile/${user.id}`} className="absolute left-3 lg:left-8">
             <img
               src={currentUser?.imageUrl || user.imageUrl}
               alt="profile"
@@ -43,7 +43,7 @@ const Topbar = () => {
           </Link>
         )}
 
-        <Link to='/'>
+        <Link to='/' className="mx-auto">
         <img
           src="/assets/images/logo.svg"
           alt="Logo"
@@ -51,7 +51,7 @@ const Topbar = () => {
           height={300}
         />
         </Link>
-        <div className="flex-center border">
+        <div className="flex-center absolute right-3 lg:right-8">
           <NotificationBell />
           <button type="button"  onClick={() => signout()}>
             <img 

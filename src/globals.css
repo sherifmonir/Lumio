@@ -237,7 +237,7 @@
   @apply max-w-5xl flex flex-col items-start w-full gap-6 md:gap-9;
 }
 @utility user-grid-container {
-  @apply w-full grid grid-cols-2 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
+  @apply w-full mx-auto grid grid-cols-2 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
 }
 
 @utility form-bottom {
@@ -355,15 +355,15 @@
 
 /* User card */
 @utility user-card {
-  @apply h-60 w-50 bg-dark-1 flex-center flex-col justify-evenly p-2 border border-dark-4 rounded-[20px];
+  @apply h-60 w-50 bg-dark-1 flex-center flex-col justify-evenly p-2 border border-dark-4 rounded-[20px] mx-auto;
 }
 
 /* Follow Button */
 @utility follow {
-  @apply bg-primary-500 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80 mt-5
+  @apply bg-primary-500 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80  cursor-pointer;
 }
 @utility unfollow {
-  @apply bg-dark-5 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80 mt-5
+  @apply bg-dark-5 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80  cursor-pointer;
 }
 
 /*****************************************/
