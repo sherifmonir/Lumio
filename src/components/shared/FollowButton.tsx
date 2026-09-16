@@ -27,7 +27,9 @@ const FollowButton = ({ targetUserId }: FollowButtonProps) => {
 
     const isFollowing = optimistic ?? !!existingFollow
 
-    const handleClick = async () => {
+    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation()
+      e.preventDefault()
     if (isFollowing) {
       setOptimistic(false);
       try {
