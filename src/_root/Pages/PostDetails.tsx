@@ -1,9 +1,11 @@
+import ConfirmationModal from "@/components/shared/ConfirmationModal"
 import FollowButton from "@/components/shared/FollowButton"
 import PostStats from "@/components/shared/PostStats"
 import { useUserContext } from "@/context/UseUserContext"
 import { getFilePreview } from "@/lib/appwrite/api"
 import { useDeletePost, useGetPostById } from "@/lib/react-query/queriesAndMutatuins"
 import { multiFormatDateString } from "@/lib/utils"
+import { useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { ClipLoader } from "react-spinners"
 
@@ -12,22 +14,21 @@ const PostDetails = () => {
   const { data: post, isPending } = useGetPostById(id || '')
   const { user } = useUserContext();
   const navigate = useNavigate()
-  const {mutate: deletePost} = useDeletePost()
+  const {mutate: deletePost, isPending: isDeletingPost } = useDeletePost()
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   
   const handleDeletePost = () => {
     deletePost(
       { postId: id || '', imageId: post?.imageId || '' },
       {
         onSuccess: () => {
+          setIsDeleteModalOpen(false)
           navigate(-1)
         },
       }
     )
   }
-console.log("user.id:", user.id)
-console.log('post?.creator.$id:',post?.creator.$id)
-console.log('post?.creator.imageUrl:',post?.creator.imageUrl)
-console.log('user.imageUrl:',user.imageUrl)
+
   return (
   <div className="post-details-container">
 
@@ -106,7 +107,7 @@ console.log('user.imageUrl:',user.imageUrl)
         </Link>
 
         <button
-          onClick={handleDeletePost}
+          onClick={() => setIsDeleteModalOpen(true)}
           className="post-details-edit-btn">
 
             <img
@@ -116,6 +117,17 @@ console.log('user.imageUrl:',user.imageUrl)
               height={24}
             />
         </button>
+        <ConfirmationModal
+          loadingLabel="Deleting"
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={handleDeletePost}
+          title="Delete Post"
+          description="Are you sure you want to delete this post?"
+          confirmLabel="Delete"
+          isLoading={isDeletingPost}
+          variant= "danger"
+    />
       </div>)
       :(
 
@@ -144,9 +156,6 @@ console.log('user.imageUrl:',user.imageUrl)
       </div>
     </div>
   </div>
-
-
-
 
     )}
 

@@ -23,7 +23,7 @@ const NotificationsPanel = ({ userId, isOpen }: NotificationsPanelProps) => {
   const notifications = data?.pages.flatMap((page) => page.documents) ?? [];
 
   return (
-    <div className="bg-dark-2 rounded-xl shadow-lg w-80 max-h-96 overflow-y-auto z-50 absolute right-0 top-full mt-2">
+    <div className="bg-dark-2 rounded-xl shadow-lg w-80 max-h-96 overflow-y-auto z-50 absolute right-0 top-full mt-2 custom-scrollbar">
       <div className="px-4 py-3 border-b border-dark-4">
         <p className="text-white font-semibold">Notifications</p>
       </div>

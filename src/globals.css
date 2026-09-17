@@ -268,7 +268,7 @@
 
 /* Post Details */
 @utility post-details-container {
-  @apply flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 custom-scrollbar items-center scrollbar-none;
+  @apply flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14  items-center scrollbar-none;
 }
 @utility post-details-card {
   @apply bg-dark-2 w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-dark-4 xl:rounded-l-3xl;
@@ -399,11 +399,9 @@
   .Create-Post-textarea {
     @apply h-36 bg-dark-3 rounded-xl p-2 border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 resize-none;
   }
-  .shad-button_primary {
-    @apply bg-primary-500 hover:bg-primary-500 text-light-1 flex gap-2;
-  }
+  
   .Add-photo-button {
-    @apply h-12 bg-dark-4 px-5 text-light-1 flex gap-2 flex-center rounded-md;
+    @apply h-12 bg-dark-4 px-5 text-light-1 flex gap-2 flex-center rounded-md cursor-pointer;
   }
   .back-button {
     @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white cursor-pointer;

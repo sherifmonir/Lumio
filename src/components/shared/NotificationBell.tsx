@@ -24,19 +24,19 @@ const NotificationBell = () => {
 
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="relative flex items-center" ref={containerRef}>
       <button
         type="button"
-        className="relative"
+        className="relative inline-flex items-center justify-center p-1"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <img
           src="/assets/icons/notification.svg"
           alt="notifications"
-          className=" pt-2 size-16 cursor-pointer"
+          className=" w-14 h-14 cursor-pointer"
         />
         {!!unreadCount && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] leading-none rounded-full min-w-4 h-4 flex items-center justify-center px-1">
+          <span className="absolute top-[12px] right-[12px] bg-red-500 text-white text-[10px] font-bold leading-none rounded-full min-w-4 h-4 flex items-center justify-center px-1 border border-dark-2 pointer-events-none">
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}

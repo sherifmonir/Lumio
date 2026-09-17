@@ -99,11 +99,8 @@ export async function getCurrentUser() {
 export async function signoutAccount() {
     
     try {    
-
         return await account.deleteSession("current")
-        
-         
-        
+   
     } catch(error) {
         console.log(error)
         
@@ -275,7 +272,8 @@ export async function getPostById(postId: string) {
         const post = await databases.getDocument<IPost>(
             appwriteconfig.databaseId,
             appwriteconfig.postsTableId,
-            postId
+            postId,
+            [Query.select(['*', 'creator.*'])]
         )
         return post
 
