@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, subscribeToNotifications, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
-import type { INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
+import type { ILike, INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
 import { useEffect } from 'react'
 
@@ -301,21 +301,34 @@ export const useLikePost = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ userId, postId }: { userId: string; postId: string }) => likePost(userId, postId),
-    onSuccess: (_data, v) => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_RELATIONS, v.userId] })
-      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKES_COUNT, v.postId] })
+    onSuccess: (data, v) => {
+      queryClient.setQueryData(
+        [queryKeys.GET_LIKES_COUNT, v.postId],
+        (old: number = 0) => old + 1
+      )
+      queryClient.setQueryData(
+        [queryKeys.GET_LIKED_RELATIONS, v.userId],
+        (old: ILike[] = []) => [...old, data]
+      )
       queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_POSTS, v.userId] })
     },
   })
 }
+
 
 export const useUnlikePost = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (v: { likeDocumentId: string; userId: string; postId: string }) => unlikePost(v.likeDocumentId),
     onSuccess: (_data, v) => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_RELATIONS, v.userId] })
-      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKES_COUNT, v.postId] })
+      queryClient.setQueryData(
+        [queryKeys.GET_LIKES_COUNT, v.postId],
+        (old: number = 0) => Math.max(0, old - 1)
+      )
+      queryClient.setQueryData(
+        [queryKeys.GET_LIKED_RELATIONS, v.userId],
+        (old: ILike[] = []) => old.filter((r) => r.$id !== v.likeDocumentId)
+      )
       queryClient.invalidateQueries({ queryKey: [queryKeys.GET_LIKED_POSTS, v.userId] })
     },
   })

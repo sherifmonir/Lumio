@@ -24,7 +24,10 @@ const PostDetails = () => {
       }
     )
   }
-
+console.log("user.id:", user.id)
+console.log('post?.creator.$id:',post?.creator.$id)
+console.log('post?.creator.imageUrl:',post?.creator.imageUrl)
+console.log('user.imageUrl:',user.imageUrl)
   return (
   <div className="post-details-container">
 
@@ -60,10 +63,10 @@ const PostDetails = () => {
         <div className="flex-between w-full">
 
           <Link
-            to={`/profile/${post?.creator}`}
+            to={`/profile/${post?.creator.$id}`}
             className="flex items-center gap-3">
               <img
-                  src={user.imageUrl}
+                  src={post?.creator.imageUrl || '/assets/icons/user.svg'}
                   alt="creator"
                   className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
                 />
@@ -89,8 +92,7 @@ const PostDetails = () => {
             </div>
           </Link>
 
-        {user.id === post?.creator.$id
-        ?(<div className="flex-center gap-4">
+        {user.id === post?.creator.$id ?(<div className="flex-center gap-4">
           <Link to={`/update-post/${post?.$id}`}
             className='post-details-edit-btn'>
 

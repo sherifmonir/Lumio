@@ -272,7 +272,7 @@ export async function deleteSavedPost(savedRecordId: string) {
 export async function getPostById(postId: string) {
 
     try{
-        const post = databases.getDocument<IPost>(
+        const post = await databases.getDocument<IPost>(
             appwriteconfig.databaseId,
             appwriteconfig.postsTableId,
             postId
