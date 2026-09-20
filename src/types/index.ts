@@ -114,7 +114,7 @@ export interface ILike extends Models.Document {
 }
 
 export interface INotification extends Models.Document {
-  type: "follow" | "like";
+  type: "follow" | "like" | "comment" | "reply";
   recipientId: string;
   actorId: string;
   postId: string | null;
@@ -123,4 +123,23 @@ export interface INotification extends Models.Document {
 
 export interface INotificationWithActor extends INotification {
   actor: IUser | undefined;
+}
+
+export interface IComment extends Models.Document {
+  postId: string;
+  authorId: string;
+  content: string;
+  parentCommentId: string | null;
+}
+
+export interface ICommentWithAuthor extends IComment {
+  author: IUser | undefined;
+  replies: (IComment & { author: IUser | undefined })[];
+}
+
+export type CommentRow = Models.Document & {
+  postId: string
+  userId: string
+  content: string
+  parentCommentId: string | null
 }

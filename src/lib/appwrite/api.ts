@@ -1,4 +1,4 @@
-import type { IFollow, ILike, INewPost, INewUser, INotification, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
+import type { CommentRow, IComment, ICommentWithAuthor, IFollow, ILike, INewPost, INewUser, INotification, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
 import {  Channel, ID, Permission, Query, Realtime, Role } from "appwrite";
 import { account, appwriteconfig, avatars, client, databases, storage } from "./config";
 
@@ -682,7 +682,7 @@ export async function unlikePost(likeDocumentId: string) {
 export async function getLikesCount(postId: string) {
   const res = await databases.listDocuments(
     appwriteconfig.databaseId, appwriteconfig.likesTableId,
-    [Query.equal('postId', postId), Query.limit(1)]
+    [Query.equal('postId', postId), Query.isNull('content'), Query.limit(1), Query.limit(1)]
   )
   return res.total
 }
@@ -691,7 +691,7 @@ export async function getLikesCount(postId: string) {
 export async function getLikedRelations(userId: string) {
   const res = await databases.listDocuments<ILike>(
     appwriteconfig.databaseId, appwriteconfig.likesTableId,
-    [Query.equal('userId', userId), Query.limit(500)]
+    [Query.equal('userId', userId), Query.isNull('content'), Query.limit(500)]
   )
   return res.documents
 }
@@ -701,8 +701,7 @@ const LIKES_PAGE_SIZE = 12
 export async function getLikedPosts({ pageParam, userId }: { pageParam: number; userId: string }) {
   const likes = await databases.listDocuments<ILike>(
     appwriteconfig.databaseId, appwriteconfig.likesTableId,
-    [Query.equal('userId', userId), Query.orderDesc('$createdAt'),
-     Query.limit(LIKES_PAGE_SIZE), Query.offset(pageParam * LIKES_PAGE_SIZE)]
+    [Query.equal('userId', userId), Query.isNull('content'), Query.orderDesc('$createdAt'), Query.limit(LIKES_PAGE_SIZE), Query.offset(pageParam * LIKES_PAGE_SIZE)]
   )
   if (!likes.documents.length) return { posts: [], hasMore: false }
 
@@ -812,4 +811,103 @@ export function subscribeToNotifications(userId: string, onEvent: () => void) {
     .document();
 
   return realtime.subscribe(channel, onEvent, [Query.equal("recipientId", [userId])]);
+}
+
+function mapToComment(doc: CommentRow): IComment {
+  const { userId, ...rest } = doc
+  return { ...rest, authorId: userId }
+}
+
+
+export async function createComment({
+  postId,
+  authorId,
+  content,
+  parentCommentId,
+}: {
+  postId: string
+  authorId: string
+  content: string
+  parentCommentId?: string
+}) {
+  const doc = await databases.createDocument<CommentRow>(
+    appwriteconfig.databaseId,
+    appwriteconfig.likesTableId,
+    ID.unique(),
+    {
+      userId: authorId,
+      postId,
+      content,
+      parentCommentId: parentCommentId ?? null,
+    },
+    [Permission.delete(Role.users())]
+  )
+  return mapToComment(doc)
+}
+
+
+export async function deleteComment(commentId: string) {
+  return databases.deleteDocument(appwriteconfig.databaseId, appwriteconfig.likesTableId, commentId)
+}
+
+
+export async function getCommentsCount(postId: string) {
+  const res = await databases.listDocuments(
+    appwriteconfig.databaseId, appwriteconfig.likesTableId,
+    [Query.equal('postId', postId), Query.isNotNull('content'), Query.limit(1)]
+  )
+  return res.total
+}
+
+const COMMENTS_PAGE_SIZE = 10
+
+export async function getComments({ pageParam, postId }: { pageParam: number; postId: string }) {
+  const topLevel = await databases.listDocuments<CommentRow>(
+    appwriteconfig.databaseId,
+    appwriteconfig.likesTableId,
+    [
+      Query.equal('postId', postId),
+      Query.isNotNull('content'),
+      Query.isNull('parentCommentId'),
+      Query.orderDesc('$createdAt'),
+      Query.limit(COMMENTS_PAGE_SIZE),
+      Query.offset(pageParam * COMMENTS_PAGE_SIZE),
+    ]
+  )
+  if (!topLevel.documents.length) return { comments: [], hasMore: false }
+
+  const topLevelIds = topLevel.documents.map((c) => c.$id)
+
+  const repliesRes = await databases.listDocuments<CommentRow>(
+    appwriteconfig.databaseId,
+    appwriteconfig.likesTableId,
+    [Query.equal('parentCommentId', topLevelIds), Query.orderAsc('$createdAt')]
+  )
+
+  const allAuthorIds = [...new Set([
+    ...topLevel.documents.map((c) => c.userId),
+    ...repliesRes.documents.map((r) => r.userId),
+  ])]
+
+  const authors = await databases.listDocuments<IUser>(
+    appwriteconfig.databaseId,
+    appwriteconfig.usersTableId,
+    [Query.equal('$id', allAuthorIds)]
+  )
+  const authorMap = new Map(authors.documents.map((a) => [a.$id, a]))
+
+  const repliesByParent = new Map<string, ICommentWithAuthor['replies']>()
+  for (const reply of repliesRes.documents) {
+    const mapped = { ...mapToComment(reply), author: authorMap.get(reply.userId) }
+    const key = reply.parentCommentId! // guaranteed set — we queried by exactly this field
+    repliesByParent.set(key, [...(repliesByParent.get(key) ?? []), mapped])
+  }
+
+  const comments: ICommentWithAuthor[] = topLevel.documents.map((c) => ({
+    ...mapToComment(c),
+    author: authorMap.get(c.userId),
+    replies: repliesByParent.get(c.$id) ?? [],
+  }))
+
+  return { comments, hasMore: topLevel.documents.length === COMMENTS_PAGE_SIZE }
 }

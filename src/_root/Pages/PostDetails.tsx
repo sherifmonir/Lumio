@@ -1,3 +1,4 @@
+import CommentSection from "@/components/shared/CommentSection"
 import ConfirmationModal from "@/components/shared/ConfirmationModal"
 import FollowButton from "@/components/shared/FollowButton"
 import PostStats from "@/components/shared/PostStats"
@@ -153,6 +154,10 @@ const PostDetails = () => {
 
       <div className="w-full">
         <PostStats post={post} userId={user.id} />
+      </div>
+    
+      <div className="w-full">
+        <CommentSection postId={post.$id} currentUserId={user.id} postOwnerId={post.creator.$id} />
       </div>
     </div>
   </div>

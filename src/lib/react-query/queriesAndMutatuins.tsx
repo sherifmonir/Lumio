@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, deleteSavedPost, followUser, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, subscribeToNotifications, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
+import { createComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, followUser, getComments, getCommentsCount, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, subscribeToNotifications, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
 import type { ILike, INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
 import { queryKeys } from './queryKeys'
 import { useEffect } from 'react'
@@ -415,4 +415,55 @@ export const useNotificationsRealtime = (userId?: string) => {
       subscription?.unsubscribe();
     };
   }, [userId, queryClient]);
-};
+}
+
+
+export const useCreateComment = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (v: { postId: string; authorId: string; content: string; parentCommentId?: string }) =>
+      createComment(v),
+    onSuccess: (_data, v) => {
+      queryClient.setQueryData(
+        [queryKeys.GET_COMMENTS_COUNT, v.postId],
+        (old: number = 0) => old + 1
+      )
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_COMMENTS, v.postId] })
+    },
+  })
+}
+
+
+export const useDeleteComment = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (v: { commentId: string; postId: string }) => deleteComment(v.commentId),
+    onSuccess: (_data, v) => {
+      queryClient.setQueryData(
+        [queryKeys.GET_COMMENTS_COUNT, v.postId],
+        (old: number = 0) => Math.max(0, old - 1)
+      )
+      queryClient.invalidateQueries({ queryKey: [queryKeys.GET_COMMENTS, v.postId] })
+    },
+  })
+}
+
+
+export const useGetComments = (postId?: string) => {
+  return useInfiniteQuery({
+    queryKey: [queryKeys.GET_COMMENTS, postId],
+    queryFn: ({ pageParam = 0 }) => getComments({ pageParam, postId: postId! }),
+    getNextPageParam: (last, pages) => (last.hasMore ? pages.length : null),
+    enabled: !!postId,
+    initialPageParam: 0,
+  })
+}
+
+
+export const useGetCommentsCount = (postId?: string) => {
+  return useQuery({
+    queryKey: [queryKeys.GET_COMMENTS_COUNT, postId],
+    queryFn: () => getCommentsCount(postId!),
+    enabled: !!postId,
+  })
+}

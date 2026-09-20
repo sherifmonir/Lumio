@@ -7,8 +7,10 @@ import {
   useLikePost,
   useUnlikePost,
   useGetLikesCount,
+  useGetCommentsCount,
 } from '@/lib/react-query/queriesAndMutatuins'
 import type { IPost, ISave } from '@/types'
+import { Link } from 'react-router-dom'
 
 type PostStatsProps = {
     post?: IPost
@@ -18,6 +20,7 @@ type PostStatsProps = {
 const PostStats = ({ post, userId }: PostStatsProps) => {
     const { data: relations, isPending: isCheckingLike } = useGetLikedRelations(userId)
     const { data: likesCount } = useGetLikesCount(post?.$id)
+    const { data: commentsCount } = useGetCommentsCount(post?.$id)
     const { mutateAsync: likePost } = useLikePost()
     const { mutateAsync: unlikePost } = useUnlikePost()
 
@@ -89,6 +92,18 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
                 {displayLikesCount}
             </p>
         </div>
+
+            <Link
+                to={`/post/${post?.$id}`}
+                onClick={(e) => e.stopPropagation()}
+                className="flex gap-2"
+            >
+                <img src="/assets/icons/comment.svg" alt="comments" width={20} height={20} />
+                <p className="small-meduim lg:base-meduim">
+                    {commentsCount ?? 0}
+                </p>
+            </Link>
+
 
         <div className="flex gap-2">
             <img

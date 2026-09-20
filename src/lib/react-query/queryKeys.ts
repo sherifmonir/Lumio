@@ -37,6 +37,10 @@ export const queryKeys = {
 
   // NOTIFICATION KEYS
   GET_NOTIFICATIONS : "getNotifications",
-  GET_UNREAD_NOTIFICATIONS_COUNT : "getUnreadNotificationsCount"
+  GET_UNREAD_NOTIFICATIONS_COUNT : "getUnreadNotificationsCount",
+
+  // COMMENTS KEYS
+  GET_COMMENTS: "getComments",
+  GET_COMMENTS_COUNT: "getCommentsCount",
 } as const;
 

@@ -6,11 +6,17 @@ type NotificationItemProps = {
   notification: INotificationWithActor;
 };
 
+const MESSAGES: Record<INotificationWithActor["type"], string> = {
+  follow: "started following you",
+  like: "liked your post",
+  comment: "commented on your post",
+  reply: "replied to your comment",
+};
+
 const NotificationItem = ({ notification }: NotificationItemProps) => {
-  if (!notification.actor) return null; // deleted-actor edge case from step 5
+  if (!notification.actor) return null; // deleted-actor edge case
 
   const { actor, type, postId, $createdAt } = notification;
-  const message = type === "follow" ? "started following you" : "liked your post";
   const linkTo = type === "follow" ? `/profile/${actor.$id}` : `/post/${postId}`;
 
   return (
@@ -18,7 +24,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
       <img src={actor.imageUrl} alt={actor.name} className="w-10 h-10 rounded-full object-cover" />
       <div className="flex-1 min-w-0">
         <p className="text-sm text-white truncate">
-          <span className="font-semibold">{actor.name}</span> {message}
+          <span className="font-semibold">{actor.name}</span> {MESSAGES[type]}
         </p>
         <p className="text-xs text-light-3">{multiFormatDateString($createdAt)}</p>
       </div>
