@@ -98,7 +98,11 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
                 onClick={(e) => e.stopPropagation()}
                 className="flex gap-2"
             >
-                <img src="/assets/icons/comment.svg" alt="comments" width={20} height={20} />
+                <img src="/assets/icons/comment.svg"
+                 alt="comments"
+                  width={20} 
+                  height={20}
+                />
                 <p className="small-meduim lg:base-meduim">
                     {commentsCount ?? 0}
                 </p>

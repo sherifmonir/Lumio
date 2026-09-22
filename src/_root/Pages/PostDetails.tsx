@@ -109,7 +109,7 @@ const PostDetails = () => {
 
         <button
           onClick={() => setIsDeleteModalOpen(true)}
-          className="post-details-edit-btn">
+          className="post-details-edit-btn cursor-pointer">
 
             <img
               src={"/assets/icons/delete.svg"}

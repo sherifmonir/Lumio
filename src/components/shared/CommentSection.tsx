@@ -43,7 +43,7 @@ const CommentSection = ({ postId, currentUserId, postOwnerId }: CommentSectionPr
       )}
 
       {hasNextPage && (
-        <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage} className="text-primary-500 text-sm self-center">
+        <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage} className="text-primary-500 text-sm self-center cursor-pointer">
           {isFetchingNextPage ? "Loading..." : "View more comments"}
         </button>
       )}

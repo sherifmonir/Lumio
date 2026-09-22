@@ -30,11 +30,11 @@ const CommentInput = ({ onSubmit, isSubmitting, placeholder = "Add a comment..."
         disabled={isSubmitting}
         className="flex-1 bg-dark-3 rounded-lg px-3 py-2 text-sm text-white outline-none"
       />
-      <button type="submit" disabled={isSubmitting || !value.trim()} className="text-primary-500 text-sm font-semibold disabled:opacity-40">
+      <button type="submit" disabled={isSubmitting || !value.trim()} className="text-primary-500 text-sm font-semibold disabled:opacity-40 cursor-pointer">
         Post
       </button>
       {onCancel && (
-        <button type="button" onClick={onCancel} className="text-light-3 text-sm">
+        <button type="button" onClick={onCancel} className="text-light-3 text-sm cursor-pointer">
           Cancel
         </button>
       )}

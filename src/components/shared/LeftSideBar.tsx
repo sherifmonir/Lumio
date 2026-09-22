@@ -2,15 +2,17 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "@/context/UseUserContext";
 import { useSignoutAccount } from "@/lib/react-query/queriesAndMutatuins";
 import { barLinks } from "@/constants";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { INavLink } from "@/types";
 import { INITIAL_USER } from "@/context/AuthConstants";
+import ConfirmationModal from "./ConfirmationModal";
 
 const LeftSideBar = () => {
-  const { mutate: signout, isSuccess } = useSignoutAccount()
+    const { mutate: signout, isSuccess, isPending: isSigningOut   } = useSignoutAccount()
   const navigate = useNavigate()
   const { setUser, setIsAuthenticated } = useUserContext()
   const { pathname } = useLocation();
+  const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false)
 
  
   useEffect(() => {
@@ -64,15 +66,25 @@ const LeftSideBar = () => {
           
         </nav>
       
-      <button type="button" className="flex gap-2 mb-5"
-       onClick={() => signout()}>
+      <button type="button" className="flex gap-2 mb-5 cursor-pointer"
+       onClick={() => setIsSignoutModalOpen(true)}>
             <img 
             src="/assets/icons/logout.svg"
             alt="logout"
-            className="cursor-pointer"
             />
             <p className="text-[1rem] text-white ">Log out</p>
       </button>
+      <ConfirmationModal
+          loadingLabel="Signing Out"
+          isOpen={isSignoutModalOpen}
+          onClose={() => setIsSignoutModalOpen(false)}
+          onConfirm={() => signout()}
+          title="Sign Out"
+          description="Are you sure you want to Sign Out?"
+          confirmLabel="Sign out"
+          isLoading={isSigningOut}
+          variant= "primary"
+          />
       </aside>
   )
 }
