@@ -1,5 +1,5 @@
-import GridPostList from "@/components/shared/GridPostList"
-import PostsSearchResults from "@/components/shared/PostsSearchResults"
+import GridPostList from "@/components/shared/posts/GridPostList"
+import PostsSearchResults from "@/components/shared/posts/PostsSearchResults"
 import { useDebounce } from "@/Hooks/useDebounce"
 import { useGetPosts, useSearchPosts, useGetFollowingRelations } from "@/lib/react-query/queriesAndMutatuins"
 import { useEffect, useMemo, useRef, useState } from "react"

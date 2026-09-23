@@ -1,4 +1,4 @@
-import UserCard from "@/components/shared/UserCard";
+import UserCard from "@/components/shared/users/UserCard";
 import { useGetFollowers, useGetFollowing } from "@/lib/react-query/queriesAndMutatuins";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import GridPostList from "@/components/shared/GridPostList";
+import GridPostList from "../../components/shared/posts/GridPostList";
 import { useUserContext } from "@/context/UseUserContext";
 import { useGetLikedPosts } from "@/lib/react-query/queriesAndMutatuins";
 import { ClipLoader } from "react-spinners";

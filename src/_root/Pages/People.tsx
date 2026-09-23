@@ -1,5 +1,5 @@
-import UserCard from "@/components/shared/UserCard";
-import UsersSearchResults from "@/components/shared/UsersSearchResults";
+import UserCard from "@/components/shared/users/UserCard";
+import UsersSearchResults from "@/components/shared/users/UsersSearchResults";
 import { useUserContext } from "@/context/UseUserContext";
 import { useDebounce } from "@/Hooks/useDebounce";
 import { useGetFollowingRelations, useGetUsers, useSearchUsers } from "@/lib/react-query/queriesAndMutatuins";

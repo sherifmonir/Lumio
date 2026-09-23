@@ -1,9 +1,10 @@
 import { useUserContext } from '@/context/UseUserContext'
 import { multiFormatDateString } from '@/lib/utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PostStats from './PostStats';
 import type {  IPost } from '@/types';
 import { getFilePreview } from '@/lib/appwrite/api';
+import MentionText from '../mentions/MentionText';
 
 
 type PostCardProps = {
@@ -12,9 +13,11 @@ type PostCardProps = {
 
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useUserContext()
-  if (!post.creator) return;
-  return (
+  const navigate = useNavigate()
 
+  if (!post.creator) return;
+
+  return (
     <div className="post-card">
 
       <div className="flex-between">
@@ -52,16 +55,14 @@ const PostCard = ({ post }: PostCardProps) => {
         </Link>
       </div>
 
-      <Link to={`/post/${post.$id}`}>
+      <div onClick={() => navigate(`/post/${post.$id}`)} className="cursor-pointer">
         <div className="small-medium lg:base-medium py-5">
-          <p>{post.caption}</p>
+          <p><MentionText text={post.caption ?? ''} /></p>
           <ul className="flex gap-1 mt-2">
             {post.tags?.map((tag: string, index: number) => (
-              <li
-                key={index}
-                className="text-light-3 small-regular">
+              <li key={index} className="text-light-3 small-regular">
                     #{tag}
-               </li>
+              </li>
             ))}
           </ul>
         </div>
@@ -69,7 +70,7 @@ const PostCard = ({ post }: PostCardProps) => {
           src={getFilePreview(post.imageId)}
           alt="post image"
           className="post-card_img" />
-      </Link>
+      </div>
 
       <PostStats post={post} userId={user.id}/>
 

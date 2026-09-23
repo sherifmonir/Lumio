@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { multiFormatDateString } from '@/lib/utils'
 import { useCreateComment, useDeleteComment } from '@/lib/react-query/queriesAndMutatuins'
+import { deleteComment as deleteCommentFromDB } from '@/lib/appwrite/api' 
 import CommentInput from './CommentInput'
 import type { ICommentWithAuthor } from '@/types'
-import ConfirmationModal from './ConfirmationModal'
+import ConfirmationModal from '../../ui/ConfirmationModal'
+import MentionText from '../mentions/MentionText'
 
 type CommentItemProps = {
   comment: ICommentWithAuthor
@@ -35,12 +37,12 @@ const CommentItem = ({ comment, postId, currentUserId, postOwnerId }: CommentIte
 
   const handleDeleteComment = () => {
     deleteComment(
-      { commentId: comment.$id, postId },
+      { commentId: comment.$id, postId, replyCount: comment.replies.length  },
       {
         onSuccess: () => {
           if (comment.replies.length > 0) {
             comment.replies.forEach((reply) => {
-            deleteComment({ commentId: reply.$id, postId })
+            deleteCommentFromDB(reply.$id)
             console.log("reply deleted")
             })
           }
@@ -74,7 +76,7 @@ const CommentItem = ({ comment, postId, currentUserId, postOwnerId }: CommentIte
             <Link to={`/profile/${comment.author.$id}`} className="font-semibold mr-1">
               {comment.author.name}
             </Link>
-            {comment.content}
+           <MentionText text={comment.content} />
           </p>
           <div className="flex gap-3 mt-1 text-xs text-light-3">
             <span>{multiFormatDateString(comment.$createdAt)}</span>
@@ -125,7 +127,7 @@ const CommentItem = ({ comment, postId, currentUserId, postOwnerId }: CommentIte
                     <Link to={`/profile/${reply.author.$id}`} className="font-semibold mr-1 cursor-pointer">
                       {reply.author.name}
                     </Link>
-                    {reply.content}
+                    <MentionText text={reply.content} />
                   </p>
                   <div className="flex gap-3 mt-1 text-xs text-light-3">
                     <span>{multiFormatDateString(reply.$createdAt)}</span>

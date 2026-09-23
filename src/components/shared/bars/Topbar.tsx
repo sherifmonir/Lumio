@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { useUserContext } from '@/context/UseUserContext'
 import { INITIAL_USER } from '@/context/AuthConstants'
 import { ClipLoader } from 'react-spinners'
-import NotificationBell from '@/components/shared/NotificationBell'
-import ConfirmationModal from './ConfirmationModal'
+import NotificationBell from '@/components/shared/notifications/NotificationBell'
+import ConfirmationModal from '@/components/ui/ConfirmationModal'
 
 const Topbar = () => {
   const { mutate: signout, isSuccess, isPending: isSigningOut   } = useSignoutAccount()

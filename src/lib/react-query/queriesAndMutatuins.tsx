@@ -1,8 +1,9 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, followUser, getComments, getCommentsCount, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, signinAccount, signoutAccount, subscribeToNotifications, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
-import type { ILike, INewPost, INewUser, IUpdatePost, IUpdateProfile } from '@/types'
+import { createComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, followUser, getComments, getCommentsCount, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, getUsersByUsernames, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, searchUsersByUsername, signinAccount, signoutAccount, subscribeToNotifications, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
+import type { ILike, INewPost, INewUser, IUpdatePost, IUpdateProfile, IUser } from '@/types'
 import { queryKeys } from './queryKeys'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
+import { extractMentions } from '../utils'
 
 
 export const useCreateUserAccount = () => {
@@ -199,6 +200,15 @@ export const useSearchUsers = (searchTerm: string) => {
     queryFn: () => searchUsers(searchTerm),
     enabled: !!searchTerm,
   });
+}
+
+
+export const useSearchUsersByUsername = (query?: string) => {
+  return useQuery({
+    queryKey: [queryKeys.SEARCH_USERS_BY_USERNAME, query],
+    queryFn: () => searchUsersByUsername(query!),
+    enabled: !!query,
+  })
 }
 
 
@@ -437,11 +447,12 @@ export const useCreateComment = () => {
 export const useDeleteComment = () => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (v: { commentId: string; postId: string }) => deleteComment(v.commentId),
+    mutationFn: (v: { commentId: string; postId: string; replyCount?: number }) => deleteComment(v.commentId),
     onSuccess: (_data, v) => {
+      const decrementBy = 1 + (v.replyCount ?? 0)
       queryClient.setQueryData(
         [queryKeys.GET_COMMENTS_COUNT, v.postId],
-        (old: number = 0) => Math.max(0, old - 1)
+        (old: number = 0) => Math.max(0, old - decrementBy)
       )
       queryClient.invalidateQueries({ queryKey: [queryKeys.GET_COMMENTS, v.postId] })
     },
@@ -466,4 +477,22 @@ export const useGetCommentsCount = (postId?: string) => {
     queryFn: () => getCommentsCount(postId!),
     enabled: !!postId,
   })
+}
+
+
+export const useResolveMentions = (text: string) => {
+  const usernames = useMemo(() => extractMentions(text), [text])
+  const cacheKey = useMemo(() => [...usernames].sort().join(','), [usernames])
+
+  const { data } = useQuery({
+    queryKey: [queryKeys.GET_USERS_BY_USERNAMES, cacheKey],
+    queryFn: () => getUsersByUsernames(usernames),
+    enabled: usernames.length > 0,
+  })
+
+  return useMemo(() => {
+    const map = new Map<string, IUser>()
+    data?.forEach((user) => { if (user.username) map.set(user.username, user) })
+    return map
+  }, [data])
 }

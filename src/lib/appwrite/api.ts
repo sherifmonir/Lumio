@@ -529,6 +529,22 @@ export async function searchUsers(searchTerm: string) {
 }
 
 
+export async function searchUsersByUsername(query: string) {
+  if (!query) return []
+  try {
+    const res = await databases.listDocuments<IUser>(
+      appwriteconfig.databaseId,
+      appwriteconfig.usersTableId,
+      [Query.startsWith('username', query), Query.limit(5)]
+    )
+    return res.documents
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
+
+
 export async function getInfiniteUsers({ pageParam }: {pageParam: number}) {
     const queries: string[] = [Query.orderDesc('$updatedAt'), Query.limit(10),Query.offset((pageParam - 1) * 10)]
 
@@ -696,8 +712,8 @@ export async function getLikedRelations(userId: string) {
   return res.documents
 }
 
-const LIKES_PAGE_SIZE = 12
 
+const LIKES_PAGE_SIZE = 12
 export async function getLikedPosts({ pageParam, userId }: { pageParam: number; userId: string }) {
   const likes = await databases.listDocuments<ILike>(
     appwriteconfig.databaseId, appwriteconfig.likesTableId,
@@ -718,9 +734,7 @@ export async function getLikedPosts({ pageParam, userId }: { pageParam: number; 
 }
 
 
-
 const NOTIFICATIONS_PAGE_SIZE = 15
-
 export async function getNotifications({
   pageParam,
   userId,
@@ -859,8 +873,8 @@ export async function getCommentsCount(postId: string) {
   return res.total
 }
 
-const COMMENTS_PAGE_SIZE = 10
 
+const COMMENTS_PAGE_SIZE = 10
 export async function getComments({ pageParam, postId }: { pageParam: number; postId: string }) {
   const topLevel = await databases.listDocuments<CommentRow>(
     appwriteconfig.databaseId,
@@ -910,4 +924,23 @@ export async function getComments({ pageParam, postId }: { pageParam: number; po
   }))
 
   return { comments, hasMore: topLevel.documents.length === COMMENTS_PAGE_SIZE }
+}
+
+
+
+
+
+export async function getUsersByUsernames(usernames: string[]) {
+  if (usernames.length === 0) return []
+  try {
+    const res = await databases.listDocuments<IUser>(
+      appwriteconfig.databaseId,
+      appwriteconfig.usersTableId,
+      [Query.equal('username', usernames)]
+    )
+    return res.documents
+  } catch (error) {
+    console.log(error)
+    return []
+  }
 }

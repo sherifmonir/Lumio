@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import type { IUser } from "@/types";
-import FollowButton from "./FollowButton";
+import FollowButton from "../FollowButton";
 
 type UserCardProps  = {
   user: IUser

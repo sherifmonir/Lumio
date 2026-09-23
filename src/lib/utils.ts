@@ -47,3 +47,15 @@ export const multiFormatDateString = (timestamp: string = ""): string => {
 export const checkIsLiked = (likeList: string[], userId: string) => {
   return likeList.includes(userId);
 };
+
+const MENTION_PATTERN = /(?<![\w.])(@[a-zA-Z0-9_.]+)/g
+
+export function extractMentions(text: string): string[] {
+  const matches = text.match(MENTION_PATTERN) ?? []
+  const usernames = matches.map((m) => m.slice(1))
+  return [...new Set(usernames)]
+}
+
+export function splitByMentions(text: string): string[] {
+  return text.split(MENTION_PATTERN)
+}

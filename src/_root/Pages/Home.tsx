@@ -1,4 +1,4 @@
-import PostCard from '@/components/shared/PostCard'
+import PostCard from '@/components/shared/posts/PostCard'
 import { useUserContext } from '@/context/UseUserContext'
 import {  useGetFollowingRelations, useGetRecentPosts } from '@/lib/react-query/queriesAndMutatuins'
 import { useMemo } from 'react'

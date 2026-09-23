@@ -1,4 +1,4 @@
-import GridPostList from "@/components/shared/GridPostList";
+import GridPostList from "@/components/shared/posts/GridPostList";
 import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutatuins"
 import type { ISave } from "@/types";
 import { useMemo } from "react";

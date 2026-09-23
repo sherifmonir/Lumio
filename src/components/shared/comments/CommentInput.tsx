@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useMentionAutocomplete } from '@/Hooks/useMentionAutocomplete'
+import MentionSuggestions from '../mentions/MentionSuggestions'
 
 type CommentInputProps = {
   onSubmit: (content: string) => void
@@ -10,6 +12,7 @@ type CommentInputProps = {
 
 const CommentInput = ({ onSubmit, isSubmitting, placeholder = "Add a comment...", onCancel, autoFocus }: CommentInputProps) => {
   const [value, setValue] = useState("")
+  const mention = useMentionAutocomplete(value, setValue)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -20,11 +23,14 @@ const CommentInput = ({ onSubmit, isSubmitting, placeholder = "Add a comment..."
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 items-center">
+    <form onSubmit={handleSubmit} className="relative flex gap-2 items-center">
       <input
+        ref={(input) => mention.setInputRef(input)}
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        onSelect={() => mention.trackCursor()}
+        onKeyUp={() => mention.trackCursor()}
         placeholder={placeholder}
         autoFocus={autoFocus}
         disabled={isSubmitting}
@@ -37,6 +43,9 @@ const CommentInput = ({ onSubmit, isSubmitting, placeholder = "Add a comment..."
         <button type="button" onClick={onCancel} className="text-light-3 text-sm cursor-pointer">
           Cancel
         </button>
+      )}
+      {mention.activeMention && (
+        <MentionSuggestions suggestions={mention.suggestions} onSelect={mention.selectMention} />
       )}
     </form>
   )

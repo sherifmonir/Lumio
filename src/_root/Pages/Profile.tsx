@@ -1,4 +1,4 @@
-import GridPostList from '@/components/shared/GridPostList';
+import GridPostList from '@/components/shared/posts/GridPostList';
 import { useUserContext } from '@/context/UseUserContext'
 import { useGetFollowersCount, useGetFollowingCount, useGetUserById } from '@/lib/react-query/queriesAndMutatuins'
 import { Link, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom'

@@ -6,14 +6,48 @@ import FileUploader from "../shared/FileUploader"
 import type { IPost } from "@/types"
 import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutatuins"
 import { useNavigate } from "react-router-dom"
-import { useToast } from "../ui/sonner"
+import { useToast } from "../ui/Toast"
 import { useUserContext } from "@/context/UseUserContext"
 import { ClipLoader } from "react-spinners"
+import type { ControllerRenderProps } from "react-hook-form"
+import { useMentionAutocomplete } from "@/Hooks/useMentionAutocomplete"
+import MentionSuggestions from "../shared/mentions/MentionSuggestions"
 
 
 type PostFormProps = {
     post?: IPost
     action: "Create" | "Update"
+}
+
+type CaptionFieldProps = {
+  field: ControllerRenderProps<z.infer<typeof postValidation>, "caption">
+}
+
+const CaptionField = ({ field }: CaptionFieldProps) => {
+  const mention = useMentionAutocomplete(field.value, field.onChange)
+
+  return (
+    <div className="field relative">
+      <label htmlFor="form-rhf-input-caption" className="form-label">
+        Caption
+      </label>
+      <textarea
+        id="form-rhf-input-caption"
+        className="Create-Post-textarea"
+        {...field}
+        ref={(el) => {
+          field.ref(el)
+          mention.setInputRef(el)
+        }}
+        onSelect={mention.trackCursor}
+        onKeyUp={mention.trackCursor}
+        placeholder="Add you post here."
+      />
+      {mention.activeMention && (
+        <MentionSuggestions suggestions={mention.suggestions} onSelect={mention.selectMention} />
+      )}
+    </div>
+  )
 }
 
 
@@ -80,21 +114,7 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
             <Controller
                 name="caption"
                 control={form.control}
-                render={({ field }) => (
-
-                <div className="field" >
-                  <label htmlFor="form-rhf-input-caption" className="form-label">
-                    Caption
-                  </label>
-                  <textarea 
-                  id="form-rhf-input-caption"
-                    className="Create-Post-textarea"
-                    {...field}
-                    placeholder="Add you post here."                    
-                  />
-                </div>
-
-                  )}
+                render={({ field }) => <CaptionField field={field} />}
             />
 
 

@@ -5,7 +5,7 @@ import { barLinks } from "@/constants";
 import { useEffect, useState } from "react";
 import type { INavLink } from "@/types";
 import { INITIAL_USER } from "@/context/AuthConstants";
-import ConfirmationModal from "./ConfirmationModal";
+import ConfirmationModal from "@/components/ui/ConfirmationModal";
 
 const LeftSideBar = () => {
     const { mutate: signout, isSuccess, isPending: isSigningOut   } = useSignoutAccount()

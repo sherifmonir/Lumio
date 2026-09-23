@@ -20,6 +20,8 @@ export const queryKeys = {
 
   //  SEARCH KEYS
   SEARCH_POSTS: "getSearchPosts",
+  SEARCH_USERS_BY_USERNAME: "searchUsersByUsername",
+  GET_USERS_BY_USERNAMES:"getUsersByUsernames",
 
   // FOLLOW KEYS
   GET_IS_FOLLOWING: "getIsFollowing",
