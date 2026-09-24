@@ -24,7 +24,7 @@ const CommentSection = ({ postId, currentUserId, postOwnerId }: CommentSectionPr
 
       {isPending ? (
         <div className="flex justify-center py-4">
-          <ClipLoader />
+          <ClipLoader size={15} />
         </div>
       ) : comments.length === 0 ? (
         <p className="text-light-3 text-sm text-center py-4">No comments yet</p>

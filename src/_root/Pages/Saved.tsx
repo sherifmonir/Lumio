@@ -32,7 +32,7 @@ import { ClipLoader } from "react-spinners";
       </div>
 
       {!currentUser ? (
-        <ClipLoader />
+        <ClipLoader size={15} />
       ) : (
         <ul className="w-full flex justify-center max-w-5xl gap-9">
           {savePosts.length === 0 ? (

@@ -45,7 +45,7 @@ const Explore = () => {
   if(!posts) {
     return (
       <div className="flex-center w-full h-full">
-        <ClipLoader />
+        <ClipLoader size={15} />
       </div>
     )
   }
@@ -102,7 +102,7 @@ const Explore = () => {
       </div>
       {hasNextPage && !searchValue && (
         <div ref={ref} className="mt-10">
-          <ClipLoader />
+          <ClipLoader size={15} />
         </div>
       )}
     </div>

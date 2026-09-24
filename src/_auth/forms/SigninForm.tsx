@@ -124,7 +124,7 @@ const SigninForm = () => {
             <button className="form-bottom" type="submit">
               { isSigningInUser ?
             (
-              <div className="flex-center gap-2 "><ClipLoader /> Loading ...</div>
+              <div className="flex-center gap-2 "><ClipLoader size={15} /> Loading ...</div>
             ):"Sign in"}</button>
             
             

@@ -16,7 +16,7 @@ const MentionSuggestions = ({ suggestions, onSelect }: MentionSuggestionsProps) 
           type="button"
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => onSelect(suggestedUser.username!)}
-          className="flex items-center gap-2 w-full px-3 py-2 text-left hover:bg-dark-4"
+          className="flex items-center gap-2 w-full px-3 py-2 text-left hover:bg-dark-4 cursor-pointer"
         >
           <img src={suggestedUser.imageUrl} alt={suggestedUser.name} className="w-6 h-6 rounded-full object-cover" />
           <span className="text-sm text-white">{suggestedUser.name}</span>

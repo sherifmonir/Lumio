@@ -32,7 +32,7 @@ const Topbar = () => {
 
         {isLoading  ? (
           <div className="h-14 bg-amber-100">
-            <ClipLoader />
+            <ClipLoader size={15} />
           </div>
         ):(
           <Link to={`/profile/${user.id}`} className="absolute left-3 lg:left-8">

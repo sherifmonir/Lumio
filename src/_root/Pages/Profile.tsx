@@ -39,7 +39,7 @@ const Profile = () => {
   if (!currentUser)
     return (
       <div className="flex-center w-full h-full">
-        <ClipLoader />
+        <ClipLoader size={15} />
       </div>
     )
 

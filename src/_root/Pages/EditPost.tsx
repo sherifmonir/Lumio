@@ -9,7 +9,7 @@ const EditePost = () => {
   const { id } = useParams()
   const {data: post, isPending } = useGetPostById(id || '')
 
-  if(isPending) return <ClipLoader />
+  if(isPending) return <ClipLoader size={15} />
 
   return (
     <div className="flex flex-1">

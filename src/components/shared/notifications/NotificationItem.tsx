@@ -11,6 +11,7 @@ const MESSAGES: Record<INotificationWithActor["type"], string> = {
   like: "liked your post",
   comment: "commented on your post",
   reply: "replied to your comment",
+  mention: "mentioned you in a post"
 };
 
 const NotificationItem = ({ notification }: NotificationItemProps) => {
@@ -23,7 +24,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
     <Link to={linkTo} className="flex items-center gap-3 px-4 py-3 hover:bg-dark-3 transition-colors">
       <img src={actor.imageUrl} alt={actor.name} className="w-10 h-10 rounded-full object-cover" />
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-white truncate">
+        <p className="text-sm text-white line-clamp-2">
           <span className="font-semibold">{actor.name}</span> {MESSAGES[type]}
         </p>
         <p className="text-xs text-light-3">{multiFormatDateString($createdAt)}</p>

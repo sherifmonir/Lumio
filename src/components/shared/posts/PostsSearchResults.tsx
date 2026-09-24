@@ -9,7 +9,7 @@ type PostsSearchResultsProps = {
 
 const PostsSearchResults = ({ isSearchFetching, searchedPosts }:PostsSearchResultsProps) => {
   if (isSearchFetching) {
-    return <ClipLoader />
+    return <ClipLoader size={15} />
   } else if (searchedPosts?.documents.length > 0) {
     return <GridPostList posts={searchedPosts.documents} />
   } else {

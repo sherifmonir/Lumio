@@ -29,7 +29,7 @@ const LikedPosts = () => {
       <GridPostList posts={likedPosts} showUser={false} showStats={false} />
       {hasNextPage && (
         <div ref={ref} className="mt-10 flex justify-center w-full">
-          <ClipLoader />
+          <ClipLoader size={15} />
         </div>
       )}
     </div>

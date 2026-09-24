@@ -196,7 +196,7 @@ const SignupForm = () => {
             (
               <div className="flex-center gap-2">
                 <div className="h-14">
-                  <ClipLoader />
+                  <ClipLoader size={15} />
                 </div>
                  <p>Loading ...</p>
               </div>

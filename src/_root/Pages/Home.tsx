@@ -31,7 +31,7 @@ const Home = () => {
           Home Feed
         </h2>
         {isPostLoading && !posts ?(
-          <ClipLoader />
+          <ClipLoader size={15} />
         ):(
         <ul className="flex flex-col flex-1 w-full">
           {postsMemo?.map((post) =>(

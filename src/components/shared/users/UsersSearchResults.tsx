@@ -9,7 +9,7 @@ type UsersSearchResultsProps = {
 
 const UsersSearchResults = ({ isSearchFetching, searchedUsers }:UsersSearchResultsProps) => {
   if (isSearchFetching) {
-    return <ClipLoader />
+    return <ClipLoader size={15} />
   } else if (searchedUsers?.documents.length > 0) {
     return (
 

@@ -30,7 +30,7 @@ const NotificationsPanel = ({ userId, isOpen }: NotificationsPanelProps) => {
 
       {isLoading ? (
         <div className="flex justify-center py-6">
-          <ClipLoader />
+          <ClipLoader size={15} />
         </div>
       ) : notifications.length === 0 ? (
         <p className="text-light-3 text-sm text-center py-6">No notifications yet</p>

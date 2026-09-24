@@ -114,7 +114,7 @@ export interface ILike extends Models.Document {
 }
 
 export interface INotification extends Models.Document {
-  type: "follow" | "like" | "comment" | "reply";
+  type: "follow" | "like" | "comment" | "reply" | "mention";
   recipientId: string;
   actorId: string;
   postId: string | null;

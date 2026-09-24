@@ -39,7 +39,7 @@ const FollowList = () => {
       ))}
       {hasNextPage &&
         <div ref={ref} className="mt-4 flex justify-center w-full">
-            <ClipLoader />
+            <ClipLoader size={15} />
         </div>}
     </ul>
   )
