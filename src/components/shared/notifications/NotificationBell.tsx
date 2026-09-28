@@ -33,7 +33,7 @@ const NotificationBell = () => {
         <img
           src="/assets/icons/notification.svg"
           alt="notifications"
-          className=" w-14 h-14 cursor-pointer"
+          className=" w-20 h-20 cursor-pointer"
         />
         {!!unreadCount && (
           <span className="absolute top-4 right-4 bg-red-500 text-white text-[10px] font-bold leading-none rounded-full min-w-4 h-4 flex items-center justify-center px-1 border border-dark-2 pointer-events-none">

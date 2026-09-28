@@ -1,4 +1,4 @@
-import type { CommentRow, IComment, ICommentWithAuthor, IFollow, ILike, INewPost, INewUser, INotification, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
+import type { CommentRow, IBugReport, IComment, ICommentWithAuthor, IFollow, ILike, INewPost, INewUser, INotification, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
 import {  Channel, ID, Permission, Query, Realtime, Role } from "appwrite";
 import { account, appwriteconfig, avatars, client, databases, storage } from "./config";
 
@@ -927,9 +927,6 @@ export async function getComments({ pageParam, postId }: { pageParam: number; po
 }
 
 
-
-
-
 export async function getUsersByUsernames(usernames: string[]) {
   if (usernames.length === 0) return []
   try {
@@ -943,4 +940,30 @@ export async function getUsersByUsernames(usernames: string[]) {
     console.log(error)
     return []
   }
+}
+
+
+export async function createBugReport({
+  reporterId,
+  description,
+  pagePath,
+  userAgent,
+}: {
+  reporterId: string
+  description: string
+  pagePath?: string
+  userAgent?: string
+}) {
+  return databases.createDocument<IBugReport>(
+    appwriteconfig.databaseId,
+    appwriteconfig.bugReportsTableId,
+    ID.unique(),
+    {
+      reporterId,
+      description,
+      pagePath: pagePath ?? null,
+      userAgent: userAgent ?? null,
+    },
+    [] 
+  )
 }

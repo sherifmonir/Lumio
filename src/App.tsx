@@ -11,6 +11,7 @@ import Saved from './_root/Pages/Saved'
 import Profile from './_root/Pages/Profile'
 import People from './_root/Pages/People'
 import FollowList from './_root/Pages/FollowList'
+import MenuBar from './components/shared/bars/MenuBar'
 
 const RouteWrapper = RoutLayout as ComponentType
 const UpdateProfileFormWrapper = UpdateProfile as ComponentType
@@ -37,6 +38,7 @@ const App = () => {
           <Route path="/profile/:id/*" element={<Profile />} />
           <Route path="/profile/:id/followers" element={<FollowList />} />
           <Route path="/profile/:id/following" element={<FollowList />} />
+          <Route path="/menu" element={<MenuBar />} />
 
           <Route path="/LikedPosts" element={<LikedPosts />} />
         </Route>

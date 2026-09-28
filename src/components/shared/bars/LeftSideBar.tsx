@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useUserContext } from "@/context/UseUserContext";
 import { useSignoutAccount } from "@/lib/react-query/queriesAndMutatuins";
-import { barLinks } from "@/constants";
+import {  leftsideBarLinks } from "@/constants";
 import { useEffect, useState } from "react";
 import type { INavLink } from "@/types";
 import { INITIAL_USER } from "@/context/AuthConstants";
@@ -31,7 +31,7 @@ const LeftSideBar = () => {
         <nav className="flex flex-col m-auto   w-30 h-80">
 
         
-          {barLinks.map((link: INavLink) => {
+          {leftsideBarLinks.map((link: INavLink) => {
             const isActive = pathname === link.route;
 
             const handleClick = (e: React.MouseEvent) => {

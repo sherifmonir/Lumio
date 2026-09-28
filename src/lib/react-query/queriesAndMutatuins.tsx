@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, followUser, getComments, getCommentsCount, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, getUsersByUsernames, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, searchUsersByUsername, signinAccount, signoutAccount, subscribeToNotifications, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
+import { createBugReport, createComment, createPost, createUserAccount, deleteComment, deletePost, deleteSavedPost, followUser, getComments, getCommentsCount, getCurrentUser, getFollowers, getFollowersCount, getFollowing, getFollowingCount, getFollowingRelations, getInfinitePosts, getInfiniteUsers, getLikedPosts, getLikedRelations, getLikesCount, getNotifications, getPostById, getRecentPost, getUnreadNotificationsCount, getUserById, getUsersByUsernames, likePost, markAllNotificationsAsRead, savePost, saveUserToDB, searchPosts, searchUsers, searchUsersByUsername, signinAccount, signoutAccount, subscribeToNotifications, unfollowUser, unlikePost, updatePost, updateProfile } from '../appwrite/api'
 import type { ILike, INewPost, INewUser, IUpdatePost, IUpdateProfile, IUser } from '@/types'
 import { queryKeys } from './queryKeys'
 import { useEffect, useMemo } from 'react'
@@ -495,4 +495,12 @@ export const useResolveMentions = (text: string) => {
     data?.forEach((user) => { if (user.username) map.set(user.username, user) })
     return map
   }, [data])
+}
+
+
+export const useCreateBugReport = () => {
+  return useMutation({
+    mutationFn: (v: { reporterId: string; description: string; pagePath?: string; userAgent?: string }) =>
+      createBugReport(v),
+  })
 }

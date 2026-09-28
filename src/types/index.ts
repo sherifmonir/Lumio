@@ -143,3 +143,10 @@ export type CommentRow = Models.Document & {
   content: string
   parentCommentId: string | null
 }
+
+export interface IBugReport extends Models.Document {
+  reporterId: string;
+  description: string;
+  pagePath: string | null;
+  userAgent: string | null;
+}

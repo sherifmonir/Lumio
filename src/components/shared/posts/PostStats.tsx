@@ -109,7 +109,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             </Link>
 
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 ml-3">
             <img
                 src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
                 alt="save"

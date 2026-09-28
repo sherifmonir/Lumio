@@ -303,6 +303,9 @@
 @utility bottom-bar {
   @apply lg:hidden z-50 flex-between w-full fixed bottom-0 bg-dark-2 h-12 px-5 py-4 transition;
 }
+@utility menu-bar {
+  @apply lg:hidden z-49 flex-between w-1/2 fixed bottom-0 bg-dark-2 h-full px-5 py-4 transition;
+}
 
 /* File uploader */
 @utility file-uploader-img {

@@ -29,6 +29,10 @@ export const postValidation = z.object({
   tags: z.string()
 })
 
+export const bugReportValidation = z.object({
+  description: z.string().min(10, "Please describe the issue in a bit more detail"),
+})
+
 export const profileValidation = z.object({
   name: z
     .string()
