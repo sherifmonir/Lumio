@@ -185,7 +185,7 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
               {(isSubmitting) && <ClipLoader size={15}/>}
               {action}
 
-              <span className="ml-2"> Post </span>
+              <span className="ml-2">  Post </span>
 
             </button>
 

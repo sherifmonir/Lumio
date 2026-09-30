@@ -21,7 +21,7 @@ const EditePost = () => {
             height={36}
             alt="add"
             />
-            <h2 className="h3-bold md:h2-bold text-left w-full">
+            <h2 className="h3-bold md:h2-bold text-left w-full ml-1">
               Edite Post
             </h2>
         </div>

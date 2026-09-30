@@ -14,6 +14,7 @@ import { ClipLoader } from "react-spinners";
     const savePosts = useMemo(() => {
   if (!savedPosts) return []
   return [...savedPosts]
+    .filter((savePost: ISave) => !!savePost.post)
     .sort((a: ISave, b: ISave) => new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime())
     .map((savePost: ISave) => ({ ...savePost.post }))
 }, [savedPosts])

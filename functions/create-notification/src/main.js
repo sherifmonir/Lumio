@@ -79,6 +79,30 @@ export default async ({ req, res, log, error }) => {
     }
 
     if (event.includes(`.tables.${POSTS_COLLECTION_ID}.rows.`)) {
+       if (event.endsWith('.delete')) {
+    // Cleanup only — a deleted post never generates notifications.
+    const [genuineLikes, relatedNotifications] = await Promise.all([
+      databases.listDocuments(DATABASE_ID, LIKES_COLLECTION_ID, [
+        Query.equal('postId', postId),
+        Query.isNull('content'),
+      ]),
+      databases.listDocuments(DATABASE_ID, NOTIFICATIONS_COLLECTION_ID, [
+        Query.equal('postId', postId),
+      ]),
+    ]);
+
+    await Promise.all([
+      ...genuineLikes.documents.map((like) =>
+        databases.deleteDocument(DATABASE_ID, LIKES_COLLECTION_ID, like.$id)
+      ),
+      ...relatedNotifications.documents.map((notif) =>
+        databases.deleteDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION_ID, notif.$id)
+      ),
+    ]);
+
+    log(`Cleaned up ${genuineLikes.documents.length} likes and ${relatedNotifications.documents.length} notifications for deleted post ${postId}`);
+    return [];
+  }
       const actorId = payload.creator?.$id;
       const postId = payload.$id;
       return extractMentionNotifications(payload.caption ?? '', actorId, postId);

@@ -336,28 +336,39 @@ export async function updatePost(post: IUpdatePost) {
 
 
 export async function deletePost(postId: string, imageId: string) {
-    if(!postId || !imageId) throw Error
+    if (!postId || !imageId) throw Error("postId and imageId are required")
 
     try {
-        await databases.deleteDocument(
-            appwriteconfig.databaseId,
-            appwriteconfig.postsTableId,
-            postId,
-        )
+        const [orphanedSaves, orphanedComments] = await Promise.all([
+            databases.listDocuments(appwriteconfig.databaseId, appwriteconfig.savesTableId, [
+                Query.equal('post', postId)
+            ]),
+            databases.listDocuments(appwriteconfig.databaseId, appwriteconfig.likesTableId, [
+                Query.equal('postId', postId),
+                Query.isNotNull('content'),
+            ]),
+        ])
+
+        await Promise.all([
+            ...orphanedSaves.documents.map((save) =>
+                databases.deleteDocument(appwriteconfig.databaseId, appwriteconfig.savesTableId, save.$id)
+            ),
+            ...orphanedComments.documents.map((comment) =>
+                databases.deleteDocument(appwriteconfig.databaseId, appwriteconfig.likesTableId, comment.$id)
+            ),
+        ])
+
+        await databases.deleteDocument(appwriteconfig.databaseId, appwriteconfig.postsTableId, postId)
 
         if (imageId) {
-            await storage.deleteFile(
-                appwriteconfig.bucketId,
-                imageId
-            )}
+            await storage.deleteFile(appwriteconfig.bucketId, imageId)
+        }
 
         return { status: 'ok' }
-
-    } catch(error) {
+    } catch (error) {
         console.log(error)
         throw error
     }
-
 }
 
 
@@ -485,7 +496,6 @@ export async function updateProfile(profile: IUpdateProfile) {
         console.log(error)
     }
 }
-
 
 
 export async function getUsers(limit?: number) {

@@ -60,7 +60,8 @@
             "events": [
                 "databases.6a27ca0b0011cdc4840d.tables.follows.rows.*.create",
                 "databases.6a27ca0b0011cdc4840d.tables.likes.rows.*.create",
-                "databases.6a27ca0b0011cdc4840d.tables.posts.rows.*.create"
+                "databases.6a27ca0b0011cdc4840d.tables.posts.rows.*.create",
+                "databases.6a27ca0b0011cdc4840d.tables.posts.rows.*.delete"
             ],
             "schedule": "",
             "timeout": 15,

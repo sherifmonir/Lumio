@@ -54,43 +54,43 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
       <div className={`absolute left-0 top-0 h-full w-[90%] max-w-sm bg-dark-2 transition-transform duration-300 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}>
-        <div className="flex flex-col h-full gap-5 p-6">
+        <div className="flex flex-col items-start h-full gap-5 p-6 ">
           {isLoading ? (
-            <div className="h-14"><ClipLoader size={15} /></div>
+            <div className="h-14 "><ClipLoader size={15} /></div>
           ) : (
-            <Link to={`/profile/${user.id}`} onClick={onClose} className="flex gap-2">
+            <Link to={`/profile/${user.id}`} onClick={onClose} className="flex gap-4 mb-8 cursor-pointer">
               <img src={currentUser?.imageUrl || user.imageUrl} alt="profile" className="rounded-full w-12 h-12" />
               <div className="flex flex-col justify-start items-start">
-                <p className="font-bold text-[16px]">{user.name}</p>
-                <p className="text-[12px]">@{user.username}</p>
+                <p className="font-bold text-[16px] text-amber-50">{user.name}</p>
+                <p className="text-[12px] text-amber-50">@{user.username}</p>
               </div>
             </Link>
           )}
 
-          <Link to="/saved" onClick={onClose} className="text-primary-500 flex-center gap-2">
-            <img src="/assets/icons/bookmark.svg" alt="saved" className="size-8" />
+          <Link to="/saved" onClick={onClose} className="text-primary-500 flex items-center justify-start gap-2 ">   
+            <img src="/assets/icons/bookmark.svg" alt="saved" className="h-8 w-8" />
             <p className="text-amber-50">Saved</p>
           </Link>
 
-          <div className="flex report-bug flex-center gap-2">
+          <div className="flex items-center justify-start  gap-2">
              <button 
             type="button" 
             onClick={() => setIsBugReportModalOpen(true)} 
-            className="flex report-bug flex-center gap-2 cursor-pointer text-left w-full"
+            className="flex items-center justify-start gap-2 cursor-pointer text-left w-full"
           >
-            <img src="/assets/icons/bug-report.svg" alt="report a bug" className="size-8" />
+            <img src="/assets/icons/report-bug.svg" alt="report a bug" className="h-8 w-8" />
             <p className="text-amber-50">report a bug</p>
           </button>
           </div>
 
-          <div className="flex dark-mode flex-center gap-2">
-            <img src="/assets/icons/dark-mode.svg" alt="change mode" className="size-8" />
+          <div className="flex items-center justify-start gap-2 cursor-pointer">
+            <img src="/assets/icons/dark-mode.svg" alt="change mode" className="h-8 w-8" />
             <p className="text-amber-50">dark mode</p>
           </div>
 
-          <div className="logout cursor-pointer">
-            <button type="button" className="flex flex-center gap-2 w-full h-full" onClick={() => setIsSignoutModalOpen(true)}>
-              <img src="/assets/icons/logout.svg" alt="logout" className="cursor-pointer size-8" />
+          <div>
+            <button type="button" className="flex items-center justify-start gap-2 cursor-pointer" onClick={() => setIsSignoutModalOpen(true)}>
+              <img src="/assets/icons/logout.svg" alt="logout" className="h-8 w-8" />
               <p className="text-amber-50">Log Out</p>
             </button>
             <ConfirmationModal
