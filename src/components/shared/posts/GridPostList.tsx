@@ -15,13 +15,17 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPost
   const { user } = useUserContext()
   return (
     <ul className="post-grid-container">
-      {posts.map((post) => (
+      {posts.map((post, index) => {
+        const isFirstPost = index === 0
+        return (
         <li key={post.$id} className="relative gap-4  w-80  h-80 ">
           <Link to={`/post/${post.$id}`} className="grid-post-link">
             <img
               src={getFilePreview(post.imageId)}
               alt="post"
-              className="h-full w-full object-cover"
+              loading={isFirstPost ? "eager" : "lazy"}
+              fetchPriority={isFirstPost ? "high" : "auto"}
+              className="h-auto w-full object-cover aspect-video"
             />
           </Link>
 
@@ -40,7 +44,8 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPost
             {showStats && <PostStats post={post} userId={user.id} />}
           </div>
         </li>
-      ))}
+        )
+      })}
     </ul>
   )
 }

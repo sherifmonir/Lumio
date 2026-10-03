@@ -143,6 +143,9 @@ export const useDeletePost = () => {
             queryClient.invalidateQueries({
                 queryKey: [queryKeys.GET_RECENT_POSTS]
             })
+            queryClient.invalidateQueries({
+                queryKey: [queryKeys.GET_CURRENT_USER]
+            })
         }
     })
 }

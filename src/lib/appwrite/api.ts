@@ -1,5 +1,5 @@
 import type { CommentRow, IBugReport, IComment, ICommentWithAuthor, IFollow, ILike, INewPost, INewUser, INotification, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
-import {  Channel, ID, Permission, Query, Realtime, Role } from "appwrite";
+import {  Channel, ID, ImageGravity, Permission, Query, Realtime, Role } from "appwrite";
 import { account, appwriteconfig, avatars, client, databases, storage } from "./config";
 
 
@@ -175,22 +175,18 @@ export async function uploadFile(file: File){
 
 
 export function getFilePreview(fileId: string) {
-      
-
     try {
-        const fileUrl = storage.getFileView({
-            bucketId: appwriteconfig.bucketId,
-            fileId: fileId
-        })
-            
+        const fileUrl = storage.getFileView(
+            appwriteconfig.bucketId,
+            fileId,
+            800,0,ImageGravity.Center, 80, 0,"", 0,1,0,"","webp"
+        );
 
-        if (!fileUrl) throw Error
+        if (!fileUrl) throw new Error("File preview could not be generated");
 
-        return fileUrl
-
-    }catch (error){
-        console.log(error)
-   
+        return fileUrl;
+    } catch (error) {
+        console.log(error);
     }
 }
 

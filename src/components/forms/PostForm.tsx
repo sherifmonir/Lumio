@@ -182,10 +182,10 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
               className="form-bottom"
               disabled={isSubmitting}>
 
-              {(isSubmitting) && <ClipLoader size={15}/>}
+              {(isSubmitting) && <ClipLoader size={15} className="mr-1"/>}
               {action}
 
-              <span className="ml-2">  Post </span>
+              <span className="ml-2"> Post </span>
 
             </button>
 

@@ -9,9 +9,10 @@ import MentionText from '../mentions/MentionText';
 
 type PostCardProps = {
   post: IPost
+  isFirst: boolean
 };
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post, isFirst = false }: PostCardProps) => {
   const { user } = useUserContext()
   const navigate = useNavigate()
 
@@ -69,6 +70,8 @@ const PostCard = ({ post }: PostCardProps) => {
         <img
           src={getFilePreview(post.imageId)}
           alt="post image"
+          loading={isFirst ? "eager" : "lazy"}
+          fetchPriority={isFirst ? "high" : "auto"}
           className="post-card_img" />
       </div>
 

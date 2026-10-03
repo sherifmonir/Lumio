@@ -51,7 +51,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     }`}>
       <div className="absolute inset-0 bg-black/70" onClick={onClose} />
 
-      <div className={`absolute left-0 top-0 h-full w-[90%] max-w-sm bg-dark-2 transition-transform duration-300 ${
+      <div className={`absolute left-0 top-0 h-full w-[70%] max-w-sm bg-dark-2 transition-transform duration-300 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}>
         <div className="flex flex-col items-start h-full gap-5 p-6 ">
@@ -79,13 +79,13 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             className="flex items-center justify-start gap-2 cursor-pointer text-left w-full"
           >
             <img src="/assets/icons/report-bug.svg" alt="report a bug" className="h-8 w-8" />
-            <p className="text-amber-50">report a bug</p>
+            <p className="text-amber-50">Report a Bug</p>
           </button>
           </div>
 
           <div className="flex items-center justify-start gap-2 cursor-pointer">
             <img src="/assets/icons/dark-mode.svg" alt="change mode" className="h-8 w-8" />
-            <p className="text-amber-50">dark mode</p>
+            <p className="text-amber-50">Dark Mode</p>
           </div>
 
           <div>
