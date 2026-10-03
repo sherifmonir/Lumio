@@ -7,6 +7,7 @@ import { INITIAL_USER } from '@/context/AuthConstants'
 import { ClipLoader } from 'react-spinners'
 import ConfirmationModal from '@/components/ui/ConfirmationModal'
 import BugReportModal from '@/components/ui/BugReportModal'
+import { useThemeContext } from "@/context/UseThemeContext";
 
 type MobileMenuProps = {
   isOpen: boolean
@@ -19,6 +20,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const { data: currentUser } = useGetUserById(user.id)
   const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false)
   const [isBugReportModalOpen, setIsBugReportModalOpen] = useState(false) 
+  const { theme, toggleTheme } = useThemeContext()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -51,10 +53,10 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     }`}>
       <div className="absolute inset-0 bg-black/70" onClick={onClose} />
 
-      <div className={`absolute left-0 top-0 h-full w-[90%] max-w-sm bg-dark-2 transition-transform duration-300 ${
+      <div className={`absolute left-0 top-0 h-full w-[70%] max-w-sm bg-dark-2 transition-transform duration-300 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}>
-        <div className="flex flex-col items-start h-full gap-5 p-6 ">
+        <div className="flex flex-col items-start h-full gap-8 p-6 ">
           {isLoading ? (
             <div className="h-14 "><ClipLoader size={15} /></div>
           ) : (
@@ -67,29 +69,36 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             </Link>
           )}
 
-          <Link to="/saved" onClick={onClose} className="text-primary-500 flex items-center justify-start gap-2 ">   
+          <Link to="/saved" onClick={onClose} className=" flex items-center justify-start gap-2 ">   
             <img src="/assets/icons/bookmark.svg" alt="saved" className="h-8 w-8" />
             <p className="text-amber-50">Saved</p>
           </Link>
 
-          <div className="flex items-center justify-start  gap-2">
+          <div className="gap-2">
              <button 
             type="button" 
             onClick={() => setIsBugReportModalOpen(true)} 
-            className="flex items-center justify-start gap-2 cursor-pointer text-left w-full"
+            className="flex items-center gap-2 cursor-pointer"
           >
             <img src="/assets/icons/report-bug.svg" alt="report a bug" className="h-8 w-8" />
-            <p className="text-amber-50">report a bug</p>
+            <p className="text-amber-50">Report a Bug</p>
           </button>
           </div>
 
-          <div className="flex items-center justify-start gap-2 cursor-pointer">
-            <img src="/assets/icons/dark-mode.svg" alt="change mode" className="h-8 w-8" />
-            <p className="text-amber-50">dark mode</p>
+          <div className="gap-2">
+            <button type="button" className="flex items-center gap-2 cursor-pointer"
+              onClick={toggleTheme}>
+                  <img 
+                  src="/assets/icons/dark-mode.svg"
+                  alt="toggle theme"
+                  className="h-8 w-8"
+                  />
+                  <p className="text-[1rem] text-white ">{theme === "dark" ? "Light mode" : "Dark mode"}</p>
+              </button>
           </div>
 
-          <div>
-            <button type="button" className="flex items-center justify-start gap-2 cursor-pointer" onClick={() => setIsSignoutModalOpen(true)}>
+          <div className="gap-2">
+            <button type="button" className="flex items-center gap-2 cursor-pointer" onClick={() => setIsSignoutModalOpen(true)}>
               <img src="/assets/icons/logout.svg" alt="logout" className="h-8 w-8" />
               <p className="text-amber-50">Log Out</p>
             </button>

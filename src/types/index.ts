@@ -150,3 +150,10 @@ export interface IBugReport extends Models.Document {
   pagePath: string | null;
   userAgent: string | null;
 }
+
+export type Theme = "dark" | "light" 
+
+export type ThemeContextType = {
+  theme: Theme
+  toggleTheme: () => void
+}

@@ -34,9 +34,9 @@ const Home = () => {
           <ClipLoader size={15} />
         ):(
         <ul className="flex flex-col flex-1 w-full">
-          {postsMemo?.map((post) =>(
+          {postsMemo?.map((post, index) =>(
             <li key={post.$id} >
-            <PostCard  post={post} />
+            <PostCard  post={post} isFirst={index === 0} />
             </li>
           ))}
         </ul>

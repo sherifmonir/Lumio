@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import type { INavLink } from "@/types";
 import { INITIAL_USER } from "@/context/AuthConstants";
 import ConfirmationModal from "@/components/ui/ConfirmationModal";
+import { useThemeContext } from "@/context/UseThemeContext";
 
 const LeftSideBar = () => {
     const { mutate: signout, isSuccess, isPending: isSigningOut   } = useSignoutAccount()
   const navigate = useNavigate()
   const { setUser, setIsAuthenticated } = useUserContext()
+  const { theme, toggleTheme } = useThemeContext()
   const { pathname } = useLocation();
   const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false)
 
@@ -28,7 +30,7 @@ const LeftSideBar = () => {
   return (
     <aside className="leftsidebar">
 
-        <nav className="flex flex-col m-auto   w-30 h-80">
+        <nav className="flex flex-col justify-center m-auto w-30 h-80">
 
         
           {leftsideBarLinks.map((link: INavLink) => {
@@ -65,15 +67,29 @@ const LeftSideBar = () => {
           })}
           
         </nav>
-      
+
+
+    <div className="flex pl-2 flex-col m-auto w-40 h-30 ">
+      <button type="button" className="flex gap-2 mb-5 cursor-pointer"
+      onClick={toggleTheme}>
+          <img 
+          src="/assets/icons/dark-mode.svg"
+          alt="toggle theme"
+          className="h-8 w-8"
+          />
+          <p className="text-[1rem] text-white">{theme === "dark" ? "Light mode" : "Dark mode"}</p>
+      </button>
+
       <button type="button" className="flex gap-2 mb-5 cursor-pointer"
        onClick={() => setIsSignoutModalOpen(true)}>
             <img 
             src="/assets/icons/logout.svg"
             alt="logout"
+            className="h-8 w-8"
             />
             <p className="text-[1rem] text-white ">Log out</p>
       </button>
+    </div>
       <ConfirmationModal
           loadingLabel="Signing Out"
           isOpen={isSignoutModalOpen}
