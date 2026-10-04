@@ -95,6 +95,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                   />
                   <p className="text-[1rem] text-white ">{theme === "dark" ? "Light mode" : "Dark mode"}</p>
               </button>
+
           </div>
 
           <div className="gap-2">
