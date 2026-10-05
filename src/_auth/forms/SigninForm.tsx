@@ -63,7 +63,7 @@ const SigninForm = () => {
 
       
   <>
-        <form className="flex flex-col w-60   rounded-md bg-dark-4 p-3" onSubmit={form.handleSubmit(onSubmit)} >
+        <form className="flex flex-col w-60   rounded-md bg-background text-foreground p-3" onSubmit={form.handleSubmit(onSubmit)} >
           <header>
             <h1 className="text-[1rem] font-bold text-light-2  px-1" >Login to your account</h1>
           </header>    

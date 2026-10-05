@@ -12,7 +12,7 @@ const RoutLayout = () => {
     if (!isAuthenticated) return navigate('/sign-in')
 
   return (
-    <div className="w-full bg-dark-4 text-amber-50">
+    <div className="w-full bg-background text-foreground">
       <Topbar />
       <LeftSideBar />
       <section className="h-screen  ml-40  [@media(max-width:64rem)]:ml-0" >

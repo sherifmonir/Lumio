@@ -53,7 +53,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     }`}>
       <div className="absolute inset-0 bg-black/70" onClick={onClose} />
 
-      <div className={`absolute left-0 top-0 h-full w-[70%] max-w-sm bg-dark-2 transition-transform duration-300 ${
+      <div className={`absolute left-0 top-0 h-full w-[70%] max-w-sm bg-background text-foreground transition-transform duration-300 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}>
         <div className="flex flex-col items-start h-full gap-8 p-6 ">

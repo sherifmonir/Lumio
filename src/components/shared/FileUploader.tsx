@@ -74,7 +74,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
     }
   })
   return (
-    <div {...getRootProps()} className="flex-center flex-col bg-dark-3 rounded-xl cursor-pointer">
+    <div {...getRootProps()} className="flex-center flex-col bg-muted text-foreground rounded-xl cursor-pointer">
       <input {...getInputProps()} className="cursor-pointer"/>
       {
         isCompressing ? (

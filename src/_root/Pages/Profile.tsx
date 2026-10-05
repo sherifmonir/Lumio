@@ -15,7 +15,7 @@ interface StabBlockProps {
 const StatBlock = ({ value, label }: StabBlockProps) => (
   <div className="flex-center gap-2">
     <p className="small-semibold lg:body-bold text-primary-500">{value}</p>
-    <p className="small-medium lg:base-medium text-light-2">{label}</p>
+    <p className="small-medium lg:base-medium text-foreground">{label}</p>
   </div>
 )
 
@@ -66,7 +66,7 @@ const Profile = () => {
 
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
               <StatBlock value={currentUser.posts?.length} label="Posts" />
-              <Link to={`/profile/${id}/followers`}>
+              <Link to={`/profile/${id}/followers`} >
                 <StatBlock value={followersCount ?? 0} label="Followers" />
               </Link>
               <Link to={`/profile/${id}/following`}>
@@ -86,7 +86,7 @@ const Profile = () => {
             <div className={`${user.id !== currentUser.$id && "hidden"}`}>
               <Link
                 to={`/update-profile/${currentUser.$id}`}
-                className={`h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg ${
+                className={`h-12 bg-background text-foreground px-5  flex-center gap-2 rounded-lg ${
                   user.id !== currentUser.$id && "hidden"
                 }`}>
                 <img
@@ -110,7 +110,7 @@ const Profile = () => {
           <Link
             to={`/profile/${id}`}
             className={`profile-tab rounded-l-lg ${
-              pathname === `/profile/${id}` && "bg-dark-3!"
+              pathname === `/profile/${id}` && "bg-background text-foreground"
             }`}>
             <img
               src={"/assets/icons/posts.svg"}
@@ -123,7 +123,7 @@ const Profile = () => {
           <Link
             to={`/profile/${id}/LikedPosts`}
             className={`profile-tab rounded-r-lg ${
-              pathname === `/profile/${id}/LikedPosts` && "bg-dark-3!"
+              pathname === `/profile/${id}/LikedPosts` && "bg-background text-foreground!"
             }`}>
             <img
               src={"/assets/icons/like.svg"}

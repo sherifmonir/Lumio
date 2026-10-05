@@ -55,8 +55,8 @@ const LeftSideBar = () => {
                   <img
                     src={link.imgURL}
                     alt={link.label}
-                    className={`size-3 invert-white ${
-                      isActive && ""
+                    className={`size-3  ${
+                      isActive && "invert-white"
                     }`}
                   />
                   {link.label}
@@ -70,14 +70,14 @@ const LeftSideBar = () => {
 
 
     <div className="flex pl-2 flex-col m-auto w-40 h-30 ">
-      <button type="button" className="flex gap-2 mb-5 cursor-pointer"
+      <button type="button" className="flex gap-2 mb-5  cursor-pointer"
       onClick={toggleTheme}>
           <img 
           src="/assets/icons/dark-mode.svg"
           alt="toggle theme"
           className="h-8 w-8"
           />
-          <p className="text-[1rem] text-white">{theme === "dark" ? "Light mode" : "Dark mode"}</p>
+          <p className="text-[1rem] text-foreground">{theme === "dark" ? "Light mode" : "Dark mode"}</p>
       </button>
 
       <button type="button" className="flex gap-2 mb-5 cursor-pointer"
@@ -87,7 +87,7 @@ const LeftSideBar = () => {
             alt="logout"
             className="h-8 w-8"
             />
-            <p className="text-[1rem] text-white ">Log out</p>
+            <p className="text-[1rem] text-foreground">Log out</p>
       </button>
     </div>
       <ConfirmationModal

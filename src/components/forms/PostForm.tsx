@@ -27,7 +27,7 @@ const CaptionField = ({ field }: CaptionFieldProps) => {
   const mention = useMentionAutocomplete(field.value, field.onChange)
 
   return (
-    <div className="field relative">
+    <div className="field bg-background text-foreground relative">
       <label htmlFor="form-rhf-input-caption" className="form-label">
         Caption
       </label>
@@ -108,7 +108,7 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
 }
 
   return (
-    <form className="flex flex-col  gap-5 w-full max-w-5xl bg-dark-4 px-1 mb-5" 
+    <form className="flex flex-col  gap-5 w-full max-w-5xl bg-background text-foreground px-1 mb-5" 
     onSubmit={form.handleSubmit(onSubmit)}> 
 
             <Controller

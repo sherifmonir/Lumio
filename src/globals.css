@@ -40,6 +40,14 @@
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-post-card: var(--post-card);
+  --color-user-card: var(--user-card);
+  --color-topbar: var(--topbar);
+  --color-notification: var(--notification);
+  --color-mobile-menu: var(--mobile-menu);
+  --color-dropdown: var(--dropdown);
+  --color-comment-input: var(--comment-input);
+  --color-bottombar: var(--bottombar);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
@@ -79,74 +87,92 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ─── CSS custom properties (shadcn light / dark) ────────────── */
+/* ─── Semantic theme tokens ──────────────────────────────────── */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  color-scheme: light;
+  --background: #dbdee4;
+  --foreground: #161b27;
+  --card: #cecdd2;
+  --card-foreground: #161b27;
+  --post-card: #cecdd2;
+  --user-card: #cecdd2;
+  --topbar: #cecdd2;
+  --notification: #cecdd2;
+  --mobile-menu: #cecdd2;
+  --dropdown: #cecdd2;
+  --comment-input: #c9ced8;
+  --bottombar: #cecdd2;
+  --border: #c9ced8;
+  --input: #c9ced8;
+  --muted: #eff1f4;
+  --muted-foreground: #626b7d;
+  --popover: #cecdd2;
+  --popover-foreground: #161b27;
+  --primary: #161b27;
+  --primary-foreground: #ffffff;
+  --secondary: #efefef;
+  --secondary-foreground: #161b27;
+  --accent: #efefef;
+  --accent-foreground: #161b27;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --ring: #877eff;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #cecdd2;
+  --sidebar-foreground: #161b27;
+  --sidebar-primary: #877eff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #efefef;
+  --sidebar-accent-foreground: #161b27;
+  --sidebar-border: #c9ced8;
+  --sidebar-ring: #877eff;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  color-scheme: dark;
+  --background: #040406;
+  --foreground: #efefef;
+  --card: #0e0d12;
+  --card-foreground: #efefef;
+  --post-card: #0e0d12;
+  --user-card: #0e0d12;
+  --topbar: #040406;
+  --notification: #0e0d12;
+  --mobile-menu: #0e0d12;
+  --dropdown: #15141a;
+  --comment-input: #15141a;
+  --bottombar: #0e0d12;
+  --border: #1c1a23;
+  --input: #474747;
+  --muted: #15141a;
+  --muted-foreground: #b2b0c5;
+  --popover: #0e0d12;
+  --popover-foreground: #efefef;
+  --primary: #efefef;
+  --primary-foreground: #0e0d12;
+  --secondary: #1c1a23;
+  --secondary-foreground: #efefef;
+  --accent: #474747;
+  --accent-foreground: #ffffff;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: #877eff;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: #040406;
+  --sidebar-foreground: #efefef;
+  --sidebar-primary: #877eff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1c1a23;
+  --sidebar-accent-foreground: #efefef;
+  --sidebar-border: #1c1a23;
+  --sidebar-ring: #877eff;
 }
 
 /* ─── Base layer ─────────────────────────────────────────────── */
@@ -156,7 +182,7 @@
   }
 
   body {
-    @apply min-h-screen font-Quicksand bg-background text-foreground bg-dark-4;
+    @apply min-h-screen font-Quicksand bg-background text-foreground;
   }
 
   html {
@@ -167,7 +193,7 @@
 /* ─── Custom utilities (v4: @utility instead of @layer utilities) */
 @utility custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #5c5c7b #09090a;
+  scrollbar-color: var(--muted-foreground) var(--background);
 }
 
 /* Typography scale */
@@ -216,7 +242,7 @@
 
 /* Layout helpers */
 @utility invert-white {
-  @apply invert brightness-0 transition;
+  @apply invert  brightness-0 transition;
 }
 @utility flex-center {
   @apply flex justify-center items-center;
@@ -244,7 +270,7 @@
 }
 
 @utility form-bottom {
-  @apply  text-light-2 text-center w-full bg-primary-500 mt-4 mb-0 px-2 py-0.5 rounded-sm cursor-pointer;
+  @apply text-white text-center w-full bg-primary-500 mt-4 mb-0 px-2 py-0.5 rounded-sm cursor-pointer;
 }
 
 /* Explore */
@@ -255,7 +281,7 @@
   @apply max-w-5xl flex flex-col items-center w-full gap-6 md:gap-9;
 }
 @utility page-search {
-  @apply h-12 bg-dark-3 rounded-sm px-2 py-0.5 ml-1.5 placeholder:text-light-4 ; 
+  @apply h-12 bg-muted text-foreground rounded-sm px-2 py-0.5 ml-1.5 placeholder:text-muted-foreground;
 }
 
 /* Home */
@@ -274,13 +300,13 @@
   @apply flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14  items-center scrollbar-none;
 }
 @utility post-details-card {
-  @apply bg-dark-2 w-full mb-1 max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-dark-4 xl:rounded-l-3xl;
+  @apply bg-card text-card-foreground w-full mb-1 max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-border xl:rounded-l-3xl;
 }
 @utility post-details-img {
-  @apply h-full  xl:w-[50%] rounded-t-[30px] xl:rounded-l-3xl xl:rounded-tr-none object-cover p-5 bg-dark-1;
+  @apply h-full xl:w-[50%] rounded-t-[30px] xl:rounded-l-3xl xl:rounded-tr-none object-cover p-5 bg-muted;
 }
 @utility post-details-info {
-  @apply bg-dark-2 flex flex-col gap-5 lg:gap-7 flex-1 items-start p-8 rounded-[30px];
+  @apply bg-card text-card-foreground flex flex-col gap-5 lg:gap-7 flex-1 items-start p-8 rounded-[30px];
 }
 
 /* Profile */
@@ -291,7 +317,7 @@
   @apply flex items-center md:mb-8 xl:items-start gap-8 flex-col xl:flex-row relative max-w-5xl w-full scrollbar-none overflow-scroll ;
 }
 @utility profile-tab {
-  @apply flex-center gap-3 py-4 w-48 bg-dark-2 transition flex-1 xl:flex-initial;
+  @apply flex-center gap-3 py-4 w-48 bg-card text-card-foreground transition flex-1 xl:flex-initial;
 }
 @utility liked-container {
   @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14 scrollbar-none;
@@ -304,7 +330,7 @@
 /* Bottom bar */
 
 @utility bottom-bar {
-  @apply lg:hidden z-50 flex-between w-full fixed bottom-0 bg-dark-2 h-12 px-5 py-4 transition;
+  @apply lg:hidden z-50 flex-between w-full fixed bottom-0 bg-bottombar text-foreground border-t border-border h-12 px-5 py-4 transition;
 }
 
 /* File uploader */
@@ -312,7 +338,7 @@
   @apply w-60 h-60  rounded-3xl object-cover object-top;
 }
 @utility file_uploader-label {
-  @apply text-light-4 text-center small-regular w-full p-4 border-t border-t-dark-4;
+  @apply text-muted-foreground text-center small-regular w-full p-4 border-t border-border;
 }
 @utility file_uploader-box {
   @apply flex-center flex-col p-7 h-80 ;
@@ -323,26 +349,26 @@
   @apply  w-full gap-7 max-w-5xl  grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
 }
 @utility grid-post-link {
-  @apply flex rounded-3xl border border-dark-4 overflow-hidden cursor-pointer w-full h-full bg-dark-2;
+  @apply flex rounded-3xl border border-border overflow-hidden cursor-pointer w-full h-full bg-post-card text-card-foreground;
 }
 @utility grid-post-user {
-  @apply absolute bottom-0 p-5 flex-between w-full bg-gradient-to-t from-dark-3 to-transparent rounded-b-3xl gap-2;
+  @apply absolute bottom-0 p-5 flex-between w-full bg-linear-to-t from-dark-4 to-transparent rounded-b-3xl gap-2;
 }
 
 /* Left sidebar */
 @utility leftsidebar {
-  @apply hidden lg:flex flex-col justify-between items-center fixed z-40  pt-20 bottom-0 h-full left-0 w-40  bg-dark-1 ;
+  @apply hidden lg:flex flex-col justify-between items-center fixed z-40 pt-20 bottom-0 h-full left-0 w-40 bg-sidebar text-sidebar-foreground border-r border-sidebar-border;
 }
 
 
 
   @utility leftsidebar-NavLink {
-    @apply text-[0.7rem] text-white h-7 py-0.5 bg-dark-5 rounded-sm hidden md:flex items-center gap-6 pl-3 mb-5 transition hover:bg-primary-500 ;
+    @apply text-[0.7rem] text-sidebar-foreground h-7 py-0.5 bg-sidebar-accent rounded-sm hidden md:flex items-center gap-6 pl-3 mb-5 transition hover:bg-sidebar-primary hover:text-sidebar-primary-foreground;
   }
 
 /* Post Card */
 @utility post-card {
-  @apply bg-dark-2 rounded-3xl border border-dark-4 p-5 lg:p-7 w-full max-w-screen-sm mb-3;
+  @apply shadow-md  text-card-foreground rounded-3xl border border-border p-5 lg:p-7 w-full max-w-screen-sm mb-3;
 }
 @utility post-card_img {
   @apply h-64 xs:h-100 lg:h-112.5 w-full rounded-3xl object-cover mb-5 aspect-video;
@@ -350,12 +376,12 @@
 
 /* Topbar */
 @utility topbar {
-  @apply sticky top-0 right-0 z-50  bg-dark-1 h-20 w-full;
+  @apply sticky top-0 right-0 z-50 bg-topbar text-foreground border-b border-border h-20 w-full;
 }
 
 /* User card */
 @utility user-card {
-  @apply h-60 w-50 bg-dark-1 flex-center flex-col justify-evenly p-2 border border-dark-4 rounded-[20px] mx-auto;
+  @apply h-60 w-50 bg-user-card text-card-foreground flex-center flex-col justify-evenly p-2 border border-border rounded-[20px] mx-auto;
 }
 
 /* Follow Button */
@@ -363,7 +389,7 @@
   @apply bg-primary-500 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80  cursor-pointer;
 }
 @utility unfollow {
-  @apply bg-dark-5 text-light-1 px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-primary-500/80  cursor-pointer;
+  @apply bg-secondary text-secondary-foreground px-5 py-2 rounded-md text-[0.8rem] font-semibold transition hover:bg-accent cursor-pointer;
 }
 
 /*****************************************/
@@ -372,11 +398,11 @@
 }
 
 @utility form-label{
- @apply text-[0.9rem] font-bold text-light-2 mt-4 mb-0.5 px-1
+ @apply text-[0.9rem] font-bold text-foreground mt-4 mb-0.5 px-1
 }
 
 @utility form-input{
- @apply bg-dark-5 h-6 rounded-[3px] border border-light-5 text-light-2 text-[0.8rem]  placeholder:text-[0.7rem] px-1
+ @apply bg-muted h-6 rounded-[3px] border border-input text-foreground text-[0.8rem] placeholder:text-muted-foreground placeholder:text-[0.7rem] px-1
 }
 @utility form-error{
  @apply text-red-500 text-[0.6rem]
@@ -388,23 +414,23 @@
 /* ─── Component layer (shadcn overrides) ─────────────────────── */
 @layer components {
   .shad-form_label {
-    @apply text-white;
+    @apply text-foreground;
   }
   .shad-form_message {
     @apply text-red;
   }
   .shad-input {
-    @apply h-10 bg-dark-4 border-none placeholder:text-light-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3;
+    @apply h-10 bg-background text-foreground border border-input placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-background;
   }
   .Create-Post-textarea {
-    @apply h-36 bg-dark-3 rounded-xl p-2 border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 resize-none;
+    @apply h-36 bg-muted text-foreground placeholder:text-muted-foreground rounded-xl p-2 border border-input focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-background resize-none;
   }
   
   .Add-photo-button {
-    @apply h-12 bg-dark-4 px-5 text-light-1 flex gap-2 flex-center rounded-md cursor-pointer;
+    @apply h-12 bg-secondary px-5 text-secondary-foreground flex gap-2 flex-center rounded-md cursor-pointer;
   }
   .back-button {
-    @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white cursor-pointer;
+    @apply flex gap-4 items-center justify-start text-foreground hover:bg-transparent hover:text-primary-500 cursor-pointer;
   }
   UserCard {
     @apply flex-center

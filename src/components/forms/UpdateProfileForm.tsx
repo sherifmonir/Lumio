@@ -59,7 +59,7 @@ function onSubmit(Values: z.infer<typeof profileValidation>) {
 }
 
   return (
-    <form className="flex-center flex-col bg-dark-4 " 
+    <form className="flex-center flex-col bg-background text-foreground" 
     onSubmit={form.handleSubmit(onSubmit)}> 
 
             <Controller

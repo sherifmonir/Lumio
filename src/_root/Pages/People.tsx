@@ -63,7 +63,7 @@ const usersMemo = useMemo(() => {
         <h2 className="h3-bold md:h2-bold w-full">
           Search Users
         </h2>
-        <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4 page-search">
+        <div className="flex gap-1 px-4 w-full rounded-lg bg-background text-foreground page-search">
           <img
             src="/assets/icons/search.svg"
             width={20}

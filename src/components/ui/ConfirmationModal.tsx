@@ -39,7 +39,7 @@ const ConfirmationModal = ({
             type="button"
             disabled={isLoading}
             onClick={onClose}
-            className="cursor-pointer px-4 py-2 rounded-lg text-light-2 hover:bg-dark-4 transition-colors disabled:opacity-50"
+            className="cursor-pointer px-4 py-2 rounded-lg bg-background text-foreground transition-colors disabled:opacity-50"
           >
             Cancel
           </button>

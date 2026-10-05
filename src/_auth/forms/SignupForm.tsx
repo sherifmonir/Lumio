@@ -76,7 +76,7 @@ const SignupForm = () => {
   return (
  
   <>
-        <form className="flex flex-col w-60   rounded-md bg-dark-4 p-3" onSubmit={form.handleSubmit(onSubmit)} >
+        <form className="flex flex-col w-60   rounded-md bg-background text-foreground p-3" onSubmit={form.handleSubmit(onSubmit)} >
           <header>
             <h1 className="text-[1rem] font-bold text-light-2  px-2" >Create a new account</h1>
             <h3 className="text-[0.6rem] text-light-2 px-2">

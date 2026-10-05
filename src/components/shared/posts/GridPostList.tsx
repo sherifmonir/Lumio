@@ -18,8 +18,8 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPost
       {posts.map((post, index) => {
         const isFirstPost = index === 0
         return (
-        <li key={post.$id} className="relative gap-4  w-80  h-80 ">
-          <Link to={`/post/${post.$id}`} className="grid-post-link">
+        <li key={post.$id} className="relative gap-4 w-80  h-80 rounded-3xl  ">
+          <Link to={`/post/${post.$id}`} className="grid-post-link shadow-lg ">
             <img
               src={getFilePreview(post.imageId)}
               alt="post"
@@ -31,7 +31,7 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPost
 
           <div className="grid-post-user">
             {showUser && (
-              <Link to={`/profile/${post.creator.$id}`} className="flex items-center justify-start gap-2 flex-1 ">
+              <Link to={`/profile/${post.creator.$id}`} className="flex items-center justify-start gap-2 flex-1">
                 <img
                   src={post.creator.imageUrl}
 
