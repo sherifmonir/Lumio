@@ -63,9 +63,9 @@ const SigninForm = () => {
 
       
   <>
-        <form className="flex flex-col w-60   rounded-md bg-background text-foreground p-3" onSubmit={form.handleSubmit(onSubmit)} >
+        <form className="flex flex-col w-60  rounded-md bg-card text-foreground p-3" onSubmit={form.handleSubmit(onSubmit)} >
           <header>
-            <h1 className="text-[1rem] font-bold text-light-2  px-1" >Login to your account</h1>
+            <h1 className="text-[1rem] font-bold text-foreground  px-1" >Login to your account</h1>
           </header>    
 
               <Controller
@@ -130,7 +130,7 @@ const SigninForm = () => {
             
         </form>     
       
-        <p className="text-[0.6rem] mt-2 text-light-2 text-center">
+        <p className="text-[0.6rem] mt-2 text-foreground text-center">
       Don't have an account?
           <Link to="/sign-up" className="text-primary-500 text-[0.7rem] ml-2" >
      Sign up

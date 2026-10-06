@@ -72,13 +72,13 @@ const CommentItem = ({ comment, postId, currentUserId, postOwnerId }: CommentIte
           <img src={comment.author.imageUrl} alt={comment.author.name} className="w-8 h-8 rounded-full object-cover" />
         </Link>
         <div className="flex-1">
-          <p className="text-sm text-white">
+          <p className="text-sm text-foreground">
             <Link to={`/profile/${comment.author.$id}`} className="font-semibold mr-1">
               {comment.author.name}
             </Link>
            <MentionText text={comment.content} />
           </p>
-          <div className="flex gap-3 mt-1 text-xs text-light-3">
+          <div className="flex gap-3 mt-1 text-xs text-muted-foreground">
             <span>{multiFormatDateString(comment.$createdAt)}</span>
             <button className="cursor-pointer" onClick={() => setIsReplying((prev) => !prev)}>Reply</button>
             {canDelete(comment.authorId) && (
@@ -123,13 +123,13 @@ const CommentItem = ({ comment, postId, currentUserId, postOwnerId }: CommentIte
                   <img src={reply.author.imageUrl} alt={reply.author.name} className="w-7 h-7 rounded-full object-cover cursor-pointer" />
                 </Link>
                 <div className="flex-1">
-                  <p className="text-sm text-white">
-                    <Link to={`/profile/${reply.author.$id}`} className="font-semibold mr-1 cursor-pointer">
+                  <p className="text-sm text-foreground">
+                    <Link to={`/profile/${reply.author.$id}`} className="text-foreground font-semibold mr-1 cursor-pointer">
                       {reply.author.name}
                     </Link>
                     <MentionText text={reply.content} />
                   </p>
-                  <div className="flex gap-3 mt-1 text-xs text-light-3">
+                  <div className="flex gap-3 mt-1 text-xs text-muted-foreground">
                     <span>{multiFormatDateString(reply.$createdAt)}</span>
                     {canDelete(reply.authorId) && (
                       <>

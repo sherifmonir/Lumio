@@ -16,7 +16,7 @@ import { useUserContext } from '@/context/UseUserContext'
       ):
 
       (
-        <div className="bg-dark-1 flex h-screen  w-full flex-center overflow-auto gap-3">
+        <div className="bg-background flex h-screen  w-full flex-center overflow-auto gap-3">
 
           <section className="w-1/2  flex flex-col items-center h-screen">
 

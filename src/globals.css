@@ -93,14 +93,12 @@
   --background: #dbdee4;
   --foreground: #161b27;
   --card: #cecdd2;
-  --card-foreground: #161b27;
   --post-card: #cecdd2;
   --user-card: #cecdd2;
   --topbar: #cecdd2;
   --notification: #cecdd2;
   --mobile-menu: #cecdd2;
   --dropdown: #cecdd2;
-  --comment-input: #c9ced8;
   --bottombar: #cecdd2;
   --border: #c9ced8;
   --input: #c9ced8;
@@ -173,6 +171,7 @@
   --sidebar-accent-foreground: #efefef;
   --sidebar-border: #1c1a23;
   --sidebar-ring: #877eff;
+  --primary-500: #877eff;
 }
 
 /* ─── Base layer ─────────────────────────────────────────────── */
@@ -266,7 +265,7 @@
   @apply max-w-5xl flex flex-col items-start w-full gap-6 md:gap-9;
 }
 @utility user-grid-container {
-  @apply w-full mx-auto grid grid-cols-2 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
+  @apply w-full mx-auto grid grid-cols-1 xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
 }
 
 @utility form-bottom {
@@ -275,7 +274,7 @@
 
 /* Explore */
 @utility explore-container {
-  @apply flex flex-col flex-1 items-center overflow-scroll py-10 px-5 md:p-14 custom-scrollbar ;
+  @apply flex flex-col flex-1 items-center overflow-scroll py-10 px-5  custom-scrollbar ;
 }
 @utility explore-inner-container {
   @apply max-w-5xl flex flex-col items-center w-full gap-6 md:gap-9;
@@ -297,7 +296,7 @@
 
 /* Post Details */
 @utility post-details-container {
-  @apply flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14  items-center scrollbar-none;
+  @apply flex flex-col flex-1 gap-10 overflow-scroll py-10 px-5   items-center scrollbar-none;
 }
 @utility post-details-card {
   @apply bg-card text-card-foreground w-full mb-1 max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-border xl:rounded-l-3xl;
@@ -311,7 +310,7 @@
 
 /* Profile */
 @utility profile-container {
-  @apply flex flex-col items-center flex-1 gap-10 overflow-scroll py-10 px-5 md:p-14 scrollbar-none ;
+  @apply flex flex-col items-center flex-1 gap-10 overflow-scroll py-10 px-5  scrollbar-none ;
 }
 @utility profile-inner-container {
   @apply flex items-center md:mb-8 xl:items-start gap-8 flex-col xl:flex-row relative max-w-5xl w-full scrollbar-none overflow-scroll ;
@@ -320,17 +319,17 @@
   @apply flex-center gap-3 py-4 w-48 bg-card text-card-foreground transition flex-1 xl:flex-initial;
 }
 @utility liked-container {
-  @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14 scrollbar-none;
+  @apply flex flex-col flex-1 items-center   scrollbar-none;
 }
 
 @utility saved-container {
-  @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:p-14 scrollbar-none;
+  @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 scrollbar-none;
 }
 
 /* Bottom bar */
 
 @utility bottom-bar {
-  @apply lg:hidden z-50 flex-between w-full fixed bottom-0 bg-bottombar text-foreground border-t border-border h-12 px-5 py-4 transition;
+  @apply lg:hidden z-50 flex-between w-full fixed bottom-0 bg-card text-foreground border-t border-border h-12 px-5 py-4 transition;
 }
 
 /* File uploader */
@@ -346,7 +345,7 @@
 
 /* Grid Post List */
 @utility post-grid-container {
-  @apply  w-full gap-7 max-w-5xl  grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
+  @apply  w-full gap-7 max-w-5xl grid grid-cols-1 sm:ml-5 md:grid-cols-2 xl:grid-cols-3 ;
 }
 @utility grid-post-link {
   @apply flex rounded-3xl border border-border overflow-hidden cursor-pointer w-full h-full bg-post-card text-card-foreground;
@@ -357,7 +356,7 @@
 
 /* Left sidebar */
 @utility leftsidebar {
-  @apply hidden lg:flex flex-col justify-between items-center fixed z-40 pt-20 bottom-0 h-full left-0 w-40 bg-sidebar text-sidebar-foreground border-r border-sidebar-border;
+  @apply hidden lg:flex flex-col justify-between items-center fixed z-40 pt-20 bottom-0 h-full left-0 w-40 bg-card text-foreground border-r border-sidebar-border;
 }
 
 
@@ -368,7 +367,7 @@
 
 /* Post Card */
 @utility post-card {
-  @apply shadow-md  text-card-foreground rounded-3xl border border-border p-5 lg:p-7 w-full max-w-screen-sm mb-3;
+  @apply shadow-md  text-card-foreground bg-card rounded-3xl border border-border p-5 lg:p-7 w-full max-w-screen-sm mb-3;
 }
 @utility post-card_img {
   @apply h-64 xs:h-100 lg:h-112.5 w-full rounded-3xl object-cover mb-5 aspect-video;
@@ -376,7 +375,7 @@
 
 /* Topbar */
 @utility topbar {
-  @apply sticky top-0 right-0 z-50 bg-topbar text-foreground border-b border-border h-20 w-full;
+  @apply sticky top-0 right-0 z-50 bg-card text-foreground border-b border-border h-20 w-full;
 }
 
 /* User card */

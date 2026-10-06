@@ -21,13 +21,13 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
   const linkTo = type === "follow" ? `/profile/${actor.$id}` : `/post/${postId}`;
 
   return (
-    <Link to={linkTo} className="flex items-center gap-3 px-4 py-3 hover:bg-dark-3 transition-colors">
+    <Link to={linkTo} className="flex items-center gap-3 px-4 py-3 hover:bg-card transition-colors">
       <img src={actor.imageUrl} alt={actor.name} className="w-10 h-10 rounded-full object-cover" />
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-white line-clamp-2">
+        <p className="text-sm text-foreground line-clamp-2">
           <span className="font-semibold">{actor.name}</span> {MESSAGES[type]}
         </p>
-        <p className="text-xs text-light-3">{multiFormatDateString($createdAt)}</p>
+        <p className="text-xs text-muted-foreground">{multiFormatDateString($createdAt)}</p>
       </div>
     </Link>
   );

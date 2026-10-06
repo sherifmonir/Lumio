@@ -48,7 +48,7 @@ function compressImage(file: File): Promise<File> {
 }
 
 const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
-    const [ file,  setFile] = useState<File[]>([])
+    const [, setFile] = useState<File[]>([])
     const [fileUrl, setFileUrl] = useState(mediaUrl)
     const [prevMediaUrl, setPrevMediaUrl] = useState(mediaUrl)
     const [isCompressing, setIsCompressing] = useState(false)
@@ -74,12 +74,12 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
     }
   })
   return (
-    <div {...getRootProps()} className="flex-center flex-col bg-muted text-foreground rounded-xl cursor-pointer">
+    <div {...getRootProps()} className="flex-center flex-col bg-card text-foreground rounded-xl cursor-pointer">
       <input {...getInputProps()} className="cursor-pointer"/>
       {
         isCompressing ? (
             <div className="flex flex-1 justify-center items-center w-full p-5 lg:p-10">
-                <p className="text-light-3 small-regular">Optimizing image...</p>
+                <p className="text-muted-foreground small-regular">Optimizing image...</p>
             </div>
         ) : fileUrl ? (
             <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
@@ -98,10 +98,10 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
                 height={77}
                 alt="file-upload"
                 />
-                <h3 className="base-medium text-light-2 mb-2 mt-6">
+                <h3 className="base-medium text-foreground mb-2 mt-6">
                     Drag photo here.
                 </h3>
-                <p className="text-light-4 small-regular mb-6">
+                <p className="text-muted-foreground small-regular mb-6">
                     SVG, PNG, JPG
                 </p>
                 <button type="button" className="Add-photo-button">

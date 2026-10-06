@@ -22,7 +22,7 @@ const UsersSearchResults = ({ isSearchFetching, searchedUsers }:UsersSearchResul
       </ul>
     )
   } else {
-    return <p className="text-light-4 mt-10 text-center w-full">No results found</p>
+    return <p className="text-muted-foreground mt-10 text-center w-full">No results found</p>
   }
 }
 

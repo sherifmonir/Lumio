@@ -86,7 +86,7 @@ const usersMemo = useMemo(() => {
                 
         </div>
       </div>
-      <div className="people-container">
+      <div>
         <h2 className="h3-bold mb-4 md:h2-bold text-left w-full">People</h2>
         {showSearchResults ? (
           <UsersSearchResults
@@ -94,7 +94,7 @@ const usersMemo = useMemo(() => {
             searchedUsers={searchedUsers ?? { documents: [] }}
           />
         ) :  shouldShowUsers ? (
-          <p className="text-light-4 mt-10 text-center w-full">No More Results</p>
+          <p className="text-muted-foreground mt-10 text-center w-full">No More Results</p>
         ) : (
           <ul className="user-grid-container">
             {usersMemo.map((page) =>
@@ -108,7 +108,7 @@ const usersMemo = useMemo(() => {
         )}
       </div>
       {hasNextPage && !searchValue && (
-        <div ref={ref} className="mt-10">
+        <div ref={ref} className="mt-10 mb-10 m-auto">
           <ClipLoader size={15} />
         </div>
       )}

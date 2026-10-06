@@ -19,7 +19,7 @@ const LikedPosts = () => {
   if (!likedPosts.length && !isFetching) {
     return (
       <div className="liked-container">
-        <p className="text-light-4">No liked posts</p>
+        <p className="text-muted-foreground">No liked posts</p>
       </div>
     );
   }

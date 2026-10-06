@@ -6,15 +6,15 @@ import { useEffect, useState } from "react";
 import type { INavLink } from "@/types";
 import { INITIAL_USER } from "@/context/AuthConstants";
 import ConfirmationModal from "@/components/ui/ConfirmationModal";
-import { useThemeContext } from "@/context/UseThemeContext";
+import BugReportModal from "@/components/ui/BugReportModal";
 
 const LeftSideBar = () => {
     const { mutate: signout, isSuccess, isPending: isSigningOut   } = useSignoutAccount()
   const navigate = useNavigate()
   const { setUser, setIsAuthenticated } = useUserContext()
-  const { theme, toggleTheme } = useThemeContext()
   const { pathname } = useLocation();
   const [isSignoutModalOpen, setIsSignoutModalOpen] = useState(false)
+  const [isBugReportModalOpen, setIsBugReportModalOpen] = useState(false) 
 
  
   useEffect(() => {
@@ -69,16 +69,15 @@ const LeftSideBar = () => {
         </nav>
 
 
-    <div className="flex pl-2 flex-col m-auto w-40 h-30 ">
-      <button type="button" className="flex gap-2 mb-5  cursor-pointer"
-      onClick={toggleTheme}>
-          <img 
-          src="/assets/icons/dark-mode.svg"
-          alt="toggle theme"
-          className="h-8 w-8"
-          />
-          <p className="text-[1rem] text-foreground">{theme === "dark" ? "Light mode" : "Dark mode"}</p>
-      </button>
+    <div className="flex pl-2 flex-col gap-2 m-auto w-full h-30 ">
+      <button 
+            type="button" 
+            onClick={() => setIsBugReportModalOpen(true)} 
+            className="flex items-center gap-2 cursor-pointer"
+          >
+            <img src="/assets/icons/report-bug.svg" alt="report a bug" className="h-8 w-8" />
+            <p className="text-foreground">Report a Bug</p>
+          </button>
 
       <button type="button" className="flex gap-2 mb-5 cursor-pointer"
        onClick={() => setIsSignoutModalOpen(true)}>
@@ -87,7 +86,7 @@ const LeftSideBar = () => {
             alt="logout"
             className="h-8 w-8"
             />
-            <p className="text-[1rem] text-foreground">Log out</p>
+            <p className="text-[1rem] text-foreground">Sign out</p>
       </button>
     </div>
       <ConfirmationModal
@@ -101,6 +100,10 @@ const LeftSideBar = () => {
           isLoading={isSigningOut}
           variant= "primary"
           />
+          <BugReportModal 
+        isOpen={isBugReportModalOpen} 
+        onClose={() => setIsBugReportModalOpen(false)} 
+      />
       </aside>
   )
 }

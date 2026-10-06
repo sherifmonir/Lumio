@@ -59,7 +59,7 @@ const Profile = () => {
               <h1 className="text-center xl:text-left h3-bold md:h1-semibold w-full">
                 {currentUser.name}
               </h1>
-              <p className="small-regular md:body-medium text-light-3 text-center xl:text-left">
+              <p className="small-regular md:body-medium text-muted-foreground text-center xl:text-left">
                 @{currentUser.username}
               </p>
             </div>
@@ -110,7 +110,7 @@ const Profile = () => {
           <Link
             to={`/profile/${id}`}
             className={`profile-tab rounded-l-lg ${
-              pathname === `/profile/${id}` && "bg-background text-foreground"
+              pathname === `/profile/${id}` && "bg-muted text-foreground"
             }`}>
             <img
               src={"/assets/icons/posts.svg"}
@@ -123,7 +123,7 @@ const Profile = () => {
           <Link
             to={`/profile/${id}/LikedPosts`}
             className={`profile-tab rounded-r-lg ${
-              pathname === `/profile/${id}/LikedPosts` && "bg-background text-foreground!"
+              pathname === `/profile/${id}/LikedPosts` && "bg-muted text-foreground!"
             }`}>
             <img
               src={"/assets/icons/like.svg"}

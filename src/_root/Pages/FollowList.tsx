@@ -25,7 +25,7 @@ const FollowList = () => {
   const users = data?.pages.flatMap((page) => page.users) ?? []
 
   if (!users.length && !isFetching) {
-    return <p className="text-light-4 text-center w-full mt-8">
+    return <p className="text-muted-foreground text-center w-full mt-8">
       {mode === "followers" ? "No followers yet" : "Not following anyone yet"}
     </p>
   }

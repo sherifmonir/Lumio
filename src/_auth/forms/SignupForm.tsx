@@ -76,12 +76,9 @@ const SignupForm = () => {
   return (
  
   <>
-        <form className="flex flex-col w-60   rounded-md bg-background text-foreground p-3" onSubmit={form.handleSubmit(onSubmit)} >
+        <form className="flex flex-col w-60   rounded-md bg-card text-foreground p-3" onSubmit={form.handleSubmit(onSubmit)} >
           <header>
-            <h1 className="text-[1rem] font-bold text-light-2  px-2" >Create a new account</h1>
-            <h3 className="text-[0.6rem] text-light-2 px-2">
-          Update your profile information below.
-            </h3>
+            <h1 className="text-[1rem] font-bold text-foreground px-2" >Create a new account</h1>
           </header>
 
           
@@ -198,14 +195,14 @@ const SignupForm = () => {
                 <div className="h-14">
                   <ClipLoader size={15} />
                 </div>
-                 <p>Loading ...</p>
+                 <p className="text-foreground">Loading ...</p>
               </div>
             ):"Sign up"}</button>
             
             
         </form>     
       
-        <p className="text-[0.6rem] mt-2 text-light-2 text-center">
+        <p className="text-[0.6rem] mt-2 text-foreground text-center">
       Already have an account?
           <Link to="/sign-in" className="text-primary-500 text-[0.7rem] ml-2" >
      Log in

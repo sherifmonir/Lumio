@@ -12,13 +12,13 @@ const Bottombar = () => {
                 <Link
                   to={link.route}
                   key={link.label}
-                  className={`text-primary-500 flex-center gap-2 ${
-                  isActive && " invert-white"
+                  className={`gap-2 p-1 ${
+                  isActive && "bg-primary-500 rounded-sm"
                 } `}>
                   <img
                     src={link.imgURL}
                     alt={link.label}
-                    className={`size-4  ${
+                    className={`size-4 m-auto ${
                       isActive && "invert-white"
                     }`}
                   />

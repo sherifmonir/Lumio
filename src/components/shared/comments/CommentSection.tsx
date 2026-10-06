@@ -27,7 +27,7 @@ const CommentSection = ({ postId, currentUserId, postOwnerId }: CommentSectionPr
           <ClipLoader size={15} />
         </div>
       ) : comments.length === 0 ? (
-        <p className="text-light-3 text-sm text-center py-4">No comments yet</p>
+        <p className="text-muted-foreground text-sm text-center py-4">No comments yet</p>
       ) : (
         <div className="flex flex-col gap-4">
           {comments.map((comment) => (

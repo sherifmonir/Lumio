@@ -5,15 +5,18 @@ import { useGetUserById } from '@/lib/react-query/queriesAndMutatuins'
 import NotificationBell from '@/components/shared/notifications/NotificationBell'
 import MobileMenu from './MobileMenu'
 import { ClipLoader } from 'react-spinners'
+import { useThemeContext } from '@/context/UseThemeContext'
 
 const Topbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { user, isLoading } = useUserContext()
   const { data: currentUser } = useGetUserById(user.id)
+    const { toggleTheme } = useThemeContext()
+  
 
   return (
     <section className="topbar">
-      <div className="flex gap-4 relative items-center h-full">
+      <div className="flex  relative items-center h-full">
         <button onClick={() => setIsMenuOpen(true)} className="lg:hidden absolute left-3 cursor-pointer">
           <img src="/assets/icons/menu.svg" alt="menu" className="h-10 w-10" />
         </button>
@@ -32,12 +35,23 @@ const Topbar = () => {
           </Link>
         )}
 
-        <Link to='/' className="mx-auto">
-          <img src="/assets/images/logo.svg" alt="Logo" width={170} height={300} />
+        <Link to='/' className="flex-center gap-2 mx-auto  h-full" >
+          <img src="/assets/icons/favicon.svg" alt="Logo" width={40} height={40} />  
+          <p className="text-foreground text-4xl font-bold">LUMIO</p>
         </Link>
 
-        <div className="flex-center absolute right-3 lg:right-8">
-          <NotificationBell />
+        <div className=" flex-center  absolute right-1 lg:right-8 h-full">
+          <button type="button" className="cursor-pointer [@media(max-width:64rem)]:hidden"
+            onClick={toggleTheme}>
+            <img 
+            src="/assets/icons/dark-mode.svg"
+            alt="toggle theme"
+            className="h-8 w-8"
+            />
+        </button>
+        <div className="">
+            <NotificationBell />
+        </div>
         </div>
       </div>
 

@@ -14,6 +14,7 @@ type GridPostListProps = {
 const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPostListProps) => {
   const { user } = useUserContext()
   return (
+    <div>
     <ul className="post-grid-container">
       {posts.map((post, index) => {
         const isFirstPost = index === 0
@@ -47,6 +48,7 @@ const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPost
         )
       })}
     </ul>
+    </div>
   )
 }
 

@@ -7,6 +7,8 @@ import { bugReportValidation } from '@/lib/validation'
 import { useCreateBugReport } from '@/lib/react-query/queriesAndMutatuins'
 import { useUserContext } from '@/context/UseUserContext'
 import { ClipLoader } from 'react-spinners'
+import { createPortal } from 'react-dom'
+
 
 type BugReportModalProps = {
   isOpen: boolean
@@ -42,36 +44,36 @@ const BugReportModal = ({ isOpen, onClose }: BugReportModalProps) => {
     onClose()
   }
 
-  return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" onClick={handleClose}>
-      <div className="bg-dark-2 rounded-xl p-6 w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
+  return createPortal(
+    <div className="fixed inset-0 bg-card/70 flex items-center justify-center z-100" >
+      <div className="bg-muted  rounded-xl p-6 w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
         {isSubmitted ? (
           <div className="flex flex-col items-center gap-4 py-4">
-            <p className="text-white text-center">Thanks — your report has been submitted.</p>
-            <button onClick={handleClose} className="text-primary-500 text-sm font-semibold">
+            <p className="text-foreground text-center">Thanks — your report has been submitted.</p>
+            <button onClick={handleClose} className="text-primary-500 text-sm font-semibold cursor-pointer">
               Close
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-            <h2 className="text-white text-lg font-semibold">Report a bug</h2>
+            <h2 className="text-foreground text-lg font-semibold">Report a bug</h2>
             <textarea
               {...register("description")}
               placeholder="What went wrong?"
               rows={5}
-              className="bg-dark-3 rounded-lg px-3 py-2 text-sm text-white outline-none resize-none"
+              className="bg-input rounded-lg px-3 py-2 text-sm text-foreground outline-none resize-none"
             />
             {errors.description && (
               <p className="text-red-500 text-xs">{errors.description.message}</p>
             )}
             <div className="flex gap-3 justify-end">
-              <button type="button" onClick={handleClose} className="text-light-3 text-sm">
+              <button type="button" onClick={handleClose} className="text-muted-foreground bg- text-sm cursor-pointer">
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isPending}
-                className="bg-primary-500 text-white text-sm font-semibold px-4 py-2 rounded-lg disabled:opacity-50 flex items-center gap-2"
+                className="bg-primary-500 text-foreground text-sm font-semibold px-4 py-2 rounded-lg cursor-pointer disabled:opacity-50"
               >
                 {isPending && <ClipLoader size={14} color="#fff" />}
                 Submit
@@ -80,7 +82,8 @@ const BugReportModal = ({ isOpen, onClose }: BugReportModalProps) => {
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 

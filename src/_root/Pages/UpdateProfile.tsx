@@ -17,7 +17,7 @@ const UpdateProfile = () => {
  if(!currentUser){
     return (
         <div className="flex-center w-full h-full">
-            <p className="text-light-3">User not found</p>
+            <p className="text-muted-foreground">User not found</p>
         </div>
     )
  }

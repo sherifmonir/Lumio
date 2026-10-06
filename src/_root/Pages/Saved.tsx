@@ -20,7 +20,7 @@ import { ClipLoader } from "react-spinners";
 }, [savedPosts])
   
   return (
-    <div className="liked-container">
+    <div className="saved-container">
       <div className="flex gap-2 w-full max-w-5xl">
         <img
           src="/assets/icons/save.svg"
@@ -37,7 +37,7 @@ import { ClipLoader } from "react-spinners";
       ) : (
         <ul className="w-full flex justify-center max-w-5xl gap-9">
           {savePosts.length === 0 ? (
-            <p className="text-light-4">No available posts</p>
+            <p className="text-muted-foreground">No available posts</p>
           ) : (
             <GridPostList posts={savePosts} showUser={false} showStats={true} />
           )}

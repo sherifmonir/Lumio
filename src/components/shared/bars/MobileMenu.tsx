@@ -23,6 +23,12 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const { theme, toggleTheme } = useThemeContext()
   const navigate = useNavigate()
 
+  const closeMenu = () => {
+    setIsSignoutModalOpen(false)
+    setIsBugReportModalOpen(false)
+    onClose()
+  }
+
   useEffect(() => {
     if (isSuccess) {
       setIsAuthenticated(false)
@@ -32,60 +38,60 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   }, [isSuccess, navigate, setIsAuthenticated, setUser])
 
   useEffect(() => {
-  if (!isOpen) return
+    if (!isOpen) return
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Escape") onClose()
-  }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeMenu()
+    }
 
-  document.body.style.overflow = 'hidden'
-  document.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', handleKeyDown)
 
-  return () => {
-    document.body.style.overflow = ''
-    document.removeEventListener('keydown', handleKeyDown)
-  }
-}, [isOpen, onClose])
+    return () => {
+      document.body.style.overflow = ''
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen, closeMenu])
 
   return createPortal(
-    <div className={`fixed inset-0 z-100 transition-opacity duration-300 ${
+    <div className={`fixed inset-0 z-50 transition-opacity duration-300 ${
       isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
     }`}>
-      <div className="absolute inset-0 bg-black/70" onClick={onClose} />
+      <div className="absolute inset-0 bg-background/70" onClick={onClose} />
 
-      <div className={`absolute left-0 top-0 h-full w-[70%] max-w-sm bg-background text-foreground transition-transform duration-300 ${
+      <div className={`absolute left-0 top-0 h-full p-2  w-[70%] max-w-sm  bg-card  transition-transform duration-300 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}>
-        <div className="flex flex-col items-start h-full gap-8 p-6 ">
+        <div className="flex flex-col  items-start h-full gap-8">
           {isLoading ? (
             <div className="h-14 "><ClipLoader size={15} /></div>
           ) : (
-            <Link to={`/profile/${user.id}`} onClick={onClose} className="flex gap-4 mb-8 cursor-pointer">
+            <Link to={`/profile/${user.id}`} onClick={onClose} className="flex gap-4 mb-10  w-full p-6 border-b border-primary-500 cursor-pointer">
               <img src={currentUser?.imageUrl || user.imageUrl} alt="profile" className="rounded-full w-12 h-12" />
               <div className="flex flex-col justify-start items-start">
-                <p className="font-bold text-[16px] text-amber-50">{user.name}</p>
-                <p className="text-[12px] text-amber-50">@{user.username}</p>
+                <p className="font-bold text-[16px] text-foreground">{user.name}</p>
+                <p className="text-[12px] text-foreground">@{user.username}</p>
               </div>
             </Link>
           )}
 
-          <Link to="/saved" onClick={onClose} className=" flex items-center justify-start gap-2 ">   
+          <Link to="/saved" onClick={onClose} className=" flex items-center border-b border-muted-foreground w-full p-2 justify-start gap-2 ">   
             <img src="/assets/icons/bookmark.svg" alt="saved" className="h-8 w-8" />
-            <p className="text-amber-50">Saved</p>
+            <p className="text-foreground">Saved</p>
           </Link>
 
-          <div className="gap-2">
+          <div className="gap-2 border-b border-muted-foreground w-full p-2">
              <button 
             type="button" 
             onClick={() => setIsBugReportModalOpen(true)} 
             className="flex items-center gap-2 cursor-pointer"
           >
             <img src="/assets/icons/report-bug.svg" alt="report a bug" className="h-8 w-8" />
-            <p className="text-amber-50">Report a Bug</p>
+            <p className="text-foreground">Report a Bug</p>
           </button>
           </div>
 
-          <div className="gap-2">
+          <div className="gap-2 border-b border-muted-foreground w-full p-2">
             <button type="button" className="flex items-center gap-2 cursor-pointer"
               onClick={toggleTheme}>
                   <img 
@@ -93,15 +99,15 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                   alt="toggle theme"
                   className="h-8 w-8"
                   />
-                  <p className="text-[1rem] text-white ">{theme === "dark" ? "Light mode" : "Dark mode"}</p>
+                  <p className="text-[1rem] text-foreground">{theme === "dark" ? "Light mode" : "Dark mode"}</p>
               </button>
 
           </div>
 
-          <div className="gap-2">
+          <div className="gap-2 border-b border-muted-foreground w-full p-2">
             <button type="button" className="flex items-center gap-2 cursor-pointer" onClick={() => setIsSignoutModalOpen(true)}>
               <img src="/assets/icons/logout.svg" alt="logout" className="h-8 w-8" />
-              <p className="text-amber-50">Log Out</p>
+              <p className="text-foreground">Sign Out</p>
             </button>
             <ConfirmationModal
               loadingLabel="Signing Out"

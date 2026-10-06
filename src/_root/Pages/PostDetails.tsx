@@ -145,7 +145,7 @@ const PostDetails = () => {
             {post.tags?.map((tag: string, index: number) => (
               <li
                 key={index}
-                className="text-light-3 small-regular">
+                className="text-muted-foreground small-regular">
                     #{tag}
                </li>
             ))}

@@ -93,7 +93,7 @@ const Explore = () => {
           />
 
         ) : shouldShowPosts ? (
-          <p className="text-light-4 mt-10 text-center w-full">End of posts</p>
+          <p className="text-muted-foreground mt-10 text-center w-full">End of posts</p>
         ) : (
           postsMemo.map((item, index) => (
             <GridPostList key={`page-${index}`} posts={item?.documents ?? []} />
