@@ -394,31 +394,80 @@ export async function getInfinitePosts({ pageParam }: {pageParam: number}) {
 
 
 export async function searchPosts(searchTerm: string) {
-  const cleanedTerm = searchTerm.replace(/^#+/, '').trim() // strip any leading '#'s before matching
+  const cleanedTerm = searchTerm.replace(/^#+/, '').trim()
 
-    try {
-        const [byCaption, byTag] = await Promise.all([
-            databases.listDocuments<IPost>(
-                appwriteconfig.databaseId,
-                appwriteconfig.postsTableId,
-                [Query.search('caption', searchTerm)]
-            ),
-            databases.listDocuments<IPost>(
-                appwriteconfig.databaseId,
-                appwriteconfig.postsTableId,
-                [Query.contains('tags', cleanedTerm)]
-            )
-        ])
+  try {
+    const [byCaption, byTag] = await Promise.all([
+      databases.listDocuments<IPost>(
+        appwriteconfig.databaseId,
+        appwriteconfig.postsTableId,
+        [Query.search('caption', searchTerm)]
+      ),
+      databases.listDocuments<IPost>(
+        appwriteconfig.databaseId,
+        appwriteconfig.postsTableId,
+        [Query.contains('tags', cleanedTerm)]
+      )
+    ])
 
-        const merged = [...byCaption.documents,...byTag.documents]
-        const unique = Array.from(new Map(merged.map((u) => [u.$id, u])).values())
+    const merged = [...byCaption.documents, ...byTag.documents]
+    const unique = Array.from(new Map(merged.map((u) => [u.$id, u])).values())
 
-        return { documents: unique, total: unique.length }
+    const creatorCache = new Map<string, IUser>()
 
-    }catch(error) {
-        console.log(error)
-        return null
-    }
+    const populatedDocuments = await Promise.all(
+      unique.map(async (post): Promise<IPost> => {
+        if (typeof post.creator === 'string') {
+          const creatorId = post.creator
+
+          if (creatorCache.has(creatorId)) {
+            return { ...post, creator: creatorCache.get(creatorId)! }
+          }
+
+          try {
+            const creatorDoc = (await databases.getDocument(
+              appwriteconfig.databaseId,
+              appwriteconfig.usersTableId,
+              creatorId
+            )) as unknown as IUser
+
+            creatorCache.set(creatorId, creatorDoc)
+            return { ...post, creator: creatorDoc }
+          } catch (error) {
+            console.error(`Failed to fetch creator for ID ${creatorId}:`, error)
+          }
+        }
+
+        if (typeof post.creator === 'string' || !post.creator) {
+          const fallbackCreator: IUser = {
+            $id: typeof post.creator === 'string' ? post.creator : '',
+            name: 'User',
+            username: '',
+            email: '',
+            accountId: '',
+            imageUrl: '/assets/icons/profile-placeholder.svg',
+            bio: '',
+            posts: [],
+            $sequence: "",
+            $collectionId: "",
+            $databaseId: "",
+            $createdAt: "",
+            $updatedAt: "",
+            $permissions: []
+          }
+          return { ...post, creator: fallbackCreator }
+        }
+
+        return post as IPost
+      })
+    )
+
+    return { documents: populatedDocuments, total: populatedDocuments.length }
+
+  } catch (error) {
+    console.log(error)
+    return null
+  }
 }
 
 

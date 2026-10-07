@@ -55,7 +55,7 @@ const Explore = () => {
   return (
     <div className="explore-container overflow-auto scrollbar-none">
 
-      <div className="explore-inner-container">
+      <div className="explore-inner-container ">
         <h2 className="h3-bold md:h2-bold w-full">
           Search Posts
         </h2>
