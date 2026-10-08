@@ -26,7 +26,7 @@ const RouteWrapper = RoutLayout as ComponentType
 const UpdateProfileFormWrapper = UpdateProfile as ComponentType
 
 const PageLoader = () => (
-  <div className="flex-center w-full h-full min-h-[400px]">
+  <div className="flex-center w-full h-full min-h-100">
     <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
   </div>
 )

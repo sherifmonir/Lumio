@@ -37,10 +37,10 @@ const Explore = () => {
   }
 
   useEffect(() => {
-    if (inView && !searchValue) {
+    if (inView && !searchValue && hasNextPage) {
       fetchNextPage();
     }
-  }, [inView, searchValue,fetchNextPage]);
+  }, [inView, searchValue, fetchNextPage, hasNextPage]);
 
   if(!posts) {
     return (
@@ -54,59 +54,54 @@ const Explore = () => {
   const shouldShowPosts = !shouldShowSearchResults && posts.pages.every((items) => items?.documents.length === 0)
   return (
     <div className="explore-container overflow-auto scrollbar-none">
+  <div className="explore-inner-container">
+    <h2 className="h3-bold md:h2-bold w-full">Search Posts</h2>
 
-      <div className="explore-inner-container ">
-        <h2 className="h3-bold md:h2-bold w-full">
-          Search Posts
-        </h2>
-        <div className="flex gap-1 px-4 w-full rounded-lg bg-background text-foreground page-search">
-          <img
-            src="/assets/icons/search.svg"
-            width={20}
-            height={20}
-            alt="search"
-            className="cursor-pointer fill-primary-500"
-            onClick={handleSearchIconClick}
-          />
-          <input
-            ref={searchValueRef}
-            type="text"
-            placeholder="Search"
-            className="page-search"
-            value={searchValue}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const { value } = e.target
-              setSearchValue(value)
-            }}
-            />
-                
-        </div>
-      </div>
-
-
-       <div className=" gap-9 flex w-full max-w-5xl mt-8 mb-3">
-        {shouldShowSearchResults ? (
-
-          <PostsSearchResults
-            isSearchFetching={isSearchFetching}
-            searchedPosts={searchedPosts ?? { documents: [] }}
-          />
-
-        ) : shouldShowPosts ? (
-          <p className="text-muted-foreground mt-10 text-center w-full">End of posts</p>
-        ) : (
-          postsMemo.map((item, index) => (
-            <GridPostList key={`page-${index}`} posts={item?.documents ?? []} />
-          ))
-        )}
-      </div>
-      {hasNextPage && !searchValue && (
-        <div ref={ref} className="mt-10">
-          <ClipLoader size={15} />
-        </div>
-      )}
+    {/* Search Input Container */}
+    <div className="flex items-center gap-3 px-4 w-full rounded-xl bg-muted h-12 border border-border/50">
+      <img
+        src="/assets/icons/search.svg"
+        width={20}
+        height={20}
+        alt="search"
+        className="cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
+        onClick={handleSearchIconClick}
+      />
+      <input
+        ref={searchValueRef}
+        type="text"
+        placeholder="Search posts or tags..."
+        className="w-full bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground text-sm"
+        value={searchValue}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setSearchValue(e.target.value)
+        }}
+      />
     </div>
-  
+  </div>
+
+  {/* Posts Layout (Stacked Vertically for Infinite Scroll) */}
+  <div className="flex flex-col gap-9 w-full max-w-5xl mt-8 mb-3">
+    {shouldShowSearchResults ? (
+      <PostsSearchResults
+        isSearchFetching={isSearchFetching}
+        searchedPosts={searchedPosts ?? { documents: [] }}
+      />
+    ) : shouldShowPosts ? (
+      <p className="text-muted-foreground mt-10 text-center w-full">End of posts</p>
+    ) : (
+      postsMemo.map((item, index) => (
+        <GridPostList key={`page-${index}`} posts={item?.documents ?? []} />
+      ))
+    )}
+  </div>
+
+  {hasNextPage && !searchValue && (
+    <div ref={ref} className="mt-10 flex justify-center">
+      <ClipLoader size={15} />
+    </div>
+  )}
+</div> 
 )}
 
 export default Explore

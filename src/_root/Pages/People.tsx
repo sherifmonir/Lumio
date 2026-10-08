@@ -22,6 +22,7 @@ const People = () => {
 
 const usersMemo = useMemo(() => {
   if (!users?.pages) return []
+  
   const followed = new Set(followingIds)
   const allUsers = users.pages.flatMap((page) => page?.documents ?? []).filter((u) => u.$id !== user.id)
 
@@ -79,22 +80,27 @@ const usersMemo = useMemo(() => {
             className="page-search"
             value={searchValue}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const { value } = e.target
-              setSearchValue(value)
+              const { value } = e.target;
+              setSearchValue(value);
             }}
-            />
-                
+          />
         </div>
       </div>
+
       <div>
         <h2 className="h3-bold mb-4 md:h2-bold text-left w-full">People</h2>
         {showSearchResults ? (
-          <UsersSearchResults
-            isSearchFetching={isSearchFetching}
-            searchedUsers={searchedUsers ?? { documents: [] }}
-          />
-        ) :  shouldShowUsers ? (
-          <p className="text-muted-foreground mt-10 text-center w-full">No More Results</p>
+          <div>
+            <UsersSearchResults
+              isSearchFetching={isSearchFetching}
+              searchedUsers={searchedUsers ?? { documents: [] }}
+            />
+            {!isSearchFetching && (searchedUsers?.documents?.length ?? 0) > 0 && (
+              <p className="text-muted-foreground my-10 text-center w-full">
+                No More Results
+              </p>
+            )}
+          </div>
         ) : (
           <ul className="user-grid-container">
             {usersMemo.map((page) =>
@@ -107,15 +113,24 @@ const usersMemo = useMemo(() => {
           </ul>
         )}
       </div>
-      {hasNextPage && !searchValue && (
-        <div ref={ref} className="mt-10 mb-10 m-auto">
-          <ClipLoader size={15} />
+
+      {!showSearchResults && (
+        <div className="my-10 flex justify-center w-full">
+          {hasNextPage ? (
+            <div ref={ref}>
+              <ClipLoader size={15} />
+            </div>
+          ) : (
+            !shouldShowUsers && (
+              <p className="text-muted-foreground text-center w-full">
+                No More Results
+              </p>
+            )
+          )}
         </div>
       )}
     </div>
+  );
+};
 
-  )
-}
-
-
-export default People
+export default People;

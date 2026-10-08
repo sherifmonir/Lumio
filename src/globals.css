@@ -8,7 +8,7 @@
 
 
 /* v4: dark variant using the new @variant syntax */
-@variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *));
 
 /* ─── Theme ─────────────────────────────────────────────────── */
 @theme {
@@ -265,7 +265,7 @@
   @apply max-w-5xl flex flex-col items-start w-full gap-6 md:gap-9;
 }
 @utility user-grid-container {
-  @apply w-full mx-auto grid grid-cols-1 xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-7 max-w-5xl;
+  @apply w-full mx-auto grid grid-cols-2 xs:grid-cols-1 sm:grid-cols-2   xl:grid-cols-3 gap-7 max-w-5xl;
 }
 
 @utility form-bottom {
@@ -289,9 +289,6 @@
 }
 @utility home-posts {
   @apply max-w-screen-sm flex flex-col items-center w-full gap-6 md:gap-9;
-}
-@utility home-creators {
-  @apply hidden xl:flex flex-col w-72 2xl:w-[465px] px-6 py-10 gap-10 overflow-scroll custom-scrollbar;
 }
 
 /* Post Details */
@@ -345,7 +342,7 @@
 
 /* Grid Post List */
 @utility post-grid-container {
-  @apply  w-full gap-7 max-w-5xl grid grid-cols-1 sm:ml-5 md:grid-cols-2 xl:grid-cols-3 ;
+  @apply  w-full gap-7 max-w-5xl grid grid-cols-1 sm:ml-5 md:grid-cols-2 xl:grid-cols-3 justify-items-center;
 }
 @utility grid-post-link {
   @apply flex rounded-3xl border border-border overflow-hidden cursor-pointer w-full h-full bg-post-card text-card-foreground;
