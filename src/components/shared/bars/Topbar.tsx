@@ -40,7 +40,7 @@ const Topbar = () => {
           <p className="text-foreground text-4xl font-bold">LUMIO</p>
         </Link>
 
-        <div className=" flex-center  absolute right-1 lg:right-8 h-full">
+        <div className=" flex-center  absolute right-0 lg:right-8 h-full">
           <button type="button" className="cursor-pointer [@media(max-width:64rem)]:hidden"
             onClick={toggleTheme}>
             <img 
@@ -49,7 +49,7 @@ const Topbar = () => {
             className="h-8 w-8"
             />
         </button>
-        <div className="">
+        <div>
             <NotificationBell />
         </div>
         </div>
