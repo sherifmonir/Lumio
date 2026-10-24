@@ -49,23 +49,25 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     const isSaved = !!savedPostRecord
 
     const handleLikePost = async (e: React.MouseEvent) => {
-        e.stopPropagation()
-        if (isLiked) {
-            setOptimistic(false)
-            try {
-                await unlikePost({ likeDocumentId: existingLike!.$id, userId, postId: post?.$id || "" })
-            } catch {
-                setOptimistic(true)
-            }
-        } else {
-            setOptimistic(true)
-            try {
-                await likePost({ userId, postId: post?.$id || "" })
-            } catch {
-                setOptimistic(false)
-            }
+    e.stopPropagation()
+    if (isLiked) {
+        setOptimistic(false)
+        try {
+            await unlikePost({ likeDocumentId: existingLike!.$id, userId, postId: post?.$id || "" })
+        } catch (error) {
+            console.error("unlike failed:", error)
+            setOptimistic(null)
+        }
+    } else {
+        setOptimistic(true)
+        try {
+            await likePost({ userId, postId: post?.$id || "" })
+        } catch (error) {
+            console.error("like failed:", error)
+            setOptimistic(null)
         }
     }
+}
 
     const handleSavePost = (e: React.MouseEvent) => {
         e.stopPropagation();
