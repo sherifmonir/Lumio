@@ -23,22 +23,31 @@ export default async ({ req, res, log, error }) => {
   const payload = req.bodyJson;
 
   async function getPostOwnerId(postId) {
-    const posts = await databases.listDocuments(DATABASE_ID, POSTS_COLLECTION_ID, [
-      Query.equal('$id', postId),
-      Query.select(['creator.$id']),
-    ]);
+    const posts = await databases.listDocuments(
+      DATABASE_ID,
+      POSTS_COLLECTION_ID,
+      [Query.equal('$id', postId), Query.select(['creator.$id'])]
+    );
     return posts.documents[0]?.creator?.$id;
   }
 
   async function extractMentionNotifications(text, actorId, postId) {
-    const usernames = [...new Set([...text.matchAll(MENTION_PATTERN)].map((m) => m[1]))];
-    log(`MENTION CHECK — text: ${JSON.stringify(text)} — usernames found: ${JSON.stringify(usernames)}`);
+    const usernames = [
+      ...new Set([...text.matchAll(MENTION_PATTERN)].map((m) => m[1])),
+    ];
+    log(
+      `MENTION CHECK — text: ${JSON.stringify(text)} — usernames found: ${JSON.stringify(usernames)}`
+    );
     if (usernames.length === 0) return [];
 
-    const users = await databases.listDocuments(DATABASE_ID, USERS_COLLECTION_ID, [
-      Query.equal('username', usernames),
-    ]);
-    log(`MENTION CHECK — users resolved: ${JSON.stringify(users.documents.map((u) => u.username))}`);
+    const users = await databases.listDocuments(
+      DATABASE_ID,
+      USERS_COLLECTION_ID,
+      [Query.equal('username', usernames)]
+    );
+    log(
+      `MENTION CHECK — users resolved: ${JSON.stringify(users.documents.map((u) => u.username))}`
+    );
 
     return users.documents.map((mentionedUser) => ({
       type: 'mention',
@@ -50,12 +59,14 @@ export default async ({ req, res, log, error }) => {
 
   async function resolveNotifications() {
     if (event.includes(`.tables.${FOLLOWS_COLLECTION_ID}.rows.`)) {
-      return [{
-        type: 'follow',
-        actorId: payload.followerId,
-        recipientId: payload.followingId,
-        postId: null,
-      }];
+      return [
+        {
+          type: 'follow',
+          actorId: payload.followerId,
+          recipientId: payload.followingId,
+          postId: null,
+        },
+      ];
     }
 
     if (event.includes(`.tables.${LIKES_COLLECTION_ID}.rows.`)) {
@@ -65,47 +76,92 @@ export default async ({ req, res, log, error }) => {
       const isComment = !!payload.content && !payload.parentCommentId;
 
       if (isReply) {
-        const parentComment = await databases.getDocument(DATABASE_ID, LIKES_COLLECTION_ID, payload.parentCommentId);
-        const primary = { type: 'reply', actorId, recipientId: parentComment.userId, postId };
-        return [primary, ...await extractMentionNotifications(payload.content, actorId, postId)];
+        const parentComment = await databases.getDocument(
+          DATABASE_ID,
+          LIKES_COLLECTION_ID,
+          payload.parentCommentId
+        );
+        const primary = {
+          type: 'reply',
+          actorId,
+          recipientId: parentComment.userId,
+          postId,
+        };
+        return [
+          primary,
+          ...(await extractMentionNotifications(
+            payload.content,
+            actorId,
+            postId
+          )),
+        ];
       }
 
       if (isComment) {
-        const primary = { type: 'comment', actorId, recipientId: await getPostOwnerId(postId), postId };
-        return [primary, ...await extractMentionNotifications(payload.content, actorId, postId)];
+        const primary = {
+          type: 'comment',
+          actorId,
+          recipientId: await getPostOwnerId(postId),
+          postId,
+        };
+        return [
+          primary,
+          ...(await extractMentionNotifications(
+            payload.content,
+            actorId,
+            postId
+          )),
+        ];
       }
 
-      return [{ type: 'like', actorId, recipientId: await getPostOwnerId(postId), postId }];
+      return [
+        {
+          type: 'like',
+          actorId,
+          recipientId: await getPostOwnerId(postId),
+          postId,
+        },
+      ];
     }
 
     if (event.includes(`.tables.${POSTS_COLLECTION_ID}.rows.`)) {
-       if (event.endsWith('.delete')) {
-    // Cleanup only — a deleted post never generates notifications.
-    const [genuineLikes, relatedNotifications] = await Promise.all([
-      databases.listDocuments(DATABASE_ID, LIKES_COLLECTION_ID, [
-        Query.equal('postId', postId),
-        Query.isNull('content'),
-      ]),
-      databases.listDocuments(DATABASE_ID, NOTIFICATIONS_COLLECTION_ID, [
-        Query.equal('postId', postId),
-      ]),
-    ]);
+      if (event.endsWith('.delete')) {
+        // Cleanup only — a deleted post never generates notifications.
+        const [genuineLikes, relatedNotifications] = await Promise.all([
+          databases.listDocuments(DATABASE_ID, LIKES_COLLECTION_ID, [
+            Query.equal('postId', postId),
+            Query.isNull('content'),
+          ]),
+          databases.listDocuments(DATABASE_ID, NOTIFICATIONS_COLLECTION_ID, [
+            Query.equal('postId', postId),
+          ]),
+        ]);
 
-    await Promise.all([
-      ...genuineLikes.documents.map((like) =>
-        databases.deleteDocument(DATABASE_ID, LIKES_COLLECTION_ID, like.$id)
-      ),
-      ...relatedNotifications.documents.map((notif) =>
-        databases.deleteDocument(DATABASE_ID, NOTIFICATIONS_COLLECTION_ID, notif.$id)
-      ),
-    ]);
+        await Promise.all([
+          ...genuineLikes.documents.map((like) =>
+            databases.deleteDocument(DATABASE_ID, LIKES_COLLECTION_ID, like.$id)
+          ),
+          ...relatedNotifications.documents.map((notif) =>
+            databases.deleteDocument(
+              DATABASE_ID,
+              NOTIFICATIONS_COLLECTION_ID,
+              notif.$id
+            )
+          ),
+        ]);
 
-    log(`Cleaned up ${genuineLikes.documents.length} likes and ${relatedNotifications.documents.length} notifications for deleted post ${postId}`);
-    return [];
-  }
+        log(
+          `Cleaned up ${genuineLikes.documents.length} likes and ${relatedNotifications.documents.length} notifications for deleted post ${postId}`
+        );
+        return [];
+      }
       const actorId = payload.creator?.$id;
       const postId = payload.$id;
-      return extractMentionNotifications(payload.caption ?? '', actorId, postId);
+      return extractMentionNotifications(
+        payload.caption ?? '',
+        actorId,
+        postId
+      );
     }
 
     return [];
@@ -125,7 +181,11 @@ export default async ({ req, res, log, error }) => {
         continue;
       }
 
-      const recipientUser = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, recipientId);
+      const recipientUser = await databases.getDocument(
+        DATABASE_ID,
+        USERS_COLLECTION_ID,
+        recipientId
+      );
 
       await databases.createDocument(
         DATABASE_ID,
@@ -145,6 +205,9 @@ export default async ({ req, res, log, error }) => {
   } catch (e) {
     error('Failed to create notification: ' + e.message);
     error('Cause: ' + JSON.stringify(e.cause));
-    return res.json({ success: false, error: e.message, cause: e.cause?.message ?? null }, 500);
+    return res.json(
+      { success: false, error: e.message, cause: e.cause?.message ?? null },
+      500
+    );
   }
 };
