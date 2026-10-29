@@ -23,12 +23,6 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const { theme, toggleTheme } = useThemeContext()
   const navigate = useNavigate()
 
-  const closeMenu = () => {
-    setIsSignoutModalOpen(false)
-    setIsBugReportModalOpen(false)
-    onClose()
-  }
-
   useEffect(() => {
     if (isSuccess) {
       setIsAuthenticated(false)
@@ -41,7 +35,11 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     if (!isOpen) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeMenu()
+      if (e.key === 'Escape') {
+        setIsSignoutModalOpen(false)
+        setIsBugReportModalOpen(false)
+        onClose()
+      }
     }
 
     document.body.style.overflow = 'hidden'
@@ -51,7 +49,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
       document.body.style.overflow = ''
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [isOpen, closeMenu])
+  }, [isOpen, onClose])
 
   return createPortal(
     <div className={`fixed inset-0 z-50 transition-opacity duration-300 ${

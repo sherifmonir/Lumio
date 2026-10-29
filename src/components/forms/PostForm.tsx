@@ -6,7 +6,7 @@ import FileUploader from "../shared/FileUploader"
 import type { IPost } from "@/types"
 import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutatuins"
 import { useNavigate } from "react-router-dom"
-import { useToast } from "../ui/Toast"
+import { useToast } from "../ui/useToast"
 import { useUserContext } from "@/context/UseUserContext"
 import { ClipLoader } from "react-spinners"
 import type { ControllerRenderProps } from "react-hook-form"
@@ -204,4 +204,3 @@ async function onSubmit(Values: z.infer<typeof postValidation>) {
 }
 
 export default PostForm
-
