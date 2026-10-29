@@ -1,11 +1,24 @@
 import {Outlet, Navigate} from 'react-router-dom'
 import { useUserContext } from '@/context/UseUserContext'
+import { useEffect, useState } from 'react'
 
 
  const AuthLayout = () => {
   
   
   const { isAuthenticated, isLoading } = useUserContext()
+  const [showSideImage, setShowSideImage] = useState(() =>
+    window.matchMedia('(min-width: 64rem)').matches
+  )
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 64rem)')
+    const updateVisibility = () => setShowSideImage(mediaQuery.matches)
+
+    mediaQuery.addEventListener('change', updateVisibility)
+    return () => mediaQuery.removeEventListener('change', updateVisibility)
+  }, [])
+
   if(isLoading) return null
 
   return (
@@ -30,11 +43,16 @@ import { useUserContext } from '@/context/UseUserContext'
             
             </section>
 
-            <img
-            src="/assets/images/side-img.svg"
-            alt="Side Image"
-            className="hidden h-full w-1/2 object-cover bg-no-repeat lg:block"
-            />
+            {showSideImage && (
+              <img
+                src="/assets/images/side-img.webp"
+                alt="Side Image"
+                width={720}
+                height={1024}
+                fetchPriority="high"
+                className="hidden h-full w-1/2 object-cover bg-no-repeat lg:block"
+              />
+            )}
         
         </div>
       ) 

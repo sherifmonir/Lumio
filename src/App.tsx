@@ -1,29 +1,25 @@
 import {Routes, Route} from 'react-router-dom'
-import { lazy, Suspense, type ComponentType } from 'react'
+import { lazy, Suspense } from 'react'
 import './globals.css'
 import AuthLayout from './_auth/forms/AuthLayout'
-import RoutLayout from './_root/RoutLayout'
 import { Toaster } from './components/ui/Toast'
 
 const SigninForm = lazy(() => import('./_auth/forms/SigninForm'))
 const SignupForm = lazy(() => import('./_auth/forms/SignupForm'))
+const RouteWrapper = lazy(() => import('./_root/RoutLayout'))
 
-const Home = lazy(() => import('./_root/Pages').then((m) => ({ default: m.Home })))
-const Explore = lazy(() => import('./_root/Pages').then((m) => ({ default: m.Explore })))
-const CreatePost = lazy(() => import('./_root/Pages').then((m) => ({ default: m.CreatePost })))
-const EditPost = lazy(() => import('./_root/Pages').then((m) => ({ default: m.EditPost })))
-const PostDetails = lazy(() => import('./_root/Pages').then((m) => ({ default: m.PostDetails })))
-const UpdateProfile = lazy(() => import('./_root/Pages').then((m) => ({ default: m.UpdateProfile })))
-const LikedPosts = lazy(() => import('./_root/Pages').then((m) => ({ default: m.LikedPosts })))
-
+const Home = lazy(() => import('./_root/Pages/Home'))
+const Explore = lazy(() => import('./_root/Pages/Explore'))
+const CreatePost = lazy(() => import('./_root/Pages/CreatePost'))
+const EditPost = lazy(() => import('./_root/Pages/EditPost'))
+const PostDetails = lazy(() => import('./_root/Pages/PostDetails'))
+const UpdateProfile = lazy(() => import('./_root/Pages/UpdateProfile'))
+const LikedPosts = lazy(() => import('./_root/Pages/LikedPosts'))
 
 const Saved = lazy(() => import('./_root/Pages/Saved'))
 const Profile = lazy(() => import('./_root/Pages/Profile'))
 const People = lazy(() => import('./_root/Pages/People'))
 const FollowList = lazy(() => import('./_root/Pages/FollowList'))
-
-const RouteWrapper = RoutLayout as ComponentType
-const UpdateProfileFormWrapper = UpdateProfile as ComponentType
 
 const PageLoader = () => (
   <div className="flex-center w-full h-full min-h-100">
@@ -50,7 +46,7 @@ const App = () => {
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:id" element={<EditPost />} />
           <Route path="/post/:id" element={<PostDetails />} />
-          <Route path="/update-profile/:id" element={<UpdateProfileFormWrapper />} />
+          <Route path="/update-profile/:id" element={<UpdateProfile />} />
           <Route path="/profile/:id/*" element={<Profile />} />
           <Route path="/profile/:id/followers" element={<FollowList />} />
           <Route path="/profile/:id/following" element={<FollowList />} />

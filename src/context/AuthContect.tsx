@@ -1,4 +1,3 @@
-import { getCurrentUser } from '@/lib/appwrite/api'
 import type {  IContextUser } from '@/types'
 import { useEffect, useState} from 'react'
 import {  INITIAL_USER, AuthContext } from './AuthConstants'
@@ -12,6 +11,7 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
   const checkAuthUser = async () => {
     setIsLoading(true)
     try{
+      const { getCurrentUser } = await import('@/lib/appwrite/api')
       const currentAccount = await getCurrentUser()
       if(currentAccount) {
         setUser({

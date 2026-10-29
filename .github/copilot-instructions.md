@@ -6,7 +6,7 @@
 - Run the Vite development server with `npm run dev`.
 - Build the frontend and run the TypeScript project checks with `npm run build`.
 - Lint the frontend with `npm run lint`; lint one file with `npx eslint src/path/to/file.tsx`.
-- There is no configured test script or test suite, so there is no single-test command.
+- Run the Vitest suite with `npm test`; run a focused test with `npx vitest run src/path/to/file.test.tsx`.
 - The notification function is a separate package under `functions/create-notification`; its formatter is `npm --prefix functions/create-notification run format`.
 
 ## Architecture

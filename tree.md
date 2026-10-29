@@ -54,7 +54,7 @@ Lumio/
 │   │   └── images/
 │   │       ├── logo.svg
 │   │       ├── profile.png
-│   │       └── side-img.svg
+│   │       └── side-img.webp
 │   └── _redirects
 ├── src/
 │   ├── _auth/

@@ -2,14 +2,13 @@ import Bottombar from '@/components/shared/bars/Bottombar'
 import LeftSideBar from '@/components/shared/bars/LeftSideBar'
 import Topbar from '@/components/shared/bars/Topbar'
 import { useUserContext } from '@/context/UseUserContext'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 
 const RoutLayout = () => {
 
     const { isAuthenticated, isLoading } = useUserContext()
-    const navigate = useNavigate()
     if (isLoading) return null
-    if (!isAuthenticated) return navigate('/sign-in')
+    if (!isAuthenticated) return <Navigate to="/sign-in" replace />
 
   return (
     <div className="w-full bg-background text-foreground">
