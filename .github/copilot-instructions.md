@@ -6,16 +6,16 @@
 - Run the Vite development server with `npm run dev`.
 - Build the frontend and run the TypeScript project checks with `npm run build`.
 - Lint the frontend with `npm run lint`; lint one file with `npx eslint src/path/to/file.tsx`.
-- Run the Vitest suite with `npm test`; run a focused test with `npx vitest run src/path/to/file.test.tsx`.
-- The notification function is a separate package under `functions/create-notification`; its formatter is `npm --prefix functions/create-notification run format`.
+- Run the Vitest suite with `npm test`; run a focused test file with `npx vitest run src/path/to/file.test.tsx`. Tests use Vitest, jsdom, and Testing Library; shared cleanup is in `src/test/setup.ts`.
+- The notification function is a separate package under `functions/create-notification`. From that directory, install with `npm install` and check its entrypoint with `npm exec -- prettier --check src/main.js`; from the repository root, format it with `npm --prefix functions/create-notification run format`.
 
 ## Architecture
 
-- This is a React 19 + TypeScript single-page app built with Vite. `src/main.tsx` composes the browser router, TanStack Query, auth, and theme providers; `src/App.tsx` declares public sign-in/sign-up routes and authenticated app routes.
-- Authenticated pages live in `src/_root/Pages`; shared navigation/layout is in `src/_root/RoutLayout.tsx`, and reusable UI is in `src/components`. Route page exports are collected in `src/_root/Pages/index.ts`.
+- This is a React 19 + TypeScript single-page app built with Vite. `src/main.tsx` composes the browser router, TanStack Query, auth, and theme providers; `src/App.tsx` lazy-loads public sign-in/sign-up routes and authenticated app routes.
+- `src/_root/RoutLayout.tsx` guards authenticated routes and supplies shared navigation; `src/_auth/forms/AuthLayout.tsx` handles the public auth layout and redirects authenticated users. Page components live in `src/_root/Pages`, reusable UI in `src/components`, and route page exports in `src/_root/Pages/index.ts`.
 - Appwrite access is centralized in `src/lib/appwrite/config.ts` and `src/lib/appwrite/api.ts`. API functions perform auth, database, and storage operations; `src/lib/react-query/queriesAndMutatuins.tsx` exposes them as query/mutation hooks, with query identifiers in `queryKeys.ts`. When a mutation changes displayed data, keep its query invalidation or cache update in sync.
 - `src/context/AuthContect.tsx` owns the current-user auth state. `src/types/index.ts` defines the Appwrite-backed app models; `src/lib/validation/index.ts` defines Zod schemas used by forms.
-- `functions/create-notification/src/main.js` is the separately deployed Appwrite event function, linked from `appwrite.config.json`. It translates follow, like/comment/reply, post, and mention events into notification rows. The `likes` table is also used for comments and replies, so event interpretation depends on the payload fields, not just the table name.
+- `functions/create-notification/src/main.js` is the separately deployed Appwrite event function, linked from `appwrite.config.json` and managed as its own npm package. It translates follow, like/comment/reply, post, and mention events into notification rows. The `likes` table is also used for comments and replies, so event interpretation depends on payload fields, not just the table name.
 - `appwrite.config.json` tracks the Appwrite project resources and function deployment settings. Keep resource changes represented there; consult `.agents/skills/appwrite-cli/SKILL.md` before using the Appwrite CLI. For SDK work, follow the existing client SDK usage in `src/lib/appwrite/api.ts` and consult `.agents/skills/appwrite-typescript/SKILL.md`.
 
 ## Repository conventions

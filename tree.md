@@ -3,12 +3,14 @@ Lumio/
 │   └── skills/
 │       ├── appwrite-cli/
 │       │   └── SKILL.md
-│       └── appwrite-typescript/
+│       ├── appwrite-typescript/
+│       │   └── SKILL.md
+│       └── house-style/
 │           └── SKILL.md
-├── .claude/
-│   └── skills/
 ├── .github/
 │   └── copilot-instructions.md
+├── .vscode/
+│   └── mcp.json
 ├── functions/
 │   └── create-notification/
 │       ├── src/
@@ -59,6 +61,7 @@ Lumio/
 ├── src/
 │   ├── _auth/
 │   │   └── forms/
+│   │       ├── AuthLayout.test.tsx
 │   │       ├── AuthLayout.tsx
 │   │       ├── SigninForm.tsx
 │   │       └── SignupForm.tsx
@@ -69,13 +72,14 @@ Lumio/
 │   │   │   ├── Explore.tsx
 │   │   │   ├── FollowList.tsx
 │   │   │   ├── Home.tsx
-│   │   │   ├── index.ts
 │   │   │   ├── LikedPosts.tsx
 │   │   │   ├── People.tsx
 │   │   │   ├── PostDetails.tsx
 │   │   │   ├── Profile.tsx
 │   │   │   ├── Saved.tsx
-│   │   │   └── UpdateProfile.tsx
+│   │   │   ├── UpdateProfile.tsx
+│   │   │   └── index.ts
+│   │   ├── RoutLayout.test.tsx
 │   │   └── RoutLayout.tsx
 │   ├── components/
 │   │   ├── forms/
@@ -101,8 +105,8 @@ Lumio/
 │   │   │   ├── posts/
 │   │   │   │   ├── GridPostList.tsx
 │   │   │   │   ├── PostCard.tsx
-│   │   │   │   ├── PostsSearchResults.tsx
-│   │   │   │   └── PostStats.tsx
+│   │   │   │   ├── PostStats.tsx
+│   │   │   │   └── PostsSearchResults.tsx
 │   │   │   ├── users/
 │   │   │   │   ├── UserCard.tsx
 │   │   │   │   └── UsersSearchResults.tsx
@@ -111,14 +115,16 @@ Lumio/
 │   │   └── ui/
 │   │       ├── BugReportModal.tsx
 │   │       ├── ConfirmationModal.tsx
-│   │       └── Toast.tsx
+│   │       ├── Toast.tsx
+│   │       └── useToast.ts
 │   ├── constants/
 │   │   └── index.ts
 │   ├── context/
-│   │   ├── AuthConstants.ts
+│   │   ├── AuthContect.test.tsx
 │   │   ├── AuthContect.tsx
+│   │   ├── AuthConstants.ts
 │   │   ├── ThemeContext.tsx
-│   │   ├── UseThemeContext.tsx
+│   │   ├── UseThemeContext.ts
 │   │   └── UseUserContext.ts
 │   ├── Hooks/
 │   │   ├── useDebounce.ts
@@ -128,12 +134,14 @@ Lumio/
 │   │   │   ├── api.ts
 │   │   │   └── config.ts
 │   │   ├── react-query/
+│   │   │   ├── QueryProvider.tsx
 │   │   │   ├── queriesAndMutatuins.tsx
-│   │   │   ├── queryKeys.ts
-│   │   │   └── QueryProvider.tsx
+│   │   │   └── queryKeys.ts
 │   │   ├── validation/
 │   │   │   └── index.ts
 │   │   └── utils.ts
+│   ├── test/
+│   │   └── setup.ts
 │   ├── types/
 │   │   └── index.ts
 │   ├── App.tsx
@@ -151,4 +159,5 @@ Lumio/
 ├── tsconfig.app.json
 ├── tsconfig.json
 ├── tsconfig.node.json
-└── vite.config.ts
+├── vite.config.ts
+└── tree.md
