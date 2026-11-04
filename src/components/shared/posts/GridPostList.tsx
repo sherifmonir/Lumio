@@ -9,18 +9,23 @@ type GridPostListProps = {
   posts: IPost[]
   showUser?: boolean
   showStats?: boolean
+  prioritizeFirstPost?: boolean
 }
 
 
-const GridPostList = ({ posts = [], showUser = true, showStats = true }:GridPostListProps) => {
+const GridPostList = ({
+  posts = [],
+  showUser = true,
+  showStats = true,
+  prioritizeFirstPost = true,
+}: GridPostListProps) => {
   const { user } = useUserContext()
-  console.log(posts[0])
   return (
     <div>
     <ul className="post-grid-container">
       {posts.map((post, index) => {
 
-        const isFirstPost = index === 0
+        const isFirstPost = prioritizeFirstPost && index === 0
         return (
         <li key={post.$id} className="relative gap-4 w-80  h-80 rounded-3xl  ">
           <Link to={`/post/${post.$id}`} className="grid-post-link shadow-lg ">

@@ -91,7 +91,11 @@ const Explore = () => {
       <p className="text-muted-foreground mt-10 text-center w-full">End of posts</p>
     ) : (
       postsMemo.map((item, index) => (
-        <GridPostList key={`page-${index}`} posts={item?.documents ?? []} />
+        <GridPostList
+          key={`page-${index}`}
+          posts={item?.documents ?? []}
+          prioritizeFirstPost={index === 0}
+        />
       ))
     )}
   </div>
