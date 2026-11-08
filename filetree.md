@@ -60,7 +60,8 @@ Lumio/
 |   |       |-- logo.svg
 |   |       |-- profile.png
 |   |       \-- side-img.webp
-|   \-- _redirects
+|   |-- _redirects
+|   \-- robots.txt
 |-- src/
 |   |-- _auth/
 |   |   \-- forms/
@@ -106,6 +107,7 @@ Lumio/
 |   |   |   |   |-- NotificationItem.tsx
 |   |   |   |   \-- NotificationsPanel.tsx
 |   |   |   |-- posts/
+|   |   |   |   |-- GridPostList.test.tsx
 |   |   |   |   |-- GridPostList.tsx
 |   |   |   |   |-- PostCard.tsx
 |   |   |   |   |-- PostsSearchResults.tsx
@@ -165,3 +167,4 @@ Lumio/
 |-- tsconfig.node.json
 \-- vite.config.ts
 ```
+
