@@ -1,33 +1,16 @@
 import type { CommentRow, IBugReport, IComment, ICommentWithAuthor, IFollow, ILike, INewPost, INewUser, INotification, IPost, IUpdatePost, IUpdateProfile, IUser } from "@/types";
-import { Channel, ID,Permission, Query, Realtime, Role } from "appwrite";
+import { AppwriteException, Channel, ID,Permission, Query, Realtime, Role } from "appwrite";
 import { account, appwriteconfig, avatars, client, databases, storage } from "./config";
 
 
 
 export async function createUserAccount(user: INewUser) {
-try{
-    
-
-    try {
-      await account.deleteSession('current');
-    } catch {
-     // No session exists
-    }
-    const newAccount = await account.create(
-        ID.unique(), 
-        user.email,
-        user.password,
-        user.name
-        )
-
-    if(!newAccount) throw new Error("ccount creation failed")
-
-    return newAccount;
-
-}catch(error){
-    console.error('Account creation error', error)
-    throw error
-}
+  try {
+    return await account.create(ID.unique(), user.email, user.password, user.name);
+  } catch (error) {
+    console.error('Account creation error', error);
+    throw error;
+  }
 }
 
 
@@ -49,26 +32,23 @@ export async function saveUserToDB(user:{
 }
 
 
-export async function signinAccount(user: {email:string, password:string}){
-
-    try {
-      await account.deleteSession('current');
-    } catch {
-      // No session exists
-    }
-
-  try{
-        const session = await account.createEmailPasswordSession(user.email, user.password)
-
-        return session
-
-      }catch (error) {
-         console.log(error)
-         return null
+export async function signinAccount(user: { email: string; password: string }) {
+  try {
+    return await account.createEmailPasswordSession(user.email, user.password);
+  } catch (error) {
+    if (error instanceof AppwriteException && error.type === 'user_session_already_exists') {
+      try {
+        await account.deleteSession('current');
+        return await account.createEmailPasswordSession(user.email, user.password);
+      } catch (retryError) {
+        console.log(retryError);
+        return null;
       }
-
-} 
-
+    }
+    console.log(error);
+    return null;
+  }
+}
 
 export async function getCurrentUser() {
     
